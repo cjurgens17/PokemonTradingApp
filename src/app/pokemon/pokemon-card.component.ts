@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Pokemon } from '../pokemoncards/pokemon';
+import { Pokemon } from './pokemon';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductService } from '../services/product.service';
+import { PokemonService } from './pokemon.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,7 +13,7 @@ export class PokemonCardComponent implements OnInit, OnDestroy {
 
   
 
-  constructor(private router: Router, private route: ActivatedRoute, private productService: ProductService) {}
+  constructor(private router: Router, private route: ActivatedRoute, private pokemonService: PokemonService) {}
 
   pokemon!: Pokemon;
   sub!: Subscription;
@@ -27,7 +27,7 @@ export class PokemonCardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
       const name = String(this.route.snapshot.paramMap.get('name'));
 
-         this.sub = this.productService.getPokemon(name).subscribe({
+         this.sub = this.pokemonService.getPokemon(name).subscribe({
           next: data => { 
             this.pokemon = data
             this.pokemon.name = data.name

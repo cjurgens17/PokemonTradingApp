@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ProductService } from '../services/product.service';
+import { PokemonService } from './pokemon.service';
 import { Subscription } from 'rxjs';
 import { Pokemon } from './pokemon';
-import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-practice',
@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PokemonCardsComponent implements OnInit, OnDestroy {
 
-  constructor(private productService: ProductService) { }
+  constructor(private pokemonService: PokemonService) { }
 
   pokemon!: Pokemon;
   pokemons: Pokemon[] = [];
@@ -35,7 +35,7 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
   }
 
   getPokemon(): void {
-    this.sub = this.productService.getPokemon(this.specificPokemon).subscribe({
+    this.sub = this.pokemonService.getPokemon(this.specificPokemon).subscribe({
       next: data => { 
         this.pokemon = data
         this.pokemon.name = data.name

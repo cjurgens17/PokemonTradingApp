@@ -16,5 +16,5 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
-  title = 'Welcome To Pool Vikings';
+  title = 'Welcome To Pokemon Trading';
 }

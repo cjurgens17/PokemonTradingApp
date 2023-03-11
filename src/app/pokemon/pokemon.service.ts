@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, map, tap, throwError } from "rxjs";
-import { Pokemon } from "../pokemoncards/pokemon";
+
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class ProductService {
+export class PokemonService {
 
     private productUrl = "https://pokeapi.co/api/v2/pokemon/";
 
