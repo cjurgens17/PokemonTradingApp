@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+
+  production: false,
+  withCredentials: true,
+  baseUrl: "http://localhost:8080",
+  headers: {
+    'content-type' : 'application/json',
+    'Access-Control-Allow-Origin': 'http://localhost:4200'
+  },
+
 };
 
 /*
