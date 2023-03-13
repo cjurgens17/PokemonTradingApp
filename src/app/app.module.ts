@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { PokemonModule } from './pokemon/pokemon.module';
-
+import { UserInfoModule } from './user-info/user-info.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,10 @@ import { PokemonModule } from './pokemon/pokemon.module';
       {path: '', redirectTo: 'home', pathMatch:'full'},
       {path: '**', redirectTo: 'home', pathMatch: 'full'}
     ]),
-    PokemonModule
+    PokemonModule,
+    UserInfoModule
+    
+  
   ],
   providers: [],
   bootstrap: [AppComponent]
