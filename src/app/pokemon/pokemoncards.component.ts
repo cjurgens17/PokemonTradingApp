@@ -43,8 +43,8 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
         this.pokemon.index = data.index
         this.pokemon.image = data.image
         this.pokemon.backImage = data.backImage
-        this.pokemon.abilities.push(data.abilities)
-        this.pokemon.stats.push(data.stats)
+        this.pokemon.abilities = data.abilities
+        this.pokemon.stats = data.stats
         this.pokemons.push(this.pokemon);
   },
   error: error => {
@@ -52,6 +52,10 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
       console.error('There was an error!', error);
     }
   })
+}
+
+addPokemon(): void {
+
 }
      
   ngOnInit(): void {

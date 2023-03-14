@@ -35,8 +35,8 @@ export class PokemonCardComponent implements OnInit, OnDestroy {
             this.pokemon.index = data.index
             this.pokemon.image = data.image
             this.pokemon.backImage = data.backImage
-            this.pokemon.abilities.push(data.abilities)
-            this.pokemon.stats.push(data.stats)
+            this.pokemon.abilities = data.abilities
+            this.pokemon.stats = data.stats
       },
       error: error => {
           this.errorMessage = error.message;

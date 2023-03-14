@@ -6,14 +6,24 @@
       <h5 class="card-title">{{ pokemon.name | titlecase}}</h5>
       <p class="card-text">Pokemon</p>
     </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item" *ngFor="let ability of pokemon.abilities">{{'Ability: '+ ability.ability.name | titlecase}}</li>
-    </ul>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item" *ngFor="let stat of pokemon.stats">{{stat.stat.name + ': ' + stat.base_stat}}</li>
-      </ul>
-    <div class="card-body">
-    </div>
+    <div class='table-responsive'>
+      <table class='table'>
+          <thead>
+              <tr>
+                  <th>Ability</th>
+                  <th>Stat</th>
+                  <th>Value</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td *ngFor="let ability of pokemon.abilities">{{'Ability: ' + ability.ability.name | titlecase }}</td>
+                  <td  *ngFor="let stat of pokemon.stats">{{'Stat: ' + stat.stat.name}}</td>
+                  <td *ngFor="let stat of pokemon.stats">{{'Value: ' + stat.base_stat}}</td>
+              </tr>
+          </tbody>
+          </table>
+  </div>
     <div class="card-footer">
         <button class="btn btn-outline-secondary"
         stlye="width:80px"
