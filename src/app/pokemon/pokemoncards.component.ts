@@ -54,8 +54,17 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
   })
 }
 
-addPokemon(): void {
+addPokemon(name: string, weight: number, index: number): void {
+  console.log(name + " " + weight + " " + index);
 
+    this.pokemonService.addPokemon(name, weight, index).subscribe({
+      next: response => {
+        console.log('Response: ', response)
+      },
+      error: err  => {
+        console.log('Error: ', err)
+      }
+    });
 }
      
   ngOnInit(): void {

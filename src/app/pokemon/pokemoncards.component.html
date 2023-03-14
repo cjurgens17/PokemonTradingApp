@@ -28,9 +28,7 @@
                                 {{showImage ? 'Hide' : 'Show'}} Image
                             </button>
                         </th>
-                        <th><button class='btn btn-primary'
-                            (click)="addPokemon()"></button>
-                        </th>
+                        <th>Add to PokeIndex</th>
                         <th>Name</th>
                         <th>Weight</th>
                         <th>Index</th>
@@ -47,6 +45,11 @@
                              [style.margin.px]="imageMargin"
                              >
                              </a>
+                        </td>
+                        <td>
+                            <button class='btn btn-primary'
+                            (click)="addPokemon(pokemon.name, pokemon.weight, pokemon.index)">Add
+                        </button>
                         </td>
                         <td>{{pokemon.name | titlecase }}</td>
                         <td>{{pokemon.weight}}</td>

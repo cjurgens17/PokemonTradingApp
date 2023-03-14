@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, map, tap, throwError } from "rxjs";
+import { Pokemon } from "./pokemon";
+import { environment } from "src/environments/environment";
 
 
 @Injectable({
@@ -10,6 +12,7 @@ import { Observable, catchError, map, tap, throwError } from "rxjs";
 export class PokemonService {
 
     private productUrl = "https://pokeapi.co/api/v2/pokemon/";
+    private userUrl = "http://localhost:8080/pokemon";
 
     constructor (private http: HttpClient) {}
 
@@ -26,6 +29,11 @@ export class PokemonService {
             }))),
             catchError(this.handleError)
         );
+    }
+
+    addPokemon(name: String, weight: number, index: number): Observable<any> {
+        const payload = {name: name, weight: weight, index: index};
+        return this.http.post<any>(`${this.userUrl}/addPokemon`, payload, {headers: environment.headers})
     }
 
     private handleError(err: HttpErrorResponse){
