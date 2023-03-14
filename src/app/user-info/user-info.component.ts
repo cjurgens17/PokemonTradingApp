@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from './user-info';
 import { NgForm } from '@angular/forms';
+import { UserService } from './user-service';
 
 @Component({
   selector: 'app-user-info',
@@ -23,13 +24,24 @@ export class UserInfoComponent implements OnInit {
   postError: boolean = false;
   postErrorMessage: string = '';
 
-  constructor() { }
+  constructor(private userService: UserService) {}
 
   onSubmit(form: NgForm) {
     console.log('In onSubmit: ', form.valid);
 
     if(form.valid){
       //do some data service to post the user info to backend api
+      this.userService.postUser(this.userInfo).subscribe({
+        next: data => {
+          console.log('data: ', data);
+        },
+
+        error: err => {
+          console.log('error: ', err)
+        }
+
+      });
+      console.log('submit successfully');
     }else{
       this.postError = true;
       this.postErrorMessage = "Please fix the above errors";
