@@ -54,10 +54,20 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
   })
 }
 
-addPokemon(name: string, weight: number, index: number): void {
+addPokemon(name: string, weight: number, index: number, abilities: any[]): void {
   console.log(name + " " + weight + " " + index);
+  console.log('abilities: ',abilities);
+  //Here I need to map my any array into a string array of all the ability names
+  const abNames: string[] = []; 
+  
+  for(var i = 0; i < abilities.length; i++) {
+    abNames.push(abilities[i].ability.name);
+}
 
-    this.pokemonService.addPokemon(name, weight, index).subscribe({
+console.log('abNames: ',abNames)
+
+
+    this.pokemonService.addPokemon(name, weight, index, abNames).subscribe({
       next: response => {
         console.log('Response: ', response)
       },
