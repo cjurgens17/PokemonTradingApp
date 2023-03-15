@@ -10,4 +10,5 @@ export interface Pokemon {
     stats: any[];
 
 
+
 }

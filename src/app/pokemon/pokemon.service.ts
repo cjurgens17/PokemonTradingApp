@@ -31,8 +31,8 @@ export class PokemonService {
         );
     }
 
-    addPokemon(name: String, weight: number, index: number, abilities: string[]): Observable<any> {
-        const payload = {name: name, weight: weight, index: index, abilities: abilities};
+    addPokemon(name: String, weight: number, index: number, abilities: string[], statNames: string[], stats: number[], image: string, backImage: string): Observable<any> {
+        const payload = {name: name, weight: weight, index: index, abilities: abilities, statNames: statNames, baseStat: stats, image: image, backImage: backImage};
         return this.http.post<any>(`${this.userUrl}/addPokemon`, payload, {headers: environment.headers}).pipe(
             catchError(this.handleError)
         );

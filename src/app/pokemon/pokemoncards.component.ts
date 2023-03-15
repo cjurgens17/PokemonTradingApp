@@ -33,7 +33,7 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
   onImageClicked(): void {
 
   }
-
+//getPokemon---------------------------------------------
   getPokemon(): void {
     this.sub = this.pokemonService.getPokemon(this.specificPokemon).subscribe({
       next: data => { 
@@ -53,21 +53,30 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
     }
   })
 }
-
-addPokemon(name: string, weight: number, index: number, abilities: any[]): void {
+//addPokemon--------------------------------------
+addPokemon(name: string, weight: number, index: number, abilities: any[], stats: any[], image: string, backImage: string): void {
   console.log(name + " " + weight + " " + index);
   console.log('abilities: ',abilities);
+  console.log('stats', stats);
   //Here I need to map my any array into a string array of all the ability names
   const abNames: string[] = []; 
+  const statNames: string[] =[];
+  const baseStat: number[] = [];
   
-  for(var i = 0; i < abilities.length; i++) {
+for(var i = 0; i < abilities.length; i++) {
     abNames.push(abilities[i].ability.name);
 }
 
+for(var i = 0;i< stats.length;i++){
+  statNames.push(stats[i].stat.name);
+  baseStat.push(stats[i].base_stat);
+}
+
 console.log('abNames: ',abNames)
+console.log('StatName: ', statNames);
+console.log('BaseStat: ', baseStat);
 
-
-    this.pokemonService.addPokemon(name, weight, index, abNames).subscribe({
+    this.pokemonService.addPokemon(name, weight, index, abNames, statNames, baseStat, image, backImage).subscribe({
       next: response => {
         console.log('Response: ', response)
       },
@@ -76,11 +85,11 @@ console.log('abNames: ',abNames)
       }
     });
 }
-     
+   //------------------------------  
   ngOnInit(): void {
 
   }
-
+//-----------------------------------
   ngOnDestroy(): void {
       this.sub.unsubscribe();
   }
