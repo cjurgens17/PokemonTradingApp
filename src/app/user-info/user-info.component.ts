@@ -11,6 +11,7 @@ import { UserService } from './user-service';
 export class UserInfoComponent implements OnInit {
 
   originalUserInfo: User = {
+    id: null,
     firstName: null,
     lastName: null,
     phoneNumber: null,

@@ -4,6 +4,7 @@ import { PokemonCardsComponent } from './pokemoncards.component';
 import { RouterModule } from '@angular/router';
 import { PokemonCardGuard } from './pokemon-card.guard';
 import { SharedModule } from '../shared/shared.module';
+import { UserInfoModule } from '../user-info/user-info.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { SharedModule } from '../shared/shared.module';
         component: PokemonCardComponent
         }
     ]),
-    SharedModule
+    SharedModule,
+    UserInfoModule
   ]
 })
 export class PokemonModule { }

@@ -19,4 +19,5 @@ export class UserService {
         return this.http.post<any>(`${this.userUrl}/new`, user, {headers: environment.headers});    
     }
 
+
 }

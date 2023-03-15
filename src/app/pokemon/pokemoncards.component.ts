@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PokemonService } from './pokemon.service';
 import { Subscription } from 'rxjs';
 import { Pokemon } from './pokemon';
+import { User } from '../user-info/user-info';
 
 
 @Component({
@@ -85,6 +86,56 @@ console.log('BaseStat: ', baseStat);
       }
     });
 }
+
+
+//----------------------testting to add pokemon to an existing users pokeIndex----------------
+  updatePokemon(pokemon: Pokemon): void{
+
+    const user: User = {
+      //this would really be take form the behavior subject
+      id: 1,
+      firstName: null,
+      lastName: null,
+      phoneNumber: null,
+      email: null,
+      birthDate: null,
+      password: null,
+      username: null
+    }
+
+    const abNames: string[] = []; 
+    const statNames: string[] =[];
+
+
+    for(var i = 0; i < pokemon.abilities.length; i++) {
+      abNames.push(pokemon.abilities[i].ability.name);
+  }
+
+  for(var i = 0;i< pokemon.stats.length;i++){
+    statNames.push(pokemon.stats[i].stat.name); 
+  }
+    const parsedPokemon: Pokemon = {
+      name: pokemon.name,
+      weight: pokemon.weight,
+      image: pokemon.image,
+      index: pokemon.index,
+      backImage: pokemon.backImage,
+      abilities:  abNames,
+      stats: statNames
+    }
+
+    this.pokemonService.updatePokemon(user, parsedPokemon).subscribe({
+
+      next: response => {
+        console.log('Respons: ', response);
+      },
+
+      error: err => {
+        console.log('Error: ', err);
+      }
+    });
+  }
+
    //------------------------------  
   ngOnInit(): void {
 
