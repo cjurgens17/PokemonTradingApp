@@ -90,19 +90,6 @@ console.log('BaseStat: ', baseStat);
 
 //----------------------testting to add pokemon to an existing users pokeIndex----------------
   updatePokemon(pokemon: Pokemon): void{
-
-    const user: User = {
-      //this would really be take form the behavior subject
-      id: 1,
-      firstName: null,
-      lastName: null,
-      phoneNumber: null,
-      email: null,
-      birthDate: null,
-      password: null,
-      username: null
-    }
-
     const abNames: string[] = []; 
     const statNames: string[] =[];
 
@@ -124,7 +111,7 @@ console.log('BaseStat: ', baseStat);
       stats: statNames
     }
 
-    this.pokemonService.updatePokemon(user, parsedPokemon).subscribe({
+    this.pokemonService.updatePokemon(parsedPokemon).subscribe({
 
       next: response => {
         console.log('Respons: ', response);
