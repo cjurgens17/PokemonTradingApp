@@ -14,7 +14,7 @@ export class PokemonService {
 
     private productUrl = "https://pokeapi.co/api/v2/pokemon/";
     private userUrl = "http://localhost:8080/pokemon";
-    private apiUrl = "http://localhost:8080/user";
+    private apiUrl = "http://localhost:8080/pokemon";
    
 
     constructor (private http: HttpClient) {}
@@ -44,10 +44,10 @@ export class PokemonService {
 
     //testing to be able to add a pokemon to an existing users pokemonIndex-----------------------
     updatePokemon(pokemon: Pokemon): Observable<any>{
-        const payload = {pokemon:pokemon};
+        //hardcoded for now until we create a login and a behavior subject
         const id = 1;
         const url = `${this.apiUrl}/${id}/addPokemon`;
-        return this.http.post<any>(url, payload, {headers: environment.headers}).pipe(
+        return this.http.post<any>(url, pokemon, {headers: environment.headers}).pipe(
             catchError(this.handleError)
         )
     }

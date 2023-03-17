@@ -111,6 +111,8 @@ console.log('BaseStat: ', baseStat);
       stats: statNames
     }
 
+    console.log(parsedPokemon);
+
     this.pokemonService.updatePokemon(parsedPokemon).subscribe({
 
       next: response => {
