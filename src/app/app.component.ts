@@ -8,7 +8,8 @@ import { Component } from '@angular/core';
     <li><a class='nav-link' routerLink='/Home'>Home</a></li>
     <li><a class='nav-link' routerLink='/pokemon'>Pokemon</a></li>
     <li><a class='nav-link' routerLink='/usersignup'>Sign Up</a></li>
-  </ul>  
+    <li><a class='nav-link' routerLink='/userlogin'>Log In</a></li>
+  </ul>
 </nav>
 <div class='container'>
   <router-outlet></router-outlet>
@@ -19,3 +20,6 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'Welcome To Pokemon Trading';
 }
+
+
+//<li><a class='nav-link' routerLink='/usersignup'>Log In</a></li>

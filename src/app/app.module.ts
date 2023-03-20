@@ -8,6 +8,8 @@ import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { UserInfoModule } from './user-info/user-info.module';
+import { UserLoginModule } from './user-login/user-login.module';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { UserInfoModule } from './user-info/user-info.module';
       {path: '**', redirectTo: 'home', pathMatch: 'full'}
     ]),
     PokemonModule,
-    UserInfoModule
+    UserInfoModule,
+    UserLoginModule
     
   
   ],
