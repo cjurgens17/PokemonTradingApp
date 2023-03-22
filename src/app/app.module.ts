@@ -9,11 +9,12 @@ import { HomeComponent } from './home/home.component';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { UserInfoModule } from './user-info/user-info.module';
 import { UserLoginModule } from './user-login/user-login.module';
+import { UserProfileModule } from './user-profile/user-profile.module';
 
 
 @NgModule({
   declarations: [
-    AppComponent, 
+    AppComponent,
     HomeComponent
   ],
   imports: [
@@ -28,9 +29,10 @@ import { UserLoginModule } from './user-login/user-login.module';
     ]),
     PokemonModule,
     UserInfoModule,
-    UserLoginModule
-    
-  
+    UserLoginModule,
+    UserProfileModule
+
+
   ],
   providers: [],
   bootstrap: [AppComponent]

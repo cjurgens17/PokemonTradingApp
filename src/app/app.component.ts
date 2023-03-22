@@ -9,12 +9,13 @@ import { Component } from '@angular/core';
     <li><a class='nav-link' routerLink='/pokemon'>Pokemon</a></li>
     <li><a class='nav-link' routerLink='/usersignup'>Sign Up</a></li>
     <li><a class='nav-link' routerLink='/userlogin'>Log In</a></li>
+    <li><a class='nav-link' routerLink='/userprofile'>Profile</a></li>
   </ul>
 </nav>
 <div class='container'>
   <router-outlet></router-outlet>
 </div>
-  ` 
+  `
 })
 
 export class AppComponent {
