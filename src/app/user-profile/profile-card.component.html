@@ -1,8 +1,25 @@
-<div class="card" *ngFor="let pokemon of userPokemon">
-  <img class="card-img-top" [src]="pokemon.image" alt="Pokemon Front image"><img class="card-img-top" [src]="pokemon.backImage">
-  <div class="card-body">
-    <h5 class="card-title">{{pokemon.name}}</h5>
-    <h6 class="card-text">{{pokemon.index}}</h6>
-    <p class="card-text" *ngFor="let ability of pokemon.abilities">{{'Ability: ' + ability.ability.name | titlecase }}</p>
+<div style="width: 50%; height:50%;">
+<div *ngFor="let pokemon of userPokemon">
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <img class="card-img-top img-fluid" [src]="pokemon.image" alt="Pokemon Front image">
+      <div class="card-body">
+        <h5 class="card-title">{{'Name: '+pokemon.name}}</h5>
+        <h6 class="card-text">{{'Index: '+pokemon.index}}</h6>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <img class="card-img-top img-fluid" [src]="pokemon.backImage" alt="Pokemon Back image">
+      <div class="card-body">
+        <h5 class="card-title">{{'Weight: '+pokemon.weight}}</h5>
+      </div>
+    </div>
   </div>
 </div>
+</div>
+</div>
+
+

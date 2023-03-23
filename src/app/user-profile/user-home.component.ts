@@ -6,9 +6,8 @@ import { Component, OnInit } from '@angular/core';
     <h4>User Profile</h4>
     <hr>
     <button (click)="togglePokemon()">{{showPokemon ? 'Hide' : 'Show'}} Pokemon</button>
-    <div *ngIf="showPokemon">
-    <app-profile-card></app-profile-card>
-    </div>`,
+    <app-profile-card *ngIf="showPokemon"></app-profile-card>
+    `,
   styleUrls: ['./user-home.component.css']
 })
 export class UserHomeComponent implements OnInit {

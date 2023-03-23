@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-login.component.css']
 })
 export class UserLoginComponent implements OnInit {
-  
+
   userLogin: UserLogin = {
     username: null,
     password: null
@@ -30,24 +30,25 @@ export class UserLoginComponent implements OnInit {
         next: data => {
           console.log('data: ', data);
           this.router.navigate(['home']);
-          localStorage.setItem('userLoginInfo', JSON.stringify(data));
+          let json = JSON.stringify(data);
+          localStorage.setItem('userLoginInfo', json);
           console.log(localStorage.getItem('userLoginInfo'));
         },
         error: err => {
           console.log('error: ', err);
-        } 
+        }
      });
-      console.log('Login successful');  
+      console.log('Login successful');
     }else{
       this.postError = true;
       this.postErrorMessage = "Username or password does not exist."
-    }  
+    }
 }
 
-ngOnInit(): void { 
+ngOnInit(): void {
 }
 
 
 }
-  
+
 

@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, map, tap, throwError } from "rxjs";
 import { Pokemon } from "./pokemon";
 import { environment } from "src/environments/environment";
-import { User } from '../user-info/user-info';
+
 
 
 @Injectable({
@@ -15,20 +15,20 @@ export class PokemonService {
     private productUrl = "https://pokeapi.co/api/v2/pokemon/";
     private userUrl = "http://localhost:8080/pokemon";
     private apiUrl = "http://localhost:8080/pokemon";
-   
+
 
     constructor (private http: HttpClient) {}
 
     getPokemon(name: string): Observable<any> {
         return this.http.get<any>(this.productUrl + name.toLowerCase()).pipe(
             map((response => ({
-                name: response.name,
-                weight: response.weight,
-                image: response.sprites.front_shiny,
-                index: response.id,
-                backImage: response.sprites.back_shiny,
-                abilities: response.abilities,
-                stats: response.stats
+              name: response.name,
+              weight: response.weight,
+              image: response.sprites.front_shiny,
+              index: response.id,
+              backImage: response.sprites.back_shiny,
+              abilities: response.abilities,
+              stats: response.stats
             }))),
             catchError(this.handleError)
         );

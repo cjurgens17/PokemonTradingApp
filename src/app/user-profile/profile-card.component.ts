@@ -18,16 +18,14 @@ export class ProfileCardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     console.log(localStorage);
-    const savedUser = localStorage.getItem('userLoginInfo');
-    const stringUser = JSON.stringify(savedUser);
-    const parsedUser = JSON.parse(stringUser);
-    const userId = parsedUser.id;
+    let savedUser = JSON.parse(localStorage.getItem('userLoginInfo') || '{}');
+    const userId = savedUser.id;
+    console.log(userId);
 
     this.sub = this.userService.getUserPokemon(userId).subscribe({
       next: data => {
-        for(var i = 0;i<data.length;i++){
-          this.userPokemon.push(data[i]);
-        }
+        this.userPokemon = data;
+        console.log(this.userPokemon);
       },
       error: error => {
         this.errorMessage = error.message;

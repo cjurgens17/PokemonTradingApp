@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
+import { Pokemon } from '../pokemon/pokemon';
 
 @Injectable({
   providedIn: 'root'
@@ -11,18 +12,9 @@ export class UserProfileService {
 
   constructor(private http: HttpClient) {}
 
-  getUserPokemon(id: number): Observable<any> {
+  getUserPokemon(id: number): Observable<Pokemon[]> {
     const path = `${this.userUrl}/${id}/userPokemon`;
-    return this.http.get<any>(path).pipe(
-      map(pokemon => pokemon.map((poke: { name: any; image: any; index: any; backImage: any; abilities: any; stats: any; weight: any }) => ({
-        name: poke.name,
-        weight: poke.weight,
-        image: poke.image,
-        index: poke.index,
-        backImage: poke.backImage,
-        abilities: poke.abilities,
-        stats: poke.stats
-      }))),
+    return this.http.get<Pokemon[]>(path).pipe(
       catchError(this.handleError)
     )
   }
