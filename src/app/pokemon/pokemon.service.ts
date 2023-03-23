@@ -43,9 +43,8 @@ export class PokemonService {
 
 
     //testing to be able to add a pokemon to an existing users pokemonIndex-----------------------
-    updatePokemon(pokemon: Pokemon): Observable<any>{
+    updatePokemon(pokemon: Pokemon, id: number): Observable<any>{
         //hardcoded for now until we create a login and a behavior subject
-        const id = 1;
         const url = `${this.apiUrl}/${id}/addPokemon`;
         return this.http.post<any>(url, pokemon, {headers: environment.headers}).pipe(
             catchError(this.handleError)

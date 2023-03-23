@@ -37,7 +37,7 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
 //getPokemon---------------------------------------------
   getPokemon(): void {
     this.sub = this.pokemonService.getPokemon(this.specificPokemon).subscribe({
-      next: data => { 
+      next: data => {
         this.pokemon = data
         this.pokemon.name = data.name
         this.pokemon.weight = data.weight
@@ -60,10 +60,10 @@ addPokemon(name: string, weight: number, index: number, abilities: any[], stats:
   console.log('abilities: ',abilities);
   console.log('stats', stats);
   //Here I need to map my any array into a string array of all the ability names
-  const abNames: string[] = []; 
+  const abNames: string[] = [];
   const statNames: string[] =[];
   const baseStat: number[] = [];
-  
+
 for(var i = 0; i < abilities.length; i++) {
     abNames.push(abilities[i].ability.name);
 }
@@ -90,8 +90,10 @@ console.log('BaseStat: ', baseStat);
 
 //----------------------testting to add pokemon to an existing users pokeIndex----------------
   updatePokemon(pokemon: Pokemon): void{
-    const abNames: string[] = []; 
+    const abNames: string[] = [];
     const statNames: string[] =[];
+    let savedUser = JSON.parse(localStorage.getItem('userLoginInfo') || '{}');
+    const userId = savedUser.id;
 
 
     for(var i = 0; i < pokemon.abilities.length; i++) {
@@ -99,7 +101,7 @@ console.log('BaseStat: ', baseStat);
   }
 
   for(var i = 0;i< pokemon.stats.length;i++){
-    statNames.push(pokemon.stats[i].stat.name); 
+    statNames.push(pokemon.stats[i].stat.name);
   }
     const parsedPokemon: Pokemon = {
       name: pokemon.name,
@@ -113,7 +115,7 @@ console.log('BaseStat: ', baseStat);
 
     console.log(parsedPokemon);
 
-    this.pokemonService.updatePokemon(parsedPokemon).subscribe({
+    this.pokemonService.updatePokemon(parsedPokemon, userId).subscribe({
 
       next: response => {
         console.log('Respons: ', response);
@@ -125,7 +127,7 @@ console.log('BaseStat: ', baseStat);
     });
   }
 
-   //------------------------------  
+   //------------------------------
   ngOnInit(): void {
 
   }
