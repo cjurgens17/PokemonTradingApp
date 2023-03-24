@@ -3,6 +3,7 @@ import { Pokemon } from '../pokemon/pokemon';
 import { UserProfileService } from './user-profile.service';
 import { Subscription } from 'rxjs';
 
+
 @Component({
   selector: 'app-profile-card',
   templateUrl: './profile-card.component.html',
@@ -19,6 +20,7 @@ export class ProfileCardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log(localStorage);
     let savedUser = JSON.parse(localStorage.getItem('userLoginInfo') || '{}');
+
     const userId = savedUser.id;
     console.log(userId);
 

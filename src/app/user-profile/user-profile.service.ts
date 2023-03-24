@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { Pokemon } from '../pokemon/pokemon';
+import { User } from '../user-info/user-info';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,15 @@ export class UserProfileService {
       catchError(this.handleError)
     )
   }
+//-----------------------------------------------------this is to get user info
+//-----------------right now we are using the local storage
+  getUserInformation(id: number): Observable<User> {
+    const path = `${this.userUrl}/${id}/userInfo`;
+    return this.http.get<User>(path).pipe(
+      catchError(this.handleError)
+    )
+  }
+//-------------------------------------------------------------------------
 
   private handleError(err: HttpErrorResponse){
 
