@@ -1,7 +1,8 @@
 <h4>User Profile</h4>
 <hr>
+<img [src]="user.profilePicture" class="img-fluid rounded-circle mb-3" alt="User Profile Picture">
 <h2>{{user.firstName}} {{user.lastName}}</h2>
 <h2>Email: {{user.email}}</h2>
 <h2>Username: {{user.username}}</h2>
 <button (click)="togglePokemon()">{{showPokemon ? 'Hide' : 'Show'}} Pokemon</button>
-<app-profile-card *ngIf="showPokemon"></app-profile-card>
+<app-profile-card *ngIf="showPokemon" (pictureEmitter)="handlePicture($event)" [currentUser]="user"></app-profile-card>

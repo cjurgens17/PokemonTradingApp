@@ -1,9 +1,12 @@
+<h2>{{currentUser.firstName}}'s Pokemon</h2>
 <div style="width: 50%; height:50%;">
 <div *ngFor="let pokemon of userPokemon">
 <div class="row">
   <div class="col-md-6">
     <div class="card">
       <img class="card-img-top img-fluid" [src]="pokemon.image" alt="Pokemon Front image">
+      <button (click)="registerPicture(pokemon.image)"
+        (click)="profilePicture()">Make Profile Picture</button>
       <div class="card-body">
         <h5 class="card-title">{{'Name: '+pokemon.name | titlecase}}</h5>
         <h6 class="card-text">{{'Index: '+pokemon.index}}</h6>

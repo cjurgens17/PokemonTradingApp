@@ -7,4 +7,5 @@ export interface User {
     birthDate: Date | null;
     password: string | null;
     username: string | null;
+    profilePicture: string | null;
 }

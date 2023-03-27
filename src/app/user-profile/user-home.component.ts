@@ -14,10 +14,15 @@ export class UserHomeComponent implements OnInit, OnDestroy {
   user!: User;
   sub!: Subscription;
   errorMessage: string = '';
+  defaultUserPicture: string = 'https://freesvg.org/img/abstract-user-flat-4.png';
   constructor(private userProfileService: UserProfileService) { }
 
   togglePokemon(): void {
     this.showPokemon = !this.showPokemon;
+  }
+
+  handlePicture(data: string): void {
+    this.user.profilePicture = data;
   }
 
   ngOnInit(): void {

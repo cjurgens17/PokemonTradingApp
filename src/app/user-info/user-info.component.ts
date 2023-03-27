@@ -18,7 +18,8 @@ export class UserInfoComponent implements OnInit {
     email: null,
     birthDate: null,
     password: null,
-    username: null
+    username: null,
+    profilePicture: null
   }
 
   userInfo: User = {...this.originalUserInfo};

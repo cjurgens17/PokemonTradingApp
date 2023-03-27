@@ -22,5 +22,5 @@ export class PokemonCardGuard implements CanActivate {
       }
     return true;
   }
-  
+
 }
