@@ -5,15 +5,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-home',
-  template: `
-    <h4>User Profile</h4>
-    <hr>
-    <h2>{{user.firstName}} {{user.lastName}}</h2>
-    <h2>Email: {{user.email}}</h2>
-    <h2>Username: {{user.username}}</h2>
-    <button (click)="togglePokemon()">{{showPokemon ? 'Hide' : 'Show'}} Pokemon</button>
-    <app-profile-card *ngIf="showPokemon"></app-profile-card>
-    `,
+  templateUrl: "./user-home.component.html",
   styleUrls: ['./user-home.component.css']
 })
 export class UserHomeComponent implements OnInit, OnDestroy {
