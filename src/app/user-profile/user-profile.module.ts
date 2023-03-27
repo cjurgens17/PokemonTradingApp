@@ -4,6 +4,7 @@ import { ProfileCardComponent } from './profile-card.component';
 import { UserHomeComponent } from './user-home.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { UserHomeGuard } from './user-home.guard';
 
 
 
@@ -16,7 +17,9 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     SharedModule,
     RouterModule.forChild([
-      {path: 'userprofile', component: UserHomeComponent}
+      {path: 'userprofile',
+      canActivate: [UserHomeGuard],
+      component: UserHomeComponent}
     ])
   ],
   bootstrap: [UserHomeComponent]

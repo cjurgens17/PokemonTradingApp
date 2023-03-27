@@ -27,7 +27,11 @@ import { NavbarComponent } from './navbar/navbar.component';
     RouterModule.forRoot([
       {path: 'home', component: HomeComponent},
       {path: '', redirectTo: 'home', pathMatch:'full'},
-      {path: '**', redirectTo: 'home', pathMatch: 'full'}
+      {path: '**', redirectTo: 'home', pathMatch: 'full'},
+      {path: 'usersignup', loadChildren: () => import('./user-info/user-info.module').then(m => m.UserInfoModule)},
+      {path: 'userlogin', loadChildren: () => import('./user-login/user-login.module').then(m => m.UserLoginModule)},
+      {path: 'userprofile', loadChildren: () => import('./user-profile/user-profile.module').then(m => m.UserProfileModule)},
+      {path: 'usersignup', loadChildren: () => import('./pokemon/pokemon.module').then(m => m.PokemonModule)}
     ]),
     PokemonModule,
     UserInfoModule,
