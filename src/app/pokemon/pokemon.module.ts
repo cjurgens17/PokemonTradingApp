@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { PokemonCardComponent } from './pokemon-card.component';
-import { PokemonCardsComponent } from './pokemoncards.component';
+import { PokemonCardComponent } from './pokemon-card/pokemon-card.component';
+import { PokemonCardsComponent } from './pokemoncards/pokemoncards.component';
 import { RouterModule } from '@angular/router';
-import { PokemonCardGuard } from './pokemon-card.guard';
+import { PokemonCardGuard } from './pokemon-card/pokemon-card.guard';
 import { SharedModule } from '../shared/shared.module';
 import { UserInfoModule } from '../user-info/user-info.module';
 

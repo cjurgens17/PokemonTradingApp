@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PokemonService } from './pokemon.service';
+import { PokemonService } from '../pokemon.service';
 import { Subscription } from 'rxjs';
-import { Pokemon } from './pokemon';
-import { User } from '../user-info/user-info';
+import { Pokemon } from '../pokemon';
+import { User } from '../../user-info/user-info';
 
 
 @Component({

@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Pokemon } from '../pokemon/pokemon';
-import { UserProfileService } from './user-profile.service';
 import { Subscription } from 'rxjs';
-import { User } from '../user-info/user-info';
+import { UserProfileService } from '../user-profile.service';
+import { User } from 'src/app/user-info/user-info';
+import { Pokemon } from 'src/app/pokemon/pokemon';
+
 
 
 @Component({
