@@ -1,8 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { EMPTY, Observable, catchError, filter, map, switchMap, tap, throwError } from 'rxjs';
 import { Pokemon } from '../pokemon/pokemon';
 import { User } from '../user-info/user-info';
+import { UserLoginService } from '../user-login/user-login-service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +12,43 @@ export class UserProfileService {
 
   private userUrl = "http://localhost:8080/user";
 
-  constructor(private http: HttpClient) {}
+  currentUserLogin$ = this.userLoginService.getCurrentUser();
 
-  getUserPokemon(id: number): Observable<Pokemon[]> {
-    const path = `${this.userUrl}/${id}/userPokemon`;
-    return this.http.get<Pokemon[]>(path).pipe(
-      catchError(this.handleError)
-    )
-  }
+  currentUser$ = this.currentUserLogin$
+  .pipe(
+    filter(userLogin => Boolean(userLogin)),
+    switchMap(userLogin => {
+      if(userLogin?.username){
+        return this.http.get<User>(`${this.userUrl}/${userLogin.username}`)
+      }else {
+        return EMPTY;
+      }
+    }),
+    tap(user => console.log(`current User`, user))
+  );
+//go back and use a merge to get userPokemon
+  userPokemon$ = this.currentUser$
+  .pipe(
+    filter(user => Boolean(user)),
+    switchMap(user => {
+      return this.http.get<Pokemon[]>(`${this.userUrl}/${user.id}/userPokemon`)
+    }),
+    tap(pokemon => console.log('user pokemon', pokemon))
+  );
+
+  constructor(private http: HttpClient, private userLoginService: UserLoginService) {}
+
+
+
+
+
+
+  // getUserPokemon(id: number): Observable<Pokemon[]> {
+  //   const path = `${this.userUrl}/${id}/userPokemon`;
+  //   return this.http.get<Pokemon[]>(path).pipe(
+  //     catchError(this.handleError)
+  //   )
+  // }
 //-----------------------------------------------------this is to get user info
 //-----------------right now we are using the local storage
   getUserInformation(id: number): Observable<User> {

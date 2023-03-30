@@ -26,6 +26,7 @@ export class UserLoginComponent implements OnInit {
   onSubmit(form: NgForm) {
     console.log('In onSubmit: ', form.valid);
     if(form.valid){
+      this.userLoginService.setCurrentUser(this.userLoginInfo);
       this.userLoginService.loginUser(this.userLoginInfo).subscribe({
         next: data => {
           console.log('data: ', data);
