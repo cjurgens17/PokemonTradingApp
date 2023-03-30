@@ -43,20 +43,15 @@ export class UserProfileService {
 
 
 
-  // getUserPokemon(id: number): Observable<Pokemon[]> {
-  //   const path = `${this.userUrl}/${id}/userPokemon`;
-  //   return this.http.get<Pokemon[]>(path).pipe(
+
+//-----------------------------------------------------this is to get user info
+//-----------------right now we are using the local storage
+  // getUserInformation(id: number): Observable<User> {
+  //   const path = `${this.userUrl}/${id}/userInfo`;
+  //   return this.http.get<User>(path).pipe(
   //     catchError(this.handleError)
   //   )
   // }
-//-----------------------------------------------------this is to get user info
-//-----------------right now we are using the local storage
-  getUserInformation(id: number): Observable<User> {
-    const path = `${this.userUrl}/${id}/userInfo`;
-    return this.http.get<User>(path).pipe(
-      catchError(this.handleError)
-    )
-  }
 //-------------------------------------------------------------------------
 
   private handleError(err: HttpErrorResponse){

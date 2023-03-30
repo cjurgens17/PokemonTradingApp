@@ -18,7 +18,7 @@ export class PokemonService {
 
 
     constructor (private http: HttpClient) {}
-
+//this gets pokemon from an offshore pokeAPI---------------------------------
     getPokemon(name: string): Observable<any> {
         return this.http.get<any>(this.productUrl + name.toLowerCase()).pipe(
             map((response => ({
@@ -33,7 +33,8 @@ export class PokemonService {
             catchError(this.handleError)
         );
     }
-
+    //--------------------------------------------------------------------------
+//adds pokemon to database
     addPokemon(name: String, weight: number, index: number, abilities: string[], statNames: string[], stats: number[], image: string, backImage: string): Observable<any> {
         const payload = {name: name, weight: weight, index: index, abilities: abilities, statNames: statNames, baseStat: stats, image: image, backImage: backImage};
         return this.http.post<any>(`${this.userUrl}/addPokemon`, payload, {headers: environment.headers}).pipe(
@@ -42,9 +43,8 @@ export class PokemonService {
     }
 
 
-    //testing to be able to add a pokemon to an existing users pokemonIndex-----------------------
+    //Adds Pokemon to users PokeIndex-----------------------
     updatePokemon(pokemon: Pokemon, id: number): Observable<any>{
-        //hardcoded for now until we create a login and a behavior subject
         const url = `${this.apiUrl}/${id}/addPokemon`;
         return this.http.post<any>(url, pokemon, {headers: environment.headers}).pipe(
             catchError(this.handleError)
