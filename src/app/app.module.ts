@@ -11,6 +11,7 @@ import { UserInfoModule } from './user-info/user-info.module';
 import { UserLoginModule } from './user-login/user-login.module';
 import { UserProfileModule } from './user-profile/user-profile.module';
 import { NavbarComponent } from './navbar/navbar.component';
+import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     PokemonModule,
     UserInfoModule,
     UserLoginModule,
-    UserProfileModule
+    UserProfileModule,
+    SharedModule
 
 
   ],

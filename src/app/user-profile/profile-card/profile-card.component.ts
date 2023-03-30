@@ -11,37 +11,38 @@ import { Pokemon } from 'src/app/pokemon/pokemon';
   templateUrl: './profile-card.component.html',
   styleUrls: ['./profile-card.component.css']
 })
-export class ProfileCardComponent implements OnInit, OnDestroy {
+export class ProfileCardComponent {
 
-  constructor(private userService: UserProfileService) { }
+
+  pokemon$ = this.userService.userPokemon$;
+
+  constructor(private userService: UserProfileService ) { }
 
   @Output() pictureEmitter = new EventEmitter();
 
   @Input() currentUser!: User
   updateProfilePicture: string = '';
-  userPokemon!: Pokemon[];
-  sub!: Subscription;
   errorMessage: string = '';
 
 
-  ngOnInit(): void {
-    console.log(localStorage);
-    let savedUser = JSON.parse(localStorage.getItem('userLoginInfo') || '{}');
+  // ngOnInit(): void {
+  //   console.log(localStorage);
+  //   let savedUser = JSON.parse(localStorage.getItem('userLoginInfo') || '{}');
 
-    const userId = savedUser.id;
-    console.log(userId);
+  //   const userId = savedUser.id;
+  //   console.log(userId);
 
-    this.sub = this.userService.getUserPokemon(userId).subscribe({
-      next: data => {
-        this.userPokemon = data;
-        console.log(this.userPokemon);
-      },
-      error: error => {
-        this.errorMessage = error.message;
-        console.error('There was an error!', error);
-      }
-    })
-  }
+  //   this.sub = this.userService.getUserPokemon(userId).subscribe({
+  //     next: data => {
+  //       this.userPokemon = data;
+  //       console.log(this.userPokemon);
+  //     },
+  //     error: error => {
+  //       this.errorMessage = error.message;
+  //       console.error('There was an error!', error);
+  //     }
+  //   })
+  // }
 
   registerPicture(image: string): void{
     this.updateProfilePicture = image;
@@ -51,8 +52,6 @@ export class ProfileCardComponent implements OnInit, OnDestroy {
     return this.pictureEmitter.emit(this.updateProfilePicture);
   }
 
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
+
 
 }
