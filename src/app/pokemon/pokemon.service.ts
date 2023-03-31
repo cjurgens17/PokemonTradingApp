@@ -17,7 +17,7 @@ export class PokemonService {
     private apiUrl = "http://localhost:8080/pokemon";
 
 
-    constructor (private http: HttpClient) {}
+  constructor (private http: HttpClient) {}
 //this gets pokemon from an offshore pokeAPI---------------------------------
     getPokemon(name: string): Observable<any> {
         return this.http.get<any>(this.productUrl + name.toLowerCase()).pipe(

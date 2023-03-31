@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Pokemon } from '../pokemon';
 
 
@@ -15,11 +15,28 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
 
 
 
+//make a behavior subject
+//make an observable from the subject
+//get pokemon button we do a next on the behviorsuvbject
+//we subscribe in the html with an async pipe to get the emissions with the
+//beahvior subject observable
+
+defaultPokemon: Pokemon = {
+  name: '',
+  weight: 0,
+  image: '',
+  index: 0,
+  backImage: '',
+  abilities: [],
+  stats: []
+}
+private pokemonBehaviorSubject = new BehaviorSubject<Pokemon>(this.defaultPokemon)
+pokemonAction$ = this.pokemonBehaviorSubject.asObservable();
+
 
   constructor(private pokemonService: PokemonService) { }
 
   pokemon!: Pokemon;
-  pokemons: Pokemon[] = [];
   sub!: Subscription;
   errorMessage: string = '';
   pageTitle: string = 'Welcome'
@@ -51,7 +68,7 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
         this.pokemon.backImage = data.backImage
         this.pokemon.abilities = data.abilities
         this.pokemon.stats = data.stats
-        this.pokemons.push(this.pokemon);
+        this.pokemonBehaviorSubject.next(this.pokemon)
   },
   error: error => {
       this.errorMessage = error.message;
@@ -134,7 +151,6 @@ console.log('BaseStat: ', baseStat);
 
    //------------------------------
   ngOnInit(): void {
-
   }
 //-----------------------------------
   ngOnDestroy(): void {

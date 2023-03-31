@@ -35,8 +35,9 @@
                         <th>Index</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr  *ngFor="let pokemon of pokemons">
+                <tbody *ngIf="pokemonAction$ | async as pokemon">
+                    <!-- <tr  *ngFor="let pokemon of pokemons"> -->
+                      <tr>
                         <td>
                             <a [routerLink]="['/pokemonCard', pokemon.name]">
                             <img *ngIf="showImage"
