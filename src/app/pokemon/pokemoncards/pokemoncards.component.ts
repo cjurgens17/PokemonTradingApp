@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { Subscription } from 'rxjs';
 import { Pokemon } from '../pokemon';
-import { User } from '../../user-info/user-info';
+
 
 
 @Component({
@@ -11,6 +11,10 @@ import { User } from '../../user-info/user-info';
   styleUrls: ['./pokemoncards.component.css']
 })
 export class PokemonCardsComponent implements OnInit, OnDestroy {
+
+
+
+
 
   constructor(private pokemonService: PokemonService) { }
 
@@ -34,7 +38,8 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
   onImageClicked(): void {
 
   }
-//getPokemon---------------------------------------------
+
+// getPokemon---------------------------------------------
   getPokemon(): void {
     this.sub = this.pokemonService.getPokemon(this.specificPokemon).subscribe({
       next: data => {
