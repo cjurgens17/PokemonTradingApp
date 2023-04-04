@@ -37,12 +37,26 @@ export class AllUsersService {
   userPokemon$ = this.selectedUser$
   .pipe(
     filter(user => Boolean(user)),
-    map((user) => {
+    switchMap((user) => {
       return this.http.get<Pokemon[]>(`${this.userUrl}/${user?.id}/userPokemon`)
     }),
     tap(pokemon => console.log('User Pokemon', pokemon))
   );
 
+  private userSelectedPokemonSubject = new Subject<string>();
+  userSelectedPokemonAction$ = this.userSelectedPokemonSubject.asObservable();
+
+    //Hot Observable that returns a selected pokemon from user-detail component
+  clickedPokemon$ = combineLatest([
+    this.userPokemon$,
+    this.userSelectedPokemonAction$
+  ])
+  .pipe(
+    map(([userPokemon,userSelectedPokemon]) =>
+    userPokemon.find(poke => poke.name === userSelectedPokemon)),
+    tap(data => console.log(`Selected Pokemon: `, JSON.stringify(data))),
+    catchError(this.handleError)
+    );
 
 
 
@@ -50,8 +64,13 @@ export class AllUsersService {
 
 
     //method for selected user that passes in an id
-    onSelected(id:number | null): void {
-      this.userSelectedSubject.next(Number(id));
+    onSelected(id:number): void {
+      this.userSelectedSubject.next(id);
+    }
+
+    //method that passes pokemon name to subject
+    onTap(name: string): void {
+      this.userSelectedPokemonSubject.next(name);
     }
 
     //error handling

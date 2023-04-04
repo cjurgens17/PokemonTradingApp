@@ -25,7 +25,7 @@
 
     <div class="table-responsive">
       <table class="table mb-0"
-             *ngIf="(ud.userPokemon | async)?.length; else noPokemon"
+             *ngIf="ud.userPokemon.length; else noPokemon"
              >
         <thead>
           <tr>
@@ -35,10 +35,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let pokemon of ud.userPokemon | async">
+          <tr *ngFor="let pokemon of ud.userPokemon">
             <td>{{ pokemon.name }}</td>
             <td>{{ pokemon.abilities }}</td>
-            <td><img class="card-img-top img-fluid" [src]="pokemon.image" alt="Pokemon Front image"></td>
+            <td><button (click)="onTap(pokemon.name)"><img class="card-img-top img-thumbnail" [src]="pokemon.image" alt="Pokemon Front image"></button></td>
           </tr>
         </tbody>
       </table>

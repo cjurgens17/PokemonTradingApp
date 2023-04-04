@@ -1,0 +1,13 @@
+<div class="card"
+*ngIf="pokeDetail$ | async as pd">
+<h1>{{pd.pageTitle}}</h1>
+<figure class="figure">
+  <img [src]="pd.clickedPokemon?.image" class="figure-img img-fluid rounded" (error)="replaceImage($event)">
+  <figcaption class="figure-caption">Pokemon Index: {{pd.clickedPokemon ? pd.clickedPokemon.index : 'Not Available'}}</figcaption>
+</figure>
+</div>
+
+<div class="alert alert-danger"
+     *ngIf="errorMessage$ | async as errorMessage">
+  {{ errorMessage }}
+</div>

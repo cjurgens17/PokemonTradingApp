@@ -15,6 +15,7 @@ import { SharedModule } from './shared/shared.module';
 import { AllUsersShellComponent } from './all-users/all-users-shell.component';
 import { AllUsersComponent } from './all-users/all-users.component';
 import { AllUsersDetailsComponent } from './all-users/all-users-details.component';
+import { PokeDetailComponent } from './all-users/poke-detail.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { AllUsersDetailsComponent } from './all-users/all-users-details.componen
     NavbarComponent,
     AllUsersShellComponent,
     AllUsersComponent,
-    AllUsersDetailsComponent
+    AllUsersDetailsComponent,
+    PokeDetailComponent
   ],
   imports: [
     BrowserModule,

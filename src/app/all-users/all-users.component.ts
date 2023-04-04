@@ -24,7 +24,7 @@ export class AllUsersComponent {
 
   //selected method to get a specific user
   onSelected(id: number | null): void {
-    this.allUsersService.onSelected(id);
+    this.allUsersService.onSelected(Number(id));
   }
 
 }
