@@ -12,13 +12,19 @@ import { UserLoginModule } from './user-login/user-login.module';
 import { UserProfileModule } from './user-profile/user-profile.module';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharedModule } from './shared/shared.module';
+import { AllUsersShellComponent } from './all-users/all-users-shell.component';
+import { AllUsersComponent } from './all-users/all-users.component';
+import { AllUsersDetailsComponent } from './all-users/all-users-details.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    AllUsersShellComponent,
+    AllUsersComponent,
+    AllUsersDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -27,6 +33,7 @@ import { SharedModule } from './shared/shared.module';
     BrowserAnimationsModule,
     RouterModule.forRoot([
       {path: 'home', component: HomeComponent},
+      {path: 'users', component: AllUsersShellComponent},
       {path: '', redirectTo: 'home', pathMatch:'full'},
       {path: '**', redirectTo: 'home', pathMatch: 'full'},
       {path: 'usersignup', loadChildren: () => import('./user-info/user-info.module').then(m => m.UserInfoModule)},

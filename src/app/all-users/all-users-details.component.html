@@ -1,0 +1,57 @@
+<div class="card"
+     *ngIf="userDetails$ | async as ud">
+  <div class="card-header">
+    {{ ud.pageTitle }}
+  </div>
+
+  <div class="card-body"
+  *ngIf="ud.user">
+    <div class="row">
+      <div class="col-md-2">First Name:</div>
+      <div class="col-md-6">{{ ud.user.firstName }}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-2">Last Name:</div>
+      <div class="col-md-6">{{ ud.user.lastName }}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-2">Email:</div>
+      <div class="col-md-6">{{ ud.user.email }}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-2">Username:</div>
+      <div class="col-md-6">{{ ud.user.username}}</div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table mb-0"
+             *ngIf="(ud.userPokemon | async)?.length; else noPokemon"
+             >
+        <thead>
+          <tr>
+            <th>Pokemon</th>
+            <th>Abilities</th>
+            <th>Image</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pokemon of ud.userPokemon | async">
+            <td>{{ pokemon.name }}</td>
+            <td>{{ pokemon.abilities }}</td>
+            <td><img class="card-img-top img-fluid" [src]="pokemon.image" alt="Pokemon Front image"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <ng-template #noPokemon>
+    <div class="alert alert-warning">
+      This User currently has no Pokemon
+    </div>
+  </ng-template>
+</div>
+
+<div class="alert alert-danger"
+     *ngIf="errorMessage$ | async as errorMessage">
+  {{ errorMessage }}
+</div>
