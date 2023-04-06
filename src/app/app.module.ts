@@ -16,7 +16,7 @@ import { AllUsersShellComponent } from './all-users/all-users-shell.component';
 import { AllUsersComponent } from './all-users/all-users.component';
 import { AllUsersDetailsComponent } from './all-users/all-users-details.component';
 import { PokeDetailComponent } from './all-users/poke-detail.component';
-import { NavbarContentComponent } from './navbar/navbar-content/navbar-content.component';
+
 
 
 @NgModule({
@@ -27,8 +27,8 @@ import { NavbarContentComponent } from './navbar/navbar-content/navbar-content.c
     AllUsersShellComponent,
     AllUsersComponent,
     AllUsersDetailsComponent,
-    PokeDetailComponent,
-    NavbarContentComponent
+    PokeDetailComponent
+
   ],
   imports: [
     BrowserModule,
