@@ -27,7 +27,7 @@ export class AllUsersDetailsComponent {
     //Cold Observabel that retireves users first last name
   pageTitle$ = this.user$
   .pipe(
-    map(u => u ? `${u.firstName} ${u.lastName}s Profile Page` : null)
+    map(u => u ? `${u.firstName} ${u.lastName} Profile Page` : null)
   )
 
     //Hot Observable that gets users pokemon based on the user which is selected
