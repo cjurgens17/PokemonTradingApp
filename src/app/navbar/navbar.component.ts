@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  title = 'Welcome To Pokemon Trading';
+  title = 'Pokemon Trading';
 
   constructor() { }
 
