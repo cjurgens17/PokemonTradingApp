@@ -16,6 +16,7 @@ import { AllUsersShellComponent } from './all-users/all-users-shell.component';
 import { AllUsersComponent } from './all-users/all-users.component';
 import { AllUsersDetailsComponent } from './all-users/all-users-details.component';
 import { PokeDetailComponent } from './all-users/poke-detail.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 
@@ -27,7 +28,8 @@ import { PokeDetailComponent } from './all-users/poke-detail.component';
     AllUsersShellComponent,
     AllUsersComponent,
     AllUsersDetailsComponent,
-    PokeDetailComponent
+    PokeDetailComponent,
+    FooterComponent
 
   ],
   imports: [
