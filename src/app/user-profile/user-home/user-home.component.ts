@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, EMPTY, Observable, Subject, Subscription, catchError, combineLatest, filter, map, startWith, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject, Subscription, catchError, combineLatest, filter, find, map, startWith, tap } from 'rxjs';
 import { UserProfileService } from '../user-profile.service';
 
 
@@ -24,11 +24,13 @@ export class UserHomeComponent {
     console.log(this.listFilter);
   }
 
-  //find out how to pass listfilter into action stream to filtered products updates
-
   //Action stream for getting user input to search for a pokemon
-  private filteredPokemonInputSubject = new Subject<string>();
+  private filteredPokemonInputSubject = new BehaviorSubject<string>('');
   filteredPokemonInput$ = this.filteredPokemonInputSubject.asObservable();
+
+  //Action stream for getting clicked pokemons name
+  private clickedPokemonSubject = new BehaviorSubject<string>('');
+  clickedPokemonInput$ = this.clickedPokemonSubject.asObservable();
 
   //Action Stream for handling errors
   private errorMessageSubject = new Subject<string>();
@@ -37,11 +39,12 @@ export class UserHomeComponent {
   currentUser$ = this.userProfileService.currentUser$;
   userPokemon$ = this.userProfileService.userPokemon$;
 
-//start with operator????
+  //Hot Observable that displays filtered pokemon based off text input
   filteredPokemon$ = combineLatest([
     this.userPokemon$,
     this.filteredPokemonInput$
-  ]).pipe(
+  ])
+  .pipe(
     map(([userPokemon, filteredInput]) =>
     userPokemon.filter((pokemon) => pokemon.name.toLowerCase().includes(filteredInput))),
     tap(data => console.log('Filrtered POkemon: ', data)),
@@ -50,6 +53,20 @@ export class UserHomeComponent {
       return EMPTY;
     })
   )
+    //Hot Observable that passes latest clicked pokemon
+    clickedPokemon$ = combineLatest([
+      this.userPokemon$,
+      this.clickedPokemonInput$
+    ])
+    .pipe(
+      map(([pokemon, clicked]) =>
+      pokemon.find((poke)=>poke.name === clicked)),
+      tap(data => console.log('clicked Pokemon: ', data)),
+      catchError(err => {
+        this.errorMessageSubject.next(err);
+        return EMPTY;
+      })
+    )
 
   constructor(private userProfileService: UserProfileService) { }
 
@@ -59,6 +76,11 @@ export class UserHomeComponent {
 
   onFilterChange() {
     this.filteredPokemonInputSubject.next(this._listFilter);
+  }
+
+  getPokemon(name: string): void {
+    this.clickedPokemonSubject.next(name);
+    console.log('passed name');
   }
 }
 
