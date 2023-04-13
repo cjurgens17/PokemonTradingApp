@@ -1,5 +1,5 @@
-<div *ngIf="currentUser$ | async as user">
-<div class="h-max bg-black">
+<div *ngIf="userProfile$ | async as profile">
+<div class="h-max min-h-screen bg-black">
   <!-- flex for user profile info and pokemon display to the right -->
   <div class="flex flex-row w-screen h-16 border-t-2 border-white justify-center">
 <h1 class="text-white font-bold text-2xl items-center">Profile Page</h1>
@@ -8,30 +8,33 @@
     <div class="flex flex-col w-1/2 justify-center items-center">
       <!-- profile card -->
       <div class="photo-wrapper p-2">
-        <img class="w-32 h-32 rounded-full mx-auto" [src]="user.profilePicture" alt="Good Old John Doe">
+        <img class="w-32 h-32 rounded-full mx-auto" [src]="profile.currentUser.profilePicture" alt="Good Old John Doe">
         </div>
         <div class="p-2">
-        <h3 class="text-xl text-center text-white font-medium leading-8">{{user.firstName | titlecase}} {{user.lastName | titlecase}}</h3>
+        <h3 class="text-xl text-center text-white font-medium leading-8">{{profile.currentUser.firstName | titlecase}} {{profile.currentUser.lastName | titlecase}}</h3>
                 <p class="text-white text-xs text-center font-semibold">Pokemon Trainer</p>
               </div>
         <table class="text-xs">
             <tbody>
               <tr>
                 <td class="p-2 font-semibold text-white">Email:</td>
-                <td class="p-2 text-white">{{user.email}}</td>
+                <td class="p-2 text-white">{{profile.currentUser.email}}</td>
               </tr>
               <tr>
                 <td class="p-2 text-white font-semibold">Username:</td>
-                <td class="p-2 text-white">{{user.username}}</td>
+                <td class="p-2 text-white">{{profile.currentUser.username}}</td>
               </tr>
             </tbody>
         </table>
     </div>
-    <div *ngIf="clickedPokemon$ | async as clicked" class="flex flex-col w-1/2 justify-center items-center">
+    <div *ngIf="profile.clickedPokemon" class="flex flex-col w-1/2 justify-center items-center">
       <!-- pokemon face -->
-        <img class="w-max h-max rounded-full mx-auto" [src]="clicked.image" >
+        <img class="w-max h-max rounded-full mx-auto" [src]="profile.clickedPokemon.image" >
         <div class="p-2">
-          <h1 class="text-center text-white text-2xl">{{clicked.name | titlecase}}</h1>
+          <h1 class="text-center text-white text-2xl">{{profile.clickedPokemon.name | titlecase}}</h1>
+          <h1 class="text-center text-white text-xl">Index #{{profile.clickedPokemon.index}}</h1>
+          <h1 class="text-center text-white text-xl">Weight: {{profile.clickedPokemon.weight}}</h1>
+          <h1 *ngFor="let ability of profile.clickedPokemon.abilities" class="text-center text-white text-xl">Ability: {{ability | titlecase}}</h1>
         </div>
     </div>
     </div>
@@ -46,11 +49,11 @@
     </div>
   </div>
   <!-- grid for pokemon -->
-  <div *ngIf="filteredPokemon$ | async as pokemon" class="grid grid-rows-auto grid-cols-3 gap-4 h-auto w-auto mx-auto justify-items-center">
+  <div *ngIf="profile.filteredPokemon" class="grid grid-rows-auto grid-cols-3 gap-4 h-auto w-auto mx-auto justify-items-center">
     <!-- pokemon card -->
-    <div *ngFor="let poke of pokemon">
+    <div *ngFor="let poke of profile.filteredPokemon" class="hover:animate-bounce">
       <button (click)="getPokemon(poke.name)">
-      <img class="w-max h-max rounded-full mx-auto" [src]="poke.image">
+      <img class="w-max h-max rounded-full mx-auto filter saturate-150" [src]="poke.image">
     </button>
       <div class="p-2">
         <h1 class="text-center text-white text-2xl">{{poke.name | titlecase}}</h1>
@@ -58,6 +61,11 @@
     </div>
 </div>
   </div>
+  </div>
+
+  <div class="alert alert-danger"
+  *ngIf="errorMessage$ | async as errorMessage">
+  {{errorMessage}}
   </div>
 
 

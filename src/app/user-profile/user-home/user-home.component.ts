@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, Subject, Subscription, catchError, combineLatest, filter, find, map, startWith, tap } from 'rxjs';
 import { UserProfileService } from '../user-profile.service';
 
@@ -6,12 +6,10 @@ import { UserProfileService } from '../user-profile.service';
 @Component({
   selector: 'app-user-home',
   templateUrl: "./user-home.component.html",
-  styleUrls: ['./user-home.component.css']
+  styleUrls: ['./user-home.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserHomeComponent {
-
-  showPokemon: boolean = false;
-  errorMessage: string = '';
 
   private _listFilter: string = '';
 
@@ -68,11 +66,22 @@ export class UserHomeComponent {
       })
     )
 
-  constructor(private userProfileService: UserProfileService) { }
+    //combining all Observables together for HTML ease
+    userProfile$ = combineLatest([
+      this.clickedPokemon$,
+      this.filteredPokemon$,
+      this.currentUser$
+    ])
+    .pipe(
+      map(([clickedPokemon,filteredPokemon,currentUser]) =>
+      ({clickedPokemon,filteredPokemon,currentUser})),
+      catchError( err => {
+        this.errorMessageSubject.next(err);
+        return EMPTY;
+      })
+    );
 
-  togglePokemon(): void {
-    this.showPokemon = !this.showPokemon;
-  }
+  constructor(private userProfileService: UserProfileService) { }
 
   onFilterChange() {
     this.filteredPokemonInputSubject.next(this._listFilter);
