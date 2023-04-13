@@ -1,4 +1,4 @@
-<h4>User Profile</h4>
+<!-- <h4>User Profile</h4>
 <hr>
 <div *ngIf="currentUser$ | async as user">
 <h2>{{user.firstName}}'s Pokemon</h2>
@@ -8,4 +8,60 @@
 <h2>Username: {{user.username}}</h2>
 <button (click)="togglePokemon()">{{showPokemon ? 'Hide' : 'Show'}} Pokemon</button>
 <app-profile-card *ngIf="showPokemon"></app-profile-card>
-</div>
+</div> -->
+<!-- <div *ngIf="currentUser$ | async as user"> -->
+<div class="h-screen bg-black">
+  <!-- flex for user profile info and pokemon display to the right -->
+  <div class="flex flex-row w-screen h-16 border-t-2 border-white justify-center">
+<h1 class="text-white font-bold text-2xl items-center">Profile Page</h1>
+  </div>
+  <div class="h-1/2 flex flex-row justify-evenly">
+    <div class="flex flex-col w-1/2 justify-center items-center">
+      <!-- profile card -->
+      <div class="photo-wrapper p-2">
+        <!-- <img class="w-32 h-32 rounded-full mx-auto" [src]="user.profilePicture" alt="Good Old John Doe"> -->
+        <img class="w-32 h-32 rounded-full mx-auto" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrqoS8xAm1C1pKoWMbCgl0XcDRBHvD38Sqmw&usqp=CAU" alt="Good Old John Doe">
+        </div>
+        <div class="p-2">
+        <!-- <h3 class="text-xl text-white font-medium">{{user.firstName | titlecase}} {{user.lastName | titlecase}}</h3> -->
+        <h3 class="text-xl text-center text-white font-medium leading-8">Masouleum Mage</h3>
+                <p class="text-white text-xs text-center font-semibold">Pokemon Trainer</p>
+              </div>
+        <table class="text-xs">
+            <tbody>
+              <tr>
+                <td class="p-2 font-semibold text-white">Email:</td>
+                <!-- <td class="p-2">{{user.email}}</td> -->
+                <td class="p-2 text-white">Your Mom dot com</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-white font-semibold">Phone:</td>
+                <!-- <td class="p-2">{{user.phoneNumber}}</td> -->
+                <td class="p-2 text-white">6312478949</td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="flex flex-col w-1/2 justify-center items-center">
+      <!-- pokemon face -->
+        <img class="w-max h-max rounded-full mx-auto" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsFkO9wIlu4WYOMmgAIOZ40JS_7goueg1Tsw&usqp=CAU" >
+        <div class="p-2">
+          <h1 class="text-center text-white text-2xl">Pickachu</h1>
+          <!-- abilities
+          stats -->
+        </div>
+    </div>
+    </div>
+    
+  <!-- grid for pokemon -->
+  <div class="grid grid-flow-col auto-cols-auto auto-rows-auto h-1/2 w-screen">
+    <!-- make pokemon card -->
+    <div>
+      <img class="w-max h-max rounded-full mx-auto" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsFkO9wIlu4WYOMmgAIOZ40JS_7goueg1Tsw&usqp=CAU" >
+      <div class="p-2">
+        <h1 class="text-center text-white text-2xl">Pickachu</h1>
+      </div>
+    </div>
+  </div>
+  <div>
+<!-- </div> -->
