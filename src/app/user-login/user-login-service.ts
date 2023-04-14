@@ -24,6 +24,7 @@ export class UserLoginService {
     constructor (private http: HttpClient) {}
 
     loginUser(user: UserLogin): Observable<any> {
+      console.log('in the login method')
         return this.http.post<any>(`${this.userUrl}/login`, user, {headers: environment.headers});
     }
 

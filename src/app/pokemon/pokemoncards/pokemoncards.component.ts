@@ -1,7 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, EMPTY, Subject, Subscription, catchError, combineLatest, map, scan, tap } from 'rxjs';
 import { Pokemon } from '../pokemon';
+import { UserProfileService } from 'src/app/user-profile/user-profile.service';
+import { UserLoginService } from 'src/app/user-login/user-login-service';
 
 
 
@@ -10,137 +12,65 @@ import { Pokemon } from '../pokemon';
   templateUrl: './pokemoncards.component.html',
   styleUrls: ['./pokemoncards.component.css']
 })
-export class PokemonCardsComponent implements OnInit, OnDestroy {
+export class PokemonCardsComponent {
 
+//Catch errors
+private errorMessageSubject = new Subject<string>();
+errorMessage$ = this.errorMessageSubject.asObservable();
 
+  //Cold Observable that loads all the pokemon from the pokeApi to this page
+  apiPokemon$ = this.pokemonService.getAllPokemon$
+  .pipe(
+    tap(data => console.log('Api Pokemon: ', data)),
+    catchError(err => {
+      this.errorMessageSubject.next(err);
+      return EMPTY;
+    })
+  );
 
+  constructor(private pokemonService: PokemonService, private userProfileService: UserProfileService, private userLoginService: UserLoginService) { }
 
-//make a behavior subject
-//make an observable from the subject
-//get pokemon button we do a next on the behviorsuvbject
-//we subscribe in the html with an async pipe to get the emissions with the
-//beahvior subject observable
-
-defaultPokemon: Pokemon = {
-  name: '',
-  weight: 0,
-  image: '',
-  index: 0,
-  backImage: '',
-  abilities: [],
-  stats: []
-}
-private pokemonBehaviorSubject = new BehaviorSubject<Pokemon>(this.defaultPokemon)
-pokemonAction$ = this.pokemonBehaviorSubject.asObservable();
-
-
-  apiPokemon$ = this.pokemonService.getAllPokemon$;
-
-
-  constructor(private pokemonService: PokemonService) { }
-
-  pokemon!: Pokemon;
-  sub!: Subscription;
-  errorMessage: string = '';
-  pageTitle: string = 'Welcome'
-  showImage: boolean = true;
-  imageWidth: number = 100;
-  imageMargin: number = 2;
-  specificPokemon: string = '';
-  find: boolean = true;
-  show: boolean = true;
-  hide: boolean = false;
-
-  toggleImage(): void {
-    this.showImage = !this.showImage;
-  }
-
-  onImageClicked(): void {
-
-  }
-
-// getPokemon---------------------------------------------
-  getPokemon(): void {
-    this.sub = this.pokemonService.getPokemon(this.specificPokemon).subscribe({
-      next: data => {
-        this.pokemon = data
-        this.pokemon.name = data.name
-        this.pokemon.weight = data.weight
-        this.pokemon.index = data.index
-        this.pokemon.image = data.image
-        this.pokemon.backImage = data.backImage
-        this.pokemon.abilities = data.abilities
-        this.pokemon.stats = data.stats
-        this.pokemonBehaviorSubject.next(this.pokemon)
-  },
-  error: error => {
-      this.errorMessage = error.message;
-      console.error('There was an error!', error);
+  passPokemon(pokemon: any){
+    const newPoke: Pokemon = {
+      name: pokemon.name,
+      weight: pokemon.weight,
+      image: pokemon.sprites.front_shiny,
+      index: pokemon.index,
+      backImage: pokemon.sprites.back_shiny,
+      abilities: pokemon.abilities,
+      stats: pokemon.stats
     }
-  })
-}
-//addPokemon--------------------------------------
-addPokemon(name: string, weight: number, index: number, abilities: any[], stats: any[], image: string, backImage: string): void {
-  console.log(name + " " + weight + " " + index);
-  console.log('abilities: ',abilities);
-  console.log('stats', stats);
-  //Here I need to map my any array into a string array of all the ability names
-  const abNames: string[] = [];
-  const statNames: string[] =[];
-  const baseStat: number[] = [];
 
-for(var i = 0; i < abilities.length; i++) {
-    abNames.push(abilities[i].ability.name);
-}
-
-for(var i = 0;i< stats.length;i++){
-  statNames.push(stats[i].stat.name);
-  baseStat.push(stats[i].base_stat);
-}
-
-console.log('abNames: ',abNames)
-console.log('StatName: ', statNames);
-console.log('BaseStat: ', baseStat);
-
-    this.pokemonService.addPokemon(name, weight, index, abNames, statNames, baseStat, image, backImage).subscribe({
-      next: response => {
-        console.log('Response: ', response)
-      },
-      error: err  => {
-        console.log('Error: ', err)
-      }
-    });
-}
+  }
 
 
-//----------------------testting to add pokemon to an existing users pokeIndex----------------
-  updatePokemon(pokemon: Pokemon): void{
+//----------------------add pokemon to an existing users pokeIndex----------------
+  updatePokemon(pokemon: any): void{
     const abNames: string[] = [];
     const statNames: string[] =[];
     let savedUser = JSON.parse(localStorage.getItem('userLoginInfo') || '{}');
     const userId = savedUser.id;
 
-
-    for(var i = 0; i < pokemon.abilities.length; i++) {
-      abNames.push(pokemon.abilities[i].ability.name);
+  for(var i = 0; i < pokemon.abilities.length; i++) {
+    abNames.push(pokemon.abilities[i].ability.name);
   }
 
   for(var i = 0;i< pokemon.stats.length;i++){
     statNames.push(pokemon.stats[i].stat.name);
   }
-    const parsedPokemon: Pokemon = {
+    const newPoke: Pokemon = {
       name: pokemon.name,
       weight: pokemon.weight,
-      image: pokemon.image,
+      image: pokemon.sprites.front_shiny,
       index: pokemon.index,
-      backImage: pokemon.backImage,
-      abilities:  abNames,
+      backImage: pokemon.sprites.back_shiny,
+      abilities: abNames,
       stats: statNames
     }
 
-    console.log(parsedPokemon);
+    console.log(newPoke);
 
-    this.pokemonService.updatePokemon(parsedPokemon, userId).subscribe({
+    this.pokemonService.updatePokemon(newPoke, userId).subscribe({
 
       next: response => {
         console.log('Respons: ', response);
@@ -150,14 +80,6 @@ console.log('BaseStat: ', baseStat);
         console.log('Error: ', err);
       }
     });
-  }
-
-   //------------------------------
-  ngOnInit(): void {
-  }
-//-----------------------------------
-  ngOnDestroy(): void {
-      this.sub.unsubscribe();
   }
 
 }
