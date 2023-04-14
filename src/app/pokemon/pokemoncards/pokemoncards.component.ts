@@ -34,6 +34,9 @@ private pokemonBehaviorSubject = new BehaviorSubject<Pokemon>(this.defaultPokemo
 pokemonAction$ = this.pokemonBehaviorSubject.asObservable();
 
 
+  apiPokemon$ = this.pokemonService.getAllPokemon$;
+
+
   constructor(private pokemonService: PokemonService) { }
 
   pokemon!: Pokemon;
