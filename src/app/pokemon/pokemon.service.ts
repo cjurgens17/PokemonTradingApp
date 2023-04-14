@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, catchError, map, tap, throwError } from "rxjs";
+import { BehaviorSubject, Observable, Subject, catchError, map, mergeMap, scan, takeWhile, tap, throwError } from "rxjs";
 import { Pokemon } from "./pokemon";
 import { environment } from "src/environments/environment";
 
@@ -15,9 +15,28 @@ export class PokemonService {
     private productUrl = "https://pokeapi.co/api/v2/pokemon/";
     private userUrl = "http://localhost:8080/pokemon";
     private apiUrl = "http://localhost:8080/pokemon";
+    private limit: number = 20;
+    start: number = 1;
 
 
-  constructor (private http: HttpClient) {}
+
+  private nextUrlSubject = new BehaviorSubject<string>(this.productUrl+this.start);
+  nextUrl$ = this.nextUrlSubject.asObservable();
+
+
+ getAllPokemon$ = this.nextUrl$
+    .pipe(
+       mergeMap(url => this.http.get(url)),
+       takeWhile(() => this.start <= this.limit),
+       tap(() => this.nextUrlSubject.next(this.productUrl + this.start++)),
+      scan((item, pokemon) => [...item, pokemon], [] as any[]),
+    );
+
+
+
+
+
+  constructor (private http: HttpClient) { }
 //this gets pokemon from an offshore pokeAPI---------------------------------
     getPokemon(name: string): Observable<any> {
         return this.http.get<any>(this.productUrl + name.toLowerCase()).pipe(
