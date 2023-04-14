@@ -39,14 +39,14 @@
                     <!-- <tr  *ngFor="let pokemon of pokemons"> -->
                       <tr>
                         <td>
-                            <a [routerLink]="['/pokemonCard', pokemon.name]">
+                           
                             <img *ngIf="showImage"
                             [src]="pokemon.image"
                              [title]="pokemon.name"
                              [style.width.px]="imageWidth"
                              [style.margin.px]="imageMargin"
                              >
-                             </a>
+
                         </td>
                         <td>
                             <button class='btn btn-primary'
