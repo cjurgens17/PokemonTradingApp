@@ -45,7 +45,7 @@ export class UserHomeComponent {
   .pipe(
     map(([userPokemon, filteredInput]) =>
     userPokemon.filter((pokemon) => pokemon.name.toLowerCase().includes(filteredInput))),
-    tap(data => console.log('Filrtered POkemon: ', data)),
+    tap(data => console.log('Filtered Pokemon: ', data)),
     catchError( err => {
       this.errorMessageSubject.next(err);
       return EMPTY;
@@ -59,7 +59,7 @@ export class UserHomeComponent {
     .pipe(
       map(([pokemon, clicked]) =>
       pokemon.find((poke)=>poke.name === clicked)),
-      tap(data => console.log('clicked Pokemon: ', data)),
+      tap(data => console.log('Clicked Pokemon: ', data)),
       catchError(err => {
         this.errorMessageSubject.next(err);
         return EMPTY;
@@ -89,7 +89,7 @@ export class UserHomeComponent {
 
   getPokemon(name: string): void {
     this.clickedPokemonSubject.next(name);
-    console.log('passed name');
+    console.log('passed '+ name);
   }
 }
 
