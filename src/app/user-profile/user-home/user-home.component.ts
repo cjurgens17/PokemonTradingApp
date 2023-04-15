@@ -12,6 +12,8 @@ import { UserProfileService } from '../user-profile.service';
 export class UserHomeComponent {
 
   private _listFilter: string = '';
+  numCols: number = 3;
+  numRows!:number;
 
   get listFilter(): string{
     return this._listFilter;
@@ -37,7 +39,7 @@ export class UserHomeComponent {
   currentUser$ = this.userProfileService.currentUser$;
   userPokemon$ = this.userProfileService.userPokemon$;
 
-  //Hot Observable that displays filtered pokemon based off text input
+  //Hot Observable that displays filtered pokemon based off user input
   filteredPokemon$ = combineLatest([
     this.userPokemon$,
     this.filteredPokemonInput$
@@ -45,7 +47,8 @@ export class UserHomeComponent {
   .pipe(
     map(([userPokemon, filteredInput]) =>
     userPokemon.filter((pokemon) => pokemon.name.toLowerCase().includes(filteredInput))),
-    tap(data => console.log('Filtered Pokemon: ', data)),
+    tap(data => this.numCols = data.length < 5 ? data.length : 5),
+    tap(data => this.numRows = this.numCols > 1 ? Math.ceil(data.length/this.numCols) : 1),
     catchError( err => {
       this.errorMessageSubject.next(err);
       return EMPTY;
