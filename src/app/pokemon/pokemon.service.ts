@@ -14,10 +14,10 @@ export class PokemonService {
 
     private productUrl = "https://pokeapi.co/api/v2/pokemon/";
     private apiUrl = "http://localhost:8080/pokemon";
-    private limit: number = 20;
-    private start: number = 1;
+    private limit: number = 21;
+    private start: number = 2;
 
-  private nextUrlSubject = new BehaviorSubject<string>(this.productUrl+this.start);
+  private nextUrlSubject = new BehaviorSubject<string>(this.productUrl+ 1);
   nextUrl$ = this.nextUrlSubject.asObservable();
 
   getAllPokemon$ = this.nextUrl$

@@ -1,82 +1,31 @@
-<!-- <div class='card'>
-    <div class='card-header'>
-        {{pageTitle}}
-    </div>
-
-    <div class='card-body'>
-        <div class='row'>
-            <div>Find Pokemon: </div>
-            <div>
-                <input class="border-4 border-red-600" type='text'
-                [(ngModel)]="specificPokemon"/>
-            </div>
-        </div>
-        <div class ='row'>
-        </div>
-        <div class='row'>
-        <div class='table-responsive'>
-            <table class='table' *ngIf="show">
-                <thead>
-                    <tr>
-                        <th>
-                            <button class='btn btn-primary'
-                            (click)="toggleImage()">
-                                {{showImage ? 'Hide' : 'Show'}} Image
-                            </button>
-                        </th>
-                        <th>Add Pokemon to Database</th>
-                        <th>Add Pokemon To users PokeIndex</th>
-                        <th>Name</th>
-                        <th>Weight</th>
-                        <th>Index</th>
-                    </tr>
-                </thead>
-                <tbody *ngIf="pokemonAction$ | async as pokemon">
-                     <tr  *ngFor="let pokemon of pokemons"> -->
-                      <!-- <tr>
-                        <td>
-
-                            <img *ngIf="showImage"
-                            [src]="pokemon.image"
-                             [title]="pokemon.name"
-                             [style.width.px]="imageWidth"
-                             [style.margin.px]="imageMargin"
-                             >
-
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                            <button class="btn btn-primary"
-                            (click)="updatePokemon(pokemon)">Update PokeIndex</button>
-                        </td>
-                        <td>{{pokemon.name | titlecase }}</td>
-                        <td>{{pokemon.weight}}</td>
-                        <td>{{pokemon.index}}</td>
-                    </tr>
-                </tbody>
-                </table>
-        </div>
-    </div>
-</div> -->
-
-
+<div class="bg-black min-h-screen border-t-2 border-white">
+<div class="flex flex-col items-center justify-center">
+  <div>
+    <h1 class="text-white text-xl font-bold">Catch A Pokemon</h1>
+  </div>
+<div class="pt-2 relative mx-auto text-gray-600 mb-2">
+  <input class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+    type="search" name="search" placeholder="Enter Pokemons Name" [(ngModel)]="searchFilter" (ngModelChange)="onSearchChange()">
+</div>
+</div>
   <!-- grid for pokemon -->
-  <div *ngIf="apiPokemon$ | async as pokemon" class="grid grid-rows-auto grid-cols-3 gap-4 h-auto w-auto mx-auto justify-items-center">
+  <div class="flex items-center justify-center pb-2">
+  <div *ngIf="searchedPokemon$ | async as pokemon" class="grid grid-rows-{{numRows}} grid-cols-{{numColumns}} gap-4 h-auto mx-auto">
     <!-- pokemon card -->
-    <div *ngFor="let poke of pokemon" class="bg-black box-border border-4 border-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-slate-400 duration-300">
-      <div class="photo-wrapper p-2">
-        <button (click)="updatePokemon(poke)">
-        <img class="w-32 h-32 rounded-full mx-auto filter saturate-150 object-center" [src]="poke.sprites.front_shiny" alt="Pokemon">
+    <div *ngFor="let poke of pokemon" class="bg-blue-300 box-border border-4 border-white transition ease-in-out delay-300 hover:bg-black duration-300 overflow-hidden">
+      <div class="flex flex-col justify-items-center">
+        <img class="w-32 h-32 rounded-full mx-auto filter saturate-150" [src]="poke.sprites.front_shiny" alt="Pokemon">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" (click)="updatePokemon(poke)">
+        Add to Collection
       </button>
         </div>
-        <div class="p-2">
+        <div class="p-2 cursor-default">
           <h3 class="text-xl text-center text-white font-medium leading-8">Weight: {{poke.weight}}</h3>
-        <h3 class="text-xl text-center text-white font-medium leading-8">{{poke.name | titlecase}}</h3>
-        <h3 class="text-xl text-center text-white font-medium leading-8">Index: {{poke.index}}</h3>
+        <h3 class="text-xl text-center text-white font-medium leading-8">Name: {{poke.name | titlecase}}</h3>
+        <h3 class="text-xl text-center text-white font-medium leading-8">Index: {{poke.id}}</h3>
         <h3 *ngFor="let ability of poke.abilities" class="text-xl text-center text-white font-medium leading-8">Ability: {{ability.ability.name | titlecase}}</h3>
-        <h3 *ngFor="let stat of poke.stats" class="text-xl text-center text-white font-medium leading-8">Stat: {{stat.stat.name}}</h3>
         </div>
     </div>
 </div>
-
+</div>
+</div>
