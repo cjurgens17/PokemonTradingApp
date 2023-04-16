@@ -55,12 +55,6 @@ export class AllUsersDetailsComponent {
     })
   );
 
-
-
-
-
-
-
   constructor(private allUsersService: AllUsersService) { }
 
     //function to pass pokemon to service function which will update a subject to pass to poke-detail component

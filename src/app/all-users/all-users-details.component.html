@@ -1,11 +1,9 @@
-<div class="card"
-     *ngIf="userDetails$ | async as ud">
+<div class="card" *ngIf="userDetails$ | async as ud">
   <div class="card-header">
     {{ ud.pageTitle }}
   </div>
 
-  <div class="card-body"
-  *ngIf="ud.user">
+  <div class="card-body" *ngIf="ud.user">
     <div class="row">
       <div class="col-md-2">First Name:</div>
       <div class="col-md-6">{{ ud.user.firstName }}</div>
@@ -24,9 +22,7 @@
     </div>
 
     <div class="table-responsive">
-      <table class="table mb-0"
-             *ngIf="ud.userPokemon.length; else noPokemon"
-             >
+      <table class="table mb-0" *ngIf="ud.userPokemon.length; else noPokemon">
         <thead>
           <tr>
             <th>Pokemon</th>
@@ -38,7 +34,8 @@
           <tr *ngFor="let pokemon of ud.userPokemon">
             <td>{{ pokemon.name }}</td>
             <td>{{ pokemon.abilities }}</td>
-            <td><button (click)="onTap(pokemon.name)"><img class="card-img-top img-thumbnail" [src]="pokemon.image" alt="Pokemon Front image"></button></td>
+            <td><button (click)="onTap(pokemon.name)"><img class="card-img-top img-thumbnail" [src]="pokemon.image"
+                  alt="Pokemon Front image"></button></td>
           </tr>
         </tbody>
       </table>
@@ -51,7 +48,9 @@
   </ng-template>
 </div>
 
-<div class="alert alert-danger"
-     *ngIf="errorMessage$ | async as errorMessage">
+<div class="alert alert-danger" *ngIf="errorMessage$ | async as errorMessage">
   {{ errorMessage }}
 </div>
+
+
+

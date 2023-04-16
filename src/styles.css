@@ -21,5 +21,9 @@ div.card {
   margin-top: 10px
 }
 
+.active {
+  @apply bg-zinc-300
+}
+
 
 
