@@ -12,7 +12,7 @@ import { UserProfileService } from '../user-profile.service';
 export class UserHomeComponent {
 
   private _listFilter: string = '';
-  numCols: number = 3;
+  numCols!: number;
   numRows!:number;
 
   get listFilter(): string{
@@ -48,7 +48,7 @@ export class UserHomeComponent {
     map(([userPokemon, filteredInput]) =>
     userPokemon.filter((pokemon) => pokemon.name.toLowerCase().includes(filteredInput))),
     tap(data => this.numCols = data.length < 5 ? data.length : 5),
-    tap(data => this.numRows = this.numCols > 1 ? Math.ceil(data.length/this.numCols) : 1),
+    tap(data => this.numRows = this.numCols <= 5 ? 1 : Math.ceil(data.length/this.numCols)),
     catchError( err => {
       this.errorMessageSubject.next(err);
       return EMPTY;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { BehaviorSubject, EMPTY, Subject, Subscription, catchError, combineLatest, map, scan, tap } from 'rxjs';
 import { Pokemon } from '../pokemon';
@@ -10,12 +10,13 @@ import { UserLoginService } from 'src/app/user-login/user-login-service';
 @Component({
   selector: 'app-practice',
   templateUrl: './pokemoncards.component.html',
-  styleUrls: ['./pokemoncards.component.css']
+  styleUrls: ['./pokemoncards.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PokemonCardsComponent {
 
   private _searchFilter = '';
-  numColumns: number = 5;
+  numColumns!: number;
   numRows!: number;
 
   get searchFilter(): string {
@@ -52,7 +53,7 @@ searchInput$ = this.onSearchSubject.asObservable();
     map(([apiPokemon,searchInput]) =>
     apiPokemon.filter((pokemon) => pokemon.name.toLowerCase().includes(searchInput))),
     tap(pokemon => this.numColumns = pokemon.length < 5 ? pokemon.length : 5),
-    tap(pokemon => this.numRows = this.numColumns > 1 ? Math.ceil(pokemon.length/this.numColumns) : 1),
+    tap(pokemon => this.numRows = this.numColumns <= 5 ? 1 : Math.ceil(pokemon.length/this.numColumns)),
     catchError(err => {
       this.errorMessageSubject.next(err);
       return EMPTY;

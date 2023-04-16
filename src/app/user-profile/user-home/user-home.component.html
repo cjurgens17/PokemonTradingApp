@@ -51,7 +51,7 @@
     </div>
   </div>
   <!-- grid for pokemon -->
-  <div *ngIf="profile.filteredPokemon" class="grid grid-rows-{{numRows}} grid-cols-{{numCols}} gap-4 h-auto w-auto mx-auto justify-items-center">
+  <div *ngIf="profile.filteredPokemon" class="grid grid-rows-{{numRows}} grid-cols-{{numCols}} gap-1 h-auto w-auto mx-auto justify-items-center">
     <!-- pokemon card -->
     <div *ngFor="let poke of profile.filteredPokemon" class="bg-black box-border border-4 border-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-slate-400 duration-300">
       <!-- <div class="photo-wrapper p-2">
