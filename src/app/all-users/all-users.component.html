@@ -1,5 +1,5 @@
-<h1 class="text-2xl text-center border-b-2 border-black">All Pokemon Trainers </h1>
-<div *ngIf="allUsers$ | async as users">
+<h1 class="text-2xl text-center border-b-2 border-black">Pokemon Trainers </h1>
+<div *ngIf="allUsers$ | async as users" class="h-screen">
   <div *ngFor="let user of users" class="border-b-2 border-black">
     <div [ngClass]="{active : user?.id === (selectedUser$ | async)?.id}">
       <div class="flex flex-col items-center pt-2 pb-2">

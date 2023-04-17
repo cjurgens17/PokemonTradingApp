@@ -1,53 +1,51 @@
-<div class="card" *ngIf="userDetails$ | async as ud">
-  <div class="card-header">
-    {{ ud.pageTitle }}
+<div *ngIf="userDetails$ | async as ud" class="h-screen">
+  <!-- User Info -->
+  <h1 class="font-bold text-2xl text-center">{{ud.user?.username}}'s Details</h1>
+  <div class="flex justify-center items-center pt-2"><img class="rounded-full" [src]="ud.user?.profilePicture" alt="Profile Picture"></div>
+  <div class="flex flex-col justify start border-b-4 border-black">
+    <h1 class="text-xl">First Name: {{ud.user?.firstName}}</h1>
+    <h1 class="text-xl">Last Name: {{ud.user?.lastName}}</h1>
+    <h1 class="text-xl">Username: {{ud.user?.username}}</h1>
   </div>
-
-  <div class="card-body" *ngIf="ud.user">
-    <div class="row">
-      <div class="col-md-2">First Name:</div>
-      <div class="col-md-6">{{ ud.user.firstName }}</div>
-    </div>
-    <div class="row">
-      <div class="col-md-2">Last Name:</div>
-      <div class="col-md-6">{{ ud.user.lastName }}</div>
-    </div>
-    <div class="row">
-      <div class="col-md-2">Email:</div>
-      <div class="col-md-6">{{ ud.user.email }}</div>
-    </div>
-    <div class="row">
-      <div class="col-md-2">Username:</div>
-      <div class="col-md-6">{{ ud.user.username}}</div>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table mb-0" *ngIf="ud.userPokemon.length; else noPokemon">
-        <thead>
-          <tr>
-            <th>Pokemon</th>
-            <th>Abilities</th>
-            <th>Image</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let pokemon of ud.userPokemon">
-            <td>{{ pokemon.name }}</td>
-            <td>{{ pokemon.abilities }}</td>
-            <td><button (click)="onTap(pokemon.name)"><img class="card-img-top img-thumbnail" [src]="pokemon.image"
-                  alt="Pokemon Front image"></button></td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="text-bold text-2xl py-2 text-center underline">Pokemon Collection</div>
+  <!-- Table -->
+  <div class="flex flex-col overflow-x-auto">
+    <div class="sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-left text-sm font-light"
+          *ngIf="ud.userPokemon.length; else noPokemon">
+            <thead class="border-b font-medium dark:border-neutral-500">
+              <tr>
+                <th scope="col" class="px-6 py-4">Pokemon</th>
+                <th scope="col" class="px-6 py-4">Poke Index</th>
+                <th scope="col" class="px-6 py-4">Image</th>
+                <th scope="col" class="px-6 py-4">Trade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let pokemon of ud.userPokemon"
+                class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
+                <td class="whitespace-nowrap px-6 py-4 font-medium">{{pokemon.name | titlecase}}</td>
+                <td class="whitespace-nowrap px-6 py-4">{{pokemon.index}}</td>
+                <td class="whitespace-nowrap px-6 py-4"><img [src]="pokemon.image" alt="pokemon"></td>
+                <td class="whitespace-nowrap px-6 py-4"><button class="btn btn-primary">Initiate</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
+</div>
+  <!-- User has no Pokemon -->
   <ng-template #noPokemon>
     <div class="alert alert-warning">
       This User currently has no Pokemon
     </div>
   </ng-template>
-</div>
-
+<!-- Error Message -->
 <div class="alert alert-danger" *ngIf="errorMessage$ | async as errorMessage">
   {{ errorMessage }}
 </div>
