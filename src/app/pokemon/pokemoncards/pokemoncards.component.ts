@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
-import { BehaviorSubject, EMPTY, Subject, Subscription, catchError, combineLatest, map, scan, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Subject, catchError, combineLatest, map, tap } from 'rxjs';
 import { Pokemon } from '../pokemon';
-import { UserProfileService } from 'src/app/user-profile/user-profile.service';
-import { UserLoginService } from 'src/app/user-login/user-login-service';
+
 
 
 

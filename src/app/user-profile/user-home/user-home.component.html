@@ -35,9 +35,9 @@
         </div>
           <div class="card-body items-center text-center bg-yellow-500">
             <h2 class="card-title text-3xl">{{profile.clickedPokemon.name | titlecase}}</h2>
-            <h2 class="text-left text-l">Index: {{profile.clickedPokemon.index}}</h2>
-            <h2 class="text-left text-l">Weight: {{profile.clickedPokemon.weight}}</h2>
-            <h1 *ngFor="let ability of profile.clickedPokemon.abilities" class="text-left text-l">Ability: {{ability | titlecase}}</h1>
+            <h2 class="text-left text-xl">Index: {{profile.clickedPokemon.index}}</h2>
+            <h2 class="text-left text-xl">Weight: {{profile.clickedPokemon.weight}}</h2>
+            <h1 *ngFor="let ability of profile.clickedPokemon.abilities" class="text-left text-xl">Ability: {{ability | titlecase}}</h1>
           </div>
         </div>
     </div>
@@ -56,14 +56,13 @@
   <div class="flex justify-center pb-2">
   <div *ngIf="profile.filteredPokemon" class="grid grid-rows-auto grid-cols-5 gap-4 h-auto w-auto mx-auto">
     <!-- pokemon card -->
-    <div *ngFor="let poke of profile.filteredPokemon" class="bg-blue-300 box-border border-4 border-black">
+    <div *ngFor="let poke of profile.filteredPokemon" class="box-border border-4 border-black">
         <div class="flex flex-col justify-items-center shadow-xl hover:contrast-125 hover:shadow-amber-50">
           <div class="flex justify-center items-start border-b-2 border-black bg-white">
             <figure class="px-10 pt-10">
               <img [src]="poke.image" alt="Clicked Pokemon" class="rounded-sm"/>
             </figure>
           </div>
-          <!-- <img class="w-32 h-32 rounded-full mx-auto filter saturate-150" [src]="poke.image" alt="Pokemon"> -->
           <div class="bg-yellow-500 flex flex-col justify-center items-center pt-2">
         <button class="bg-yellow-700 hover:bg-black transition ease-in text-white font-bold py-2 px-4 rounded-full" (click)="getPokemon(poke.name)">
           Details

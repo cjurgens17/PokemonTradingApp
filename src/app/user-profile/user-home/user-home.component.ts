@@ -47,7 +47,7 @@ export class UserHomeComponent {
   ])
   .pipe(
     map(([userPokemon, filteredInput]) =>
-    userPokemon.filter((pokemon) => pokemon.name.toLowerCase().includes(filteredInput))),
+    userPokemon.filter((pokemon) => pokemon.name.toLowerCase().includes(filteredInput)).sort()),
     catchError( err => {
       this.errorMessageSubject.next(err);
       return EMPTY;

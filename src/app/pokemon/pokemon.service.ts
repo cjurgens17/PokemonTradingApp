@@ -53,3 +53,7 @@ export class PokemonService {
     }
 
 }
+function sort(): import("rxjs").OperatorFunction<any[], unknown> {
+  throw new Error("Function not implemented.");
+}
+
