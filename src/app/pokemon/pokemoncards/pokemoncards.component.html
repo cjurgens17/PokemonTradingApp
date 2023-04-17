@@ -10,7 +10,7 @@
 </div>
   <!-- grid for pokemon -->
   <div class="flex justify-center pb-2">
-  <div *ngIf="searchedPokemon$ | async as pokemon" class="grid grid-rows-{{numRows}} grid-cols-{{numColumns}} gap-4 h-auto mx-auto">
+  <div *ngIf="searchedPokemon$ | async as pokemon" class="grid grid-rows-auto grid-cols-5 gap-4 h-auto mx-auto">
     <!-- pokemon card -->
     <div *ngFor="let poke of pokemon" class="bg-blue-300 box-border border-4 border-white transition ease-in-out delay-150 hover:bg-black duration-150 overflow-hidden">
       <div class="flex flex-col justify-items-center">

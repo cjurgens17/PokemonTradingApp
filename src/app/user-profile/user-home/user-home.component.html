@@ -1,5 +1,5 @@
 <div *ngIf="userProfile$ | async as profile">
-<div class="h-max min-h-screen bg-gradient-to-r from-black to-white">
+<div class="h-max min-h-screen bg-cover bg-no-repeat filter saturate-150 bg-fixed" style="background-image: url('https://images.alphacoders.com/119/119223.jpg')">
   <!-- flex for user profile info and pokemon display to the right -->
   <div class="flex flex-row w-screen h-16 border-t-2 border-white justify-center">
 <h1 class="text-white font-bold text-2xl items-center">Profile Page</h1>
@@ -17,26 +17,28 @@
         <table class="text-xs">
             <tbody>
               <tr>
-                <td class="p-2 font-semibold text-white">Email:</td>
-                <td class="p-2 text-white">{{profile.currentUser.email}}</td>
+                <td class="p-2 font-semibold text-white">Email: {{profile.currentUser.email}}</td>
               </tr>
               <tr>
-                <td class="p-2 text-white font-semibold">Username:</td>
-                <td class="p-2 text-white">{{profile.currentUser.username}}</td>
+                <td class="p-2 text-white font-semibold">Username: {{profile.currentUser.username}}</td>
               </tr>
             </tbody>
         </table>
     </div>
     <div *ngIf="profile.clickedPokemon" class="flex flex-col w-1/2 justify-center items-center">
       <!-- pokemon face -->
-        <div class="box-border border-4 border-black">
-        <img class="w-max h-max rounded-full mx-auto" [src]="profile.clickedPokemon.image" >
-        <div class="p-2">
-          <h1 class="text-center text-white text-2xl">{{profile.clickedPokemon.name | titlecase}}</h1>
-          <h1 class="text-center text-white text-xl">Index #{{profile.clickedPokemon.index}}</h1>
-          <h1 class="text-center text-white text-xl">Weight: {{profile.clickedPokemon.weight}}</h1>
-          <h1 *ngFor="let ability of profile.clickedPokemon.abilities" class="text-center text-white text-xl">Ability: {{ability | titlecase}}</h1>
+        <div class="card w-96 bg-base-100 shadow-xl border-4 border-black hover:contrast-200 hover:shadow-amber-50">
+          <div class="flex justify-center items-start border-b-2 border-white bg-black">
+          <figure class="px-10 pt-10">
+            <img [src]="profile.clickedPokemon.image" alt="Clicked Pokemon" class="rounded-sm"/>
+          </figure>
         </div>
+          <div class="card-body items-center text-center bg-yellow-500">
+            <h2 class="card-title text-3xl">{{profile.clickedPokemon.name | titlecase}}</h2>
+            <h2 class="text-left text-l">Index: {{profile.clickedPokemon.index}}</h2>
+            <h2 class="text-left text-l">Weight: {{profile.clickedPokemon.weight}}</h2>
+            <h1 *ngFor="let ability of profile.clickedPokemon.abilities" class="text-left text-l">Ability: {{ability | titlecase}}</h1>
+          </div>
         </div>
     </div>
     </div>
@@ -51,24 +53,26 @@
     </div>
   </div>
   <!-- grid for pokemon -->
-  <div *ngIf="profile.filteredPokemon" class="grid grid-rows-{{numRows}} grid-cols-{{numCols}} gap-1 h-auto w-auto mx-auto justify-items-center">
+  <div class="flex justify-center pb-2">
+  <div *ngIf="profile.filteredPokemon" class="grid grid-rows-auto grid-cols-5 gap-4 h-auto w-auto mx-auto">
     <!-- pokemon card -->
-    <div *ngFor="let poke of profile.filteredPokemon" class="bg-black box-border border-4 border-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-slate-400 duration-300">
-      <!-- <div class="photo-wrapper p-2">
-        <button (click)="getPokemon(poke.name)">
-        <img class="w-32 h-32 rounded-full mx-auto filter saturate-150" [src]="poke.image" alt="Pokemon">
-      </button>
-        </div> -->
-        <div class="flex flex-col justify-items-center">
-          <img class="w-32 h-32 rounded-full mx-auto filter saturate-150" [src]="poke.image" alt="Pokemon">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" (click)="getPokemon(poke.name)">
+    <div *ngFor="let poke of profile.filteredPokemon" class="bg-blue-300 box-border border-4 border-black">
+        <div class="flex flex-col justify-items-center shadow-xl hover:contrast-125 hover:shadow-amber-50">
+          <div class="flex justify-center items-start border-b-2 border-black bg-white">
+            <figure class="px-10 pt-10">
+              <img [src]="poke.image" alt="Clicked Pokemon" class="rounded-sm"/>
+            </figure>
+          </div>
+          <!-- <img class="w-32 h-32 rounded-full mx-auto filter saturate-150" [src]="poke.image" alt="Pokemon"> -->
+          <div class="bg-yellow-500 flex flex-col justify-center items-center pt-2">
+        <button class="bg-yellow-700 hover:bg-black transition ease-in text-white font-bold py-2 px-4 rounded-full" (click)="getPokemon(poke.name)">
           Details
         </button>
+        <h3 class="text-xl text-black font-medium leading-8 mb-2">{{poke.name | titlecase}}</h3>
           </div>
-        <div class="p-2">
-        <h3 class="text-xl text-center text-white font-medium leading-8">{{poke.name | titlecase}}</h3>
-        </div>
+      </div>
     </div>
+</div>
 </div>
 
   </div>

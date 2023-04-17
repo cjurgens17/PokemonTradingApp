@@ -16,8 +16,9 @@ import { UserLoginService } from 'src/app/user-login/user-login-service';
 export class PokemonCardsComponent {
 
   private _searchFilter = '';
-  numColumns!: number;
-  numRows!: number;
+  // Loading after Search
+  // numColumns!: number;
+  // numRows!: number;
 
   get searchFilter(): string {
     return this._searchFilter;
@@ -52,8 +53,6 @@ searchInput$ = this.onSearchSubject.asObservable();
   .pipe(
     map(([apiPokemon,searchInput]) =>
     apiPokemon.filter((pokemon) => pokemon.name.toLowerCase().includes(searchInput))),
-    tap(pokemon => this.numColumns = pokemon.length < 5 ? pokemon.length : 5),
-    tap(pokemon => this.numRows = this.numColumns <= 5 ? 1 : Math.ceil(pokemon.length/this.numColumns)),
     catchError(err => {
       this.errorMessageSubject.next(err);
       return EMPTY;
