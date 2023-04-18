@@ -33,7 +33,9 @@ export class AllUsersDetailsComponent {
     //Hot Observable that gets users pokemon based on the user which is selected
   userPokemon$ = this.allUsersService.userPokemon$
   .pipe(
-    tap(data => console.log(`User pokemon: `, JSON.stringify(data))),
+    map((pokemon) => {
+      return pokemon.sort((a,b) => a.index - b.index)
+    }),
     catchError( err => {
       this.errorMessageSubject.next(err);
       return EMPTY;

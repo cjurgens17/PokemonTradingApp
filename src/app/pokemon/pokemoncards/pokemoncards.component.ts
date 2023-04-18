@@ -35,10 +35,9 @@ errorMessage$ = this.errorMessageSubject.asObservable();
 private onSearchSubject = new BehaviorSubject<string>('');
 searchInput$ = this.onSearchSubject.asObservable();
 
-  //Cold Observable that loads all the pokemon from the pokeApi to this page
+  //Cold Observable that loads all the pokemon from the pokeApi to this page and sorts by name
   apiPokemon$ = this.pokemonService.getAllPokemon$
   .pipe(
-    tap(data => console.log('Api Pokemon: ', data)),
     catchError(err => {
       this.errorMessageSubject.next(err);
       return EMPTY;

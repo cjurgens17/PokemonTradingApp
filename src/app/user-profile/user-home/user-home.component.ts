@@ -37,8 +37,20 @@ export class UserHomeComponent {
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
 
+  //Cold Observable that grabs the current Users information
   currentUser$ = this.userProfileService.currentUser$;
-  userPokemon$ = this.userProfileService.userPokemon$;
+
+  //Cold Observable that grabs all users pokemon and sorts them by name order
+  userPokemon$ = this.userProfileService.userPokemon$
+  .pipe(
+    map((pokemon) => {
+      return pokemon.sort((a,b) => a.index - b.index);
+    }),
+    catchError(err => {
+      this.errorMessageSubject.next(err);
+      return EMPTY;
+    })
+  );
 
   //Hot Observable that displays filtered pokemon based off user input
   filteredPokemon$ = combineLatest([

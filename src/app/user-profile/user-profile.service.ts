@@ -26,7 +26,7 @@ export class UserProfileService {
     }),
     tap(user => console.log(`current User`, user))
   );
-//go back and use a merge to get userPokemon
+
   userPokemon$ = this.currentUser$
   .pipe(
     filter(user => Boolean(user)),
