@@ -1,6 +1,7 @@
 
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~font-awesome/css/font-awesome.min.css";
+@import  "@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 
 
@@ -28,3 +29,6 @@ div.card {
 
 
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

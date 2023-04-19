@@ -65,7 +65,7 @@ export class AllUsersDetailsComponent {
   //Use the docs to strat implementing into the html
   //In TradeDialogComponent send message to user inbox of pokemon
   //message pokemon
-  
+
 
     //---------------------MatDialog for initiating a Trade--------------
 
