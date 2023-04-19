@@ -58,6 +58,22 @@ export class AllUsersDetailsComponent {
   );
 
   constructor(private allUsersService: AllUsersService) { }
+  //First step is going to be importing angular material
+  //Here is where we bring in the MatDialog through the constructor and also bring a sanckbar
+  //Bring in Router if we need it, well see after we create our dialog
+  //Create a tradeDialog Component
+  //Use the docs to strat implementing into the html
+  //In TradeDialogComponent send message to user inbox of pokemon
+  //message pokemon
+  
+
+    //---------------------MatDialog for initiating a Trade--------------
+
+
+
+
+
+    //---------------------------------------------------------------------
 
     //function to pass pokemon to service function which will update a subject to pass to poke-detail component
     onTap(name: string): void {
