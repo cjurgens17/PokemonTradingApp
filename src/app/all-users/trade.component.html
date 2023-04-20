@@ -5,12 +5,12 @@
   <form class="example-form">
     <mat-form-field *ngIf="currentUser$ | async as user" class="example-full-width">
       <mat-label>Username</mat-label>
-      <input matInput placeholder="Enter username" [value]="user.username" readonly>
+      <input matInput placeholder="Enter username" [value]="user.username" [formControl]="username">
     </mat-form-field>
 
     <mat-form-field class="example-full-width">
       <mat-label>Leave a comment</mat-label>
-      <textarea matInput placeholder="Enter text"></textarea>
+      <textarea matInput placeholder="Enter text" [formControl]="text"></textarea>
     </mat-form-field>
   </form>
 
@@ -37,7 +37,9 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-
+  <button mat-button color="primary" (click)="trade()">
+    <mat-icon>Submit</mat-icon>Submit
+  </button>
 
 
 

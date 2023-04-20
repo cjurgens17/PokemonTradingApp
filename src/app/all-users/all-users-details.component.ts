@@ -18,6 +18,7 @@ export class AllUsersDetailsComponent {
 
   @ViewChild('pokemonImage') clickedPokemonImage!: ElementRef;
   @ViewChild('pokemonName') clickedPokemonName!: ElementRef;
+  @ViewChild('passedUsername') passedUsername!: ElementRef;
 
   //for error handling: Hot Observable
   private errorMessageSubject = new Subject<string>();
@@ -84,7 +85,13 @@ export class AllUsersDetailsComponent {
         let dialogRef = this.dialog.open(TradeComponent, {
           width: '600px',
           height: '600px',
-          data: {passedUserPokemon: this.clickedPokemonImage.nativeElement.src, passedPokemonName: this.clickedPokemonName.nativeElement.textContent}
+          data: {
+
+            passedUserPokemon: this.clickedPokemonImage.nativeElement.src,
+             passedPokemonName: this.clickedPokemonName.nativeElement.textContent,
+             passedUsername: this.passedUsername.nativeElement.textContent
+             
+            }
         });
 
         dialogRef.afterClosed().subscribe( result => {
