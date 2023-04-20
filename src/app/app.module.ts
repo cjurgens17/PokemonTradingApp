@@ -17,6 +17,7 @@ import { AllUsersComponent } from './all-users/all-users.component';
 import { AllUsersDetailsComponent } from './all-users/all-users-details.component';
 import { PokeDetailComponent } from './all-users/poke-detail.component';
 import { FooterComponent } from './footer/footer.component';
+import { TradeComponent } from './all-users/trade.component';
 
 
 
@@ -29,7 +30,8 @@ import { FooterComponent } from './footer/footer.component';
     AllUsersComponent,
     AllUsersDetailsComponent,
     PokeDetailComponent,
-    FooterComponent
+    FooterComponent,
+    TradeComponent
 
   ],
   imports: [

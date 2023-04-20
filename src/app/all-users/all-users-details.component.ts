@@ -1,6 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AllUsersService } from './all-users.service';
 import { EMPTY, Subject, catchError, combineLatest, filter, map, tap } from 'rxjs';
+import { Router } from '@angular/router';
+
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { TradeComponent } from './trade.component';
 
 @Component({
   selector: 'app-all-users-details',
@@ -10,6 +15,9 @@ import { EMPTY, Subject, catchError, combineLatest, filter, map, tap } from 'rxj
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AllUsersDetailsComponent {
+
+  @ViewChild('pokemonImage') clickedPokemonImage!: ElementRef;
+  @ViewChild('pokemonName') clickedPokemonName!: ElementRef;
 
   //for error handling: Hot Observable
   private errorMessageSubject = new Subject<string>();
@@ -57,7 +65,10 @@ export class AllUsersDetailsComponent {
     })
   );
 
-  constructor(private allUsersService: AllUsersService) { }
+  constructor(private allUsersService: AllUsersService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private router: Router) { }
   //First step is going to be importing angular material
   //Here is where we bring in the MatDialog through the constructor and also bring a sanckbar
   //Bring in Router if we need it, well see after we create our dialog
@@ -69,7 +80,27 @@ export class AllUsersDetailsComponent {
 
     //---------------------MatDialog for initiating a Trade--------------
 
+      openTradeDialog(): void {
+        let dialogRef = this.dialog.open(TradeComponent, {
+          width: '600px',
+          height: '600px',
+          data: {passedUserPokemon: this.clickedPokemonImage.nativeElement.src, passedPokemonName: this.clickedPokemonName.nativeElement.textContent}
+        });
 
+        dialogRef.afterClosed().subscribe( result => {
+          console.log('The dialog was closed', result);
+            //here we are handling if we can trade
+            //we need to handle the case where we cant trade because a user has lost the
+            //pokemon they wanted to trade
+          if(result){
+            this.openSnackBar("Request Sent. Make sure to check your inbox for updates");
+          }
+        })
+      }
+
+      openSnackBar(message: string): MatSnackBarRef<SimpleSnackBar> {
+        return this.snackBar.open(message);
+      }
 
 
 

@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>Request to Trade</h2>
+
+<mat-dialog-content>
+
+  <form class="example-form">
+    <mat-form-field *ngIf="currentUser$ | async as user" class="example-full-width">
+      <mat-label>Username</mat-label>
+      <input matInput placeholder="Enter username" [value]="user.username" readonly>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Leave a comment</mat-label>
+      <textarea matInput placeholder="Enter text"></textarea>
+    </mat-form-field>
+  </form>
+
+  <h2 class="font-bold ">Choose a Pokemon to Trade</h2>
+  <br>
+  <mat-form-field *ngIf="userPokemon$ | async as userPokemon" appearance="fill">
+    <mat-label>Select an option</mat-label>
+    <mat-select [(ngModel)]="message.userPokemon">
+      <mat-select-trigger>
+        {{message.userPokemon | titlecase}}
+      </mat-select-trigger>
+      <mat-optgroup *ngFor="let pokemon of userPokemon" [label]="pokemon.name | titlecase">
+      <mat-option [value]="pokemon.name">
+       <img class="h-full w-auto" [src]="pokemon.image">
+      </mat-option>
+      </mat-optgroup>
+    </mat-select>
+  </mat-form-field>
+  <p>Pokemon you wish to Trade: {{message.userPokemon | titlecase}}</p>
+  <br>
+  <img  [src]="data.passedUserPokemon | titlecase">
+  <br>
+  <h2>Pokemon you wish to get: {{data.passedPokemonName}}</h2>
+</mat-dialog-content>
+<mat-dialog-actions>
+
+
+
+
+
+</mat-dialog-actions>
