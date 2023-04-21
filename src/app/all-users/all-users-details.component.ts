@@ -93,8 +93,7 @@ export class AllUsersDetailsComponent {
 
       openTradeDialog(): void {
         let dialogRef = this.dialog.open(TradeComponent, {
-          width: '600px',
-          height: '600px',
+          width: '450px',
           data: {
             //this is an image
             passedUserPokemon: this.pass.image,
