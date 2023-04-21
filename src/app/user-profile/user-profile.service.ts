@@ -4,6 +4,7 @@ import { EMPTY, Observable, catchError, filter, map, switchMap, tap, throwError 
 import { Pokemon } from '../pokemon/pokemon';
 import { User } from '../user-info/user-info';
 import { UserLoginService } from '../user-login/user-login-service';
+import { Message } from '../all-users/message';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,17 @@ export class UserProfileService {
     }),
     tap(pokemon => console.log('user pokemon', pokemon))
   );
+
+//this gets all the users inbox/all messages
+  userMessages$ =this.currentUser$
+  .pipe(
+    filter(user => Boolean(user)),
+    switchMap(user => {
+      return this.http.get<Message[]>(`${this.userUrl}/${user.id}/userMessages`)
+    }),
+    tap(inbox => console.log('User Inbox: ', inbox)),
+    catchError(this.handleError)
+  )
 
   constructor(private http: HttpClient, private userLoginService: UserLoginService) {}
 

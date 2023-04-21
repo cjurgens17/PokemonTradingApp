@@ -23,7 +23,7 @@
         {{message.userPokemon | titlecase}}
       </mat-select-trigger>
       <mat-optgroup *ngFor="let pokemon of userPokemon" [label]="pokemon.name | titlecase">
-      <mat-option [value]="pokemon.name">
+      <mat-option [value]="pokemon.name" (click)="getImage(pokemon.image)">
        <img class="h-full w-auto" [src]="pokemon.image">
       </mat-option>
       </mat-optgroup>
@@ -31,7 +31,7 @@
   </mat-form-field>
   <p>Pokemon you wish to Trade: {{message.userPokemon | titlecase}}</p>
   <br>
-  <img  [src]="data.passedUserPokemon | titlecase">
+  <img [src]="data.passedUserPokemon">
   <br>
   <h2>Pokemon you wish to get: {{data.passedPokemonName}}</h2>
 </mat-dialog-content>

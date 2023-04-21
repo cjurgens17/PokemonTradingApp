@@ -7,6 +7,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { TradeComponent } from './trade.component';
 
+export interface IpassDialog {
+  image: string;
+  name: string;
+  username: string | null | undefined;
+}
+
 @Component({
   selector: 'app-all-users-details',
   templateUrl: './all-users-details.component.html',
@@ -16,8 +22,12 @@ import { TradeComponent } from './trade.component';
 })
 export class AllUsersDetailsComponent {
 
-  @ViewChild('pokemonImage') clickedPokemonImage!: ElementRef;
-  @ViewChild('pokemonName') clickedPokemonName!: ElementRef;
+  pass: IpassDialog = {
+    image: '',
+    name: '',
+    username:''
+  }
+
   @ViewChild('passedUsername') passedUsername!: ElementRef;
 
   //for error handling: Hot Observable
@@ -86,11 +96,11 @@ export class AllUsersDetailsComponent {
           width: '600px',
           height: '600px',
           data: {
+            //this is an image
+            passedUserPokemon: this.pass.image,
+             passedPokemonName: this.pass.name,
+             passedUsername: this.pass.username
 
-            passedUserPokemon: this.clickedPokemonImage.nativeElement.src,
-             passedPokemonName: this.clickedPokemonName.nativeElement.textContent,
-             passedUsername: this.passedUsername.nativeElement.textContent
-             
             }
         });
 
@@ -116,6 +126,13 @@ export class AllUsersDetailsComponent {
     //function to pass pokemon to service function which will update a subject to pass to poke-detail component
     onTap(name: string): void {
       this.allUsersService.onTap(name);
+    }
+
+    //passes info from dom child to IdomPokeon so we can get image and name of pokemon
+    fillPokemon(image: string, name: string, username: string | null | undefined): void {
+      this.pass.image = image;
+      this.pass.name = name;
+      this.pass.username = username || null || undefined;
     }
 
 }

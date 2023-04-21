@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, Subject, Subscription, catchError, combineLatest, filter, find, map, startWith, tap } from 'rxjs';
 import { UserProfileService } from '../user-profile.service';
+import { MatDialog } from '@angular/material/dialog';
+import { InboxComponent } from '../inbox/inbox.component';
 
 
 @Component({
@@ -95,7 +97,7 @@ export class UserHomeComponent {
       })
     );
 
-  constructor(private userProfileService: UserProfileService) { }
+  constructor(private userProfileService: UserProfileService, private dialog: MatDialog) { }
 
   onFilterChange() {
     this.filteredPokemonInputSubject.next(this._listFilter);
@@ -104,6 +106,13 @@ export class UserHomeComponent {
   getPokemon(name: string): void {
     this.clickedPokemonSubject.next(name);
     console.log('passed '+ name);
+  }
+
+  openInboxDialog(): void {
+    let dialogRef = this.dialog.open(InboxComponent, {
+      width: '900px',
+      height: '900px'
+    });
   }
 }
 

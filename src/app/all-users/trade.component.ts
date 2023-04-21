@@ -16,7 +16,6 @@ import { FormControl } from '@angular/forms';
 })
 export class TradeComponent implements OnInit {
 
-
   text = new FormControl('');
   username = new FormControl('');
 
@@ -48,18 +47,27 @@ export class TradeComponent implements OnInit {
     let tradeMsg: Message = {
       text: '',
       userPokemon: '',
+      userPokemonImage: '',
       tradePokemon: '',
-      username: ''
+      tradePokemonImage: '',
+      username: '',
+      currentUsername: ''
     }
 
     this.message = tradeMsg;
 
   }
 
+  getImage(image: string){
+    this.message.tradePokemonImage = image;
+  }
+
   trade(): void {
     this.message.tradePokemon = this.data.passedPokemonName;
     this.message.text = this.text.value || '{}';
-    this.message.username = this.username.value || '{}';
+    this.message.username = this.data.passedUsername;
+    this.message.userPokemonImage = this.data.passedUserPokemon;
+    this.message.currentUsername = this.username.value || '{}';
     console.log(this.message);
 
     this.tradeService.addToUserInbox(this.message).subscribe({

@@ -21,6 +21,7 @@ import { TradeComponent } from './all-users/trade.component';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +32,7 @@ import { TradeComponent } from './all-users/trade.component';
     AllUsersDetailsComponent,
     PokeDetailComponent,
     FooterComponent,
-    TradeComponent
+    TradeComponent,
 
   ],
   imports: [

@@ -1,7 +1,13 @@
 <div *ngIf="userProfile$ | async as profile">
 <div class="h-max min-h-screen bg-cover bg-no-repeat filter saturate-150 bg-fixed" style="background-image: url('https://images.alphacoders.com/119/119223.jpg')">
   <!-- flex for user profile info and pokemon display to the right -->
-  <div class="flex flex-row w-screen h-16 border-t-2 border-white justify-center">
+  <div class="flex flex-row w-screen h-16 border-t-2 border-white justify-between">
+    <div class="demo-section">
+      <button mat-raised-button color="primary"
+          matBadge="8" matBadgePosition="after" matBadgeColor="accent" (click)="openInboxDialog()">
+        Inbox
+      </button>
+    </div>
 <h1 class="text-white font-bold text-2xl items-center">Profile Page</h1>
   </div>
   <div class="h-1/4 flex flex-row justify-evenly">
