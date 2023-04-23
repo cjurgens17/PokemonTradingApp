@@ -45,16 +45,20 @@ export class InboxComponent implements OnInit {
   onViewMessage(message: Message): void {
       this.userMessageSubject.next(message);
   }
-
+//declines the trade
   decline(message: Message): void {
-    //we need message.username
+    //this changes the usernames so decline msg displays proper names in view/client side
     let to = message.currentUsername;
     let from = message.username;
+
+    //update msg object to reflect changes
     let declineMessage = {
-       ...message,
-       text: `${message.username} has declined your trade.`,
+      ...message,
+      text: `${message.username} has declined your trade.`,
       username: to,
       currentUsername: from}
+
+      //sends the actual decline msg
     this.tradeService.addDeclineMessage(declineMessage).subscribe({
         next: resp => {
           console.log('resp', resp)
@@ -68,7 +72,37 @@ export class InboxComponent implements OnInit {
     });
   }
 
-  accept(): void {
+  //accepts the trade between 2 users
+  accept(message: Message): void {
+    //currentUsername == from
+    //username == to(so us)
+    //userPokemon == our pokemon
+    //tradePokemon == their pokemon
+    let hasPokemon = false;
+
+    let username = message.username;
+    let currentUsername = message.currentUsername;
+    let userPokemon = message.userPokemon;
+    let tradePokemon = message.tradePokemon;
+
+    this.tradeService.checkUsersPokemon(username, currentUsername, userPokemon,tradePokemon).subscribe({
+      next: resp => {
+        if(resp){
+          hasPokemon = true;
+        }
+        console.log('resp', resp);
+      },
+
+      error: err => {
+        console.log('error: ' ,err);
+      },
+      complete: () => {
+
+      }
+    })
+
+    
+
 
   }
 
@@ -76,7 +110,8 @@ export class InboxComponent implements OnInit {
        return this.snackBar.open(message, action);
   }
 
-  acceptSnackBar(): void {
+  acceptSnackBar(message: string): MatSnackBarRef<SimpleSnackBar> {
+    return this.snackBar.open(message);
 
   }
 
