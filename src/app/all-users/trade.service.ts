@@ -41,6 +41,21 @@ export class TradeService {
       catchError(this.handleError)
     )
   }
+  //adds and deletes pokemon to each users pokeIndex
+  completeTrade(username: string, currentUsername: string, userPokemon: string, tradePokemon: string): Observable<Boolean> {
+    //data object to be received on backend
+    const trade = {
+      username: username,
+      currentUsername: currentUsername,
+      userPokemon: userPokemon,
+      tradePokemon: tradePokemon
+    }
+
+    return this.http.post<Boolean>(`${this.apiUrl}/tradePokemon`, trade, {headers: environment.headers})
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
 
 
   private handleError(err: HttpErrorResponse){

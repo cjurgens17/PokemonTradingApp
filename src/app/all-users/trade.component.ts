@@ -7,6 +7,7 @@ import { AllUsersService } from './all-users.service';
 import { inject } from '@angular/core/testing';
 import { TradeService } from './trade.service';
 import { FormControl } from '@angular/forms';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -39,7 +40,8 @@ export class TradeComponent implements OnInit {
   private dialogRef: MatDialogRef<TradeComponent>,
   private userProfileService: UserProfileService,
   @Inject(MAT_DIALOG_DATA) public data: any,
-  private tradeService: TradeService) {}
+  private tradeService: TradeService,
+  private snackBar: MatSnackBar) {}
 
 
   ngOnInit(): void {
@@ -84,6 +86,24 @@ export class TradeComponent implements OnInit {
       }
 
     });
+
+    this.tradeSentSnackBar('Message Sent', 'close', this.dialogRef);
+
   }
+
+  tradeSentSnackBar(message: string, action: string, dialogRef: MatDialogRef<TradeComponent>): MatSnackBarRef<SimpleSnackBar>{
+    const snackBarRef = this.snackBar.open(message, action, {
+      duration: 5000,
+      data: { dialogRef }
+    });
+
+    snackBarRef.afterDismissed().subscribe(() => {
+      this.dialogRef.close();
+    })
+
+    return snackBarRef;
+  }
+
+
 
 }

@@ -45,6 +45,8 @@ export class InboxComponent implements OnInit {
   onViewMessage(message: Message): void {
       this.userMessageSubject.next(message);
   }
+
+//----------------------------HTTP CALLS------------------------
 //declines the trade
   decline(message: Message): void {
     //this changes the usernames so decline msg displays proper names in view/client side
@@ -70,6 +72,8 @@ export class InboxComponent implements OnInit {
 
         }
     });
+
+    this.declineSnackBar('Trade declined', 'close');
   }
 
   //accepts the trade between 2 users
@@ -78,41 +82,48 @@ export class InboxComponent implements OnInit {
     //username == to(so us)
     //userPokemon == our pokemon
     //tradePokemon == their pokemon
-    let hasPokemon = false;
 
     let username = message.username;
     let currentUsername = message.currentUsername;
     let userPokemon = message.userPokemon;
     let tradePokemon = message.tradePokemon;
 
+    //Checking if users have pokemon avaiable to trade
     this.tradeService.checkUsersPokemon(username, currentUsername, userPokemon,tradePokemon).subscribe({
       next: resp => {
-        if(resp){
-          hasPokemon = true;
-        }
-        console.log('resp', resp);
-      },
+        let hasPokemon = resp;
+        console.log('Have Pokemon?', resp);
+        console.log('hasPokemon value: ' ,hasPokemon);
 
+         //users have pokemon available to trade
+    if(hasPokemon){
+      this.tradeService.completeTrade(username, currentUsername,userPokemon, tradePokemon).subscribe({
+        next: resp => {
+          console.log('Trade: ', resp);
+        },
+        error: err => {
+          console.log('error: ', err);
+        },
+        complete: () => {
+
+        }
+      })
+      //success snackbar
+        this.acceptSuccessSnackBar('Trade Successful, check your PokeIndex', 'Close');
+    }else{
+      //fail snackbar
+      console.log('Users dont have pokemon anymore');
+      this.acceptFailSnackBar('Pokemon for trade are no longer available', 'Close');
+    }
+
+  },
       error: err => {
         console.log('error: ' ,err);
       },
+
       complete: () => {
-
       }
-    })
-
-    
-
-
-  }
-
-  declineSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
-       return this.snackBar.open(message, action);
-  }
-
-  acceptSnackBar(message: string): MatSnackBarRef<SimpleSnackBar> {
-    return this.snackBar.open(message);
-
+    });
   }
 
   deleteMessage(message: Message): void {
@@ -131,6 +142,26 @@ export class InboxComponent implements OnInit {
 
     });
   }
+//---------------------------------------SNACKBARS---------------------------
+  declineSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
+       return this.snackBar.open(message, action, {
+        duration: 5000
+       });
+  }
+
+  acceptSuccessSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
+    return this.snackBar.open(message, action, {
+      duration: 5000
+    });
+  }
+
+  acceptFailSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
+    return this.snackBar.open(message, action, {
+      duration: 5000,
+    });
+  }
+
+
 
   ngOnInit(): void {
   }

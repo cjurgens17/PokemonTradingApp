@@ -108,13 +108,12 @@ export class AllUsersDetailsComponent {
             //here we are handling if we can trade
             //we need to handle the case where we cant trade because a user has lost the
             //pokemon they wanted to trade
-            this.openSnackBar("Request Sent. Make sure to check your inbox for updates");
         })
       }
 
-      openSnackBar(message: string): MatSnackBarRef<SimpleSnackBar> {
-        return this.snackBar.open(message);
-      }
+      // openSnackBar(message: string): MatSnackBarRef<SimpleSnackBar> {
+      //   return this.snackBar.open(message);
+      // }
 
 
 
