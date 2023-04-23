@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { TradeComponent } from './trade.component';
+import { AnimationDurations } from '@angular/material/core';
 
 export interface IpassDialog {
   image: string;
@@ -28,7 +29,6 @@ export class AllUsersDetailsComponent {
     username:''
   }
 
-  @ViewChild('passedUsername') passedUsername!: ElementRef;
 
   //for error handling: Hot Observable
   private errorMessageSubject = new Subject<string>();
@@ -96,7 +96,7 @@ export class AllUsersDetailsComponent {
           width: '450px',
           data: {
             //this is an image
-            passedUserPokemon: this.pass.image,
+             passedUserPokemon: this.pass.image,
              passedPokemonName: this.pass.name,
              passedUsername: this.pass.username
 
@@ -108,9 +108,7 @@ export class AllUsersDetailsComponent {
             //here we are handling if we can trade
             //we need to handle the case where we cant trade because a user has lost the
             //pokemon they wanted to trade
-          if(result){
             this.openSnackBar("Request Sent. Make sure to check your inbox for updates");
-          }
         })
       }
 

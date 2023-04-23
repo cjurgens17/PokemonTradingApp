@@ -22,7 +22,7 @@ export class TradeService {
 
     //adding decline message  to users inbox
     addDeclineMessage(message: any): Observable<any> {
-      return this.http.post<any>(`${this.apiUrl}/${message.currentUsername}/addMessage`, message, {headers: environment.headers})
+      return this.http.post<any>(`${this.apiUrl}/${message.username}/addMessage`, message, {headers: environment.headers})
       .pipe(
         catchError(this.handleError)
       )
@@ -33,6 +33,7 @@ export class TradeService {
     const options = {headers: environment.headers, body: message};
    return this.http.delete<Message>(`${this.apiUrl}/deleteMessage`, options).pipe(catchError(this.handleError));
   }
+
 
   private handleError(err: HttpErrorResponse){
 

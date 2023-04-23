@@ -48,8 +48,13 @@ export class InboxComponent implements OnInit {
 
   decline(message: Message): void {
     //we need message.username
-    let declineMessage = {...message, text: `${message.currentUsername} has declined your trade.`}
-
+    let to = message.currentUsername;
+    let from = message.username;
+    let declineMessage = {
+       ...message,
+       text: `${message.username} has declined your trade.`,
+      username: to,
+      currentUsername: from}
     this.tradeService.addDeclineMessage(declineMessage).subscribe({
         next: resp => {
           console.log('resp', resp)
@@ -58,7 +63,7 @@ export class InboxComponent implements OnInit {
           console.log('err', err)
         },
         complete: () => {
-          
+
         }
     });
   }
