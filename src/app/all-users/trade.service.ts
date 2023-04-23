@@ -36,7 +36,7 @@ export class TradeService {
 
   //checking if users have current pokemon
   checkUsersPokemon(username: string, currentUsername: string, userPokemon: string, tradePokemon: string): Observable<Boolean>{
-    return this.http.post<Boolean>(`${this.apiUrl}/${username}/${currentUsername}/${userPokemon}/${tradePokemon}/checkPokemon`, {headers: environment.headers})
+    return this.http.get<Boolean>(`${this.apiUrl}/${username}/${currentUsername}/${userPokemon}/${tradePokemon}/checkPokemon`, {headers: environment.headers})
     .pipe(
       catchError(this.handleError)
     )
