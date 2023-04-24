@@ -21,6 +21,8 @@ export class InboxComponent implements OnInit {
   private userMessageSubject = new Subject<Message>();
   userMessage$ = this.userMessageSubject.asObservable();
 
+  //create a boolean subject for inbox
+
     //Cold Observable that grabs the current Users information
     currentUser$ = this.userProfileService.currentUser$;
 
@@ -125,7 +127,7 @@ export class InboxComponent implements OnInit {
       }
     });
   }
-
+//deletes message from user inbox
   deleteMessage(message: Message): void {
     this.tradeService.deleteUserMessage(message).subscribe({
       next: resp => {
@@ -141,6 +143,9 @@ export class InboxComponent implements OnInit {
       }
 
     });
+
+
+
   }
 //---------------------------------------SNACKBARS---------------------------
   declineSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
