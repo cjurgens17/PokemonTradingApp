@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Inject, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Message } from './message';
 import { UserProfileService } from '../user-profile/user-profile.service';
-import { EMPTY, catchError, map } from 'rxjs';
+import { EMPTY, Subject, catchError, map, takeUntil } from 'rxjs';
 import { AllUsersService } from './all-users.service';
 import { inject } from '@angular/core/testing';
 import { TradeService } from './trade.service';
@@ -15,12 +15,13 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
   templateUrl: './trade.component.html',
   styleUrls: ['./trade.component.css']
 })
-export class TradeComponent implements OnInit {
+export class TradeComponent implements OnInit, OnDestroy {
 
   text = new FormControl('');
   username = new FormControl('');
-
   message!:Message;
+
+  private ngUnsubscribe = new Subject<void>();
 
   //This gets all currentUsers pokemon so we can select to trade
   userPokemon$ = this.userProfileService.userPokemon$
@@ -43,6 +44,49 @@ export class TradeComponent implements OnInit {
   private tradeService: TradeService,
   private snackBar: MatSnackBar) {}
 
+  getImage(image: string){
+    this.message.tradePokemonImage = image;
+  }
+
+  trade(): void {
+    this.message.tradePokemon = this.data.passedPokemonName;
+    this.message.text = this.text.value || '{}';
+    this.message.username = this.data.passedUsername;
+    this.message.userPokemonImage = this.data.passedUserPokemon;
+    this.message.currentUsername = this.username.value || '{}';
+    console.log(this.message);
+
+    this.tradeService.addToUserInbox(this.message)
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
+      next: response => {
+        console.log('response: ', response);
+      },
+
+      error: err => {
+        console.log('Error: ', err)
+      },
+
+      complete: () => {
+
+      }
+
+    });
+
+    this.tradeSentSnackBar('Message Sent', 'Close');
+
+  }
+
+  tradeSentSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
+    const snackBarRef = this.snackBar.open(message, action, {
+      duration: 5000,
+      data: this.dialogRef
+    });
+    this.dialogRef.close();
+    return snackBarRef;
+  }
 
   ngOnInit(): void {
     console.log(this.data);
@@ -60,50 +104,9 @@ export class TradeComponent implements OnInit {
 
   }
 
-  getImage(image: string){
-    this.message.tradePokemonImage = image;
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
-
-  trade(): void {
-    this.message.tradePokemon = this.data.passedPokemonName;
-    this.message.text = this.text.value || '{}';
-    this.message.username = this.data.passedUsername;
-    this.message.userPokemonImage = this.data.passedUserPokemon;
-    this.message.currentUsername = this.username.value || '{}';
-    console.log(this.message);
-
-    this.tradeService.addToUserInbox(this.message).subscribe({
-      next: response => {
-        console.log('response: ', response);
-      },
-
-      error: err => {
-        console.log('Error: ', err)
-      },
-
-      complete: () => {
-
-      }
-
-    });
-
-    this.tradeSentSnackBar('Message Sent', 'close', this.dialogRef);
-
-  }
-
-  tradeSentSnackBar(message: string, action: string, dialogRef: MatDialogRef<TradeComponent>): MatSnackBarRef<SimpleSnackBar>{
-    const snackBarRef = this.snackBar.open(message, action, {
-      duration: 5000,
-      data: { dialogRef }
-    });
-
-    snackBarRef.afterDismissed().subscribe(() => {
-      this.dialogRef.close();
-    })
-
-    return snackBarRef;
-  }
-
-
 
 }
