@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserProfileService } from '../user-profile.service';
-import { BehaviorSubject, EMPTY, Subject, Subscription, catchError, combineLatest, filter, switchMap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Subject, Subscription, catchError, combineLatest, filter, switchMap, takeUntil } from 'rxjs';
 import { Message } from 'src/app/all-users/message';
 import { TradeService } from 'src/app/all-users/trade.service';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
@@ -16,16 +16,12 @@ import { Inbox } from './inbox';
 })
 export class InboxComponent implements OnInit, OnDestroy {
 
-  declineMsgSub!:Subscription;
-  completeTradeSub!:Subscription;
-  tradeSub!:Subscription;
-  deleteMsgSub!: Subscription;
-  userSub!: Subscription;
-  inboxSub!: Subscription;
   userId!: number;
   userInbox: Inbox = {
     messages: []
   }
+  //unsubscribes to all called observables onDestroy
+  private ngUnsubscribe = new Subject<void>();
 
   //User inbox stream
   private inboxSubject = new BehaviorSubject<Inbox>(this.userInbox);
@@ -68,7 +64,11 @@ export class InboxComponent implements OnInit, OnDestroy {
       currentUsername: from}
 
       //sends the actual decline msg
-    this.declineMsgSub = this.tradeService.addDeclineMessage(declineMessage).subscribe({
+    this.tradeService.addDeclineMessage(declineMessage)
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
         next: resp => {
           console.log('resp', resp)
         },
@@ -96,7 +96,11 @@ export class InboxComponent implements OnInit, OnDestroy {
     let tradePokemon = message.tradePokemon;
 
     //Checking if users have pokemon avaiable to trade
-    this.tradeSub = this.tradeService.checkUsersPokemon(username, currentUsername, userPokemon,tradePokemon).subscribe({
+    this.tradeService.checkUsersPokemon(username, currentUsername, userPokemon,tradePokemon)
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
       next: resp => {
         let hasPokemon = resp;
         console.log('Have Pokemon?', resp);
@@ -104,7 +108,11 @@ export class InboxComponent implements OnInit, OnDestroy {
 
          //users have pokemon available to trade
     if(hasPokemon){
-      this.completeTradeSub = this.tradeService.completeTrade(username, currentUsername,userPokemon, tradePokemon).subscribe({
+      this.tradeService.completeTrade(username, currentUsername,userPokemon, tradePokemon)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe({
         next: resp => {
           console.log('Trade: ', resp);
         },
@@ -134,7 +142,11 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 //deletes message from user inbox
   deleteMessage(message: Message): void {
-   this.deleteMsgSub = this.tradeService.deleteUserMessage(message).subscribe({
+    this.tradeService.deleteUserMessage(message)
+   .pipe(
+    takeUntil(this.ngUnsubscribe)
+   )
+   .subscribe({
       next: resp => {
         //removing msg from inbox then pushing back to behaviorSubject
         if(resp){
@@ -175,15 +187,15 @@ export class InboxComponent implements OnInit, OnDestroy {
 
 //------------------LifeCycle Hooks-----------------------
   ngOnInit(): void {
-   this.userSub = this.currentUser$.subscribe({
-      next: resp => {
-          this.userId = resp.id || 0;
-          console.log('user', resp)
-      },
-      error: err => console.log('error: ', err)
-    })
+    //getting userId
+  this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
+  console.log(`user Id: `,this.userId);
 
-    this.inboxSub = this.userProfileService.getUserMessages(1).subscribe({
+    this.userProfileService.getUserMessages(this.userId)
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
       next: resp => {
         console.log(resp);
         this.userInbox.messages = resp;
@@ -196,12 +208,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.inboxSub.unsubscribe();
-    this.userSub.unsubscribe();
-    this.deleteMsgSub.unsubscribe();
-    this.tradeSub.unsubscribe();
-    this.completeTradeSub.unsubscribe();
-    this.declineMsgSub.unsubscribe();
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }
