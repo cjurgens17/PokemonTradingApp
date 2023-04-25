@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EMPTY, Observable, catchError, filter, map, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, combineLatest, filter, find, map, switchMap, tap, throwError } from 'rxjs';
 import { Pokemon } from '../pokemon/pokemon';
 import { User } from '../user-info/user-info';
 import { UserLoginService } from '../user-login/user-login-service';
@@ -12,6 +12,16 @@ import { Message } from '../all-users/message';
 export class UserProfileService {
 
   private userUrl = "http://localhost:8080/user";
+
+  msg: Message = {
+    text: '',
+    userPokemon: '',
+    userPokemonImage: '',
+    tradePokemon: '',
+    tradePokemonImage: '',
+    username: '',
+    currentUsername: ''
+  }
 
   currentUserLogin$ = this.userLoginService.getCurrentUser();
 
@@ -28,6 +38,7 @@ export class UserProfileService {
     tap(user => console.log(`current User`, user))
   );
 
+//Hot Observable that shows and updates a users msgs initally and when they get deleted
   userPokemon$ = this.currentUser$
   .pipe(
     filter(user => Boolean(user)),
@@ -37,34 +48,15 @@ export class UserProfileService {
     tap(pokemon => console.log('user pokemon', pokemon))
   );
 
-//this gets all the users inbox/all messages
-  userMessages$ =this.currentUser$
-  .pipe(
-    filter(user => Boolean(user)),
-    switchMap(user => {
-      return this.http.get<Message[]>(`${this.userUrl}/${user.id}/userMessages`)
-    }),
-    tap(inbox => console.log('User Inbox: ', inbox)),
-    catchError(this.handleError)
-  )
-
   constructor(private http: HttpClient, private userLoginService: UserLoginService) {}
+    //gets users messages
+  getUserMessages(id: number): Observable<Message[]> {
+    return this.http.get<Message[]>(`${this.userUrl}/${id}/userMessages`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
 
-
-
-
-
-
-
-//-----------------------------------------------------this is to get user info
-//-----------------right now we are using the local storage
-  // getUserInformation(id: number): Observable<User> {
-  //   const path = `${this.userUrl}/${id}/userInfo`;
-  //   return this.http.get<User>(path).pipe(
-  //     catchError(this.handleError)
-  //   )
-  // }
-//-------------------------------------------------------------------------
 
   private handleError(err: HttpErrorResponse){
 

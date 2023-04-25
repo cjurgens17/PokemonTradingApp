@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserProfileService } from '../user-profile.service';
-import { EMPTY, Subject, catchError } from 'rxjs';
+import { BehaviorSubject, EMPTY, Subject, Subscription, catchError, combineLatest, filter, switchMap } from 'rxjs';
 import { Message } from 'src/app/all-users/message';
 import { TradeService } from 'src/app/all-users/trade.service';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { User } from 'src/app/user-info/user-info';
+import { Inbox } from './inbox';
 
 @Component({
   selector: 'app-inbox',
@@ -12,37 +14,40 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
   styleUrls: ['./inbox.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InboxComponent implements OnInit {
+export class InboxComponent implements OnInit, OnDestroy {
+
+  declineMsgSub!:Subscription;
+  completeTradeSub!:Subscription;
+  tradeSub!:Subscription;
+  deleteMsgSub!: Subscription;
+  userSub!: Subscription;
+  inboxSub!: Subscription;
+  userId!: number;
+  userInbox: Inbox = {
+    messages: []
+  }
+
+  //User inbox stream
+  private inboxSubject = new BehaviorSubject<Inbox>(this.userInbox);
+  inbox$ = this.inboxSubject.asObservable();
 
   //Action Stream for handling errors
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
 
+  //Passes User Message Subject
   private userMessageSubject = new Subject<Message>();
   userMessage$ = this.userMessageSubject.asObservable();
 
-  //create a boolean subject for inbox
+  //Cold Observable that grabs the current Users information
+  currentUser$ = this.userProfileService.currentUser$;
 
-    //Cold Observable that grabs the current Users information
-    currentUser$ = this.userProfileService.currentUser$;
-
-    userInbox$ = this.userProfileService.userMessages$
-    .pipe(
-      catchError( err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      })
-    )
-
-
-        //make a subject in service method that update when we select a message
-        //then create a combined hot observable that use the subject and all the usersmessages
-        //make a method so wehn we click a message it updates the Hot observabkle and dislpays in the html from a different component
   constructor(
     private dialogRef: MatDialogRef<InboxComponent>,
     private userProfileService: UserProfileService,
     private tradeService: TradeService,
     private snackBar: MatSnackBar) { }
+
 
   onViewMessage(message: Message): void {
       this.userMessageSubject.next(message);
@@ -63,7 +68,7 @@ export class InboxComponent implements OnInit {
       currentUsername: from}
 
       //sends the actual decline msg
-    this.tradeService.addDeclineMessage(declineMessage).subscribe({
+    this.declineMsgSub = this.tradeService.addDeclineMessage(declineMessage).subscribe({
         next: resp => {
           console.log('resp', resp)
         },
@@ -91,7 +96,7 @@ export class InboxComponent implements OnInit {
     let tradePokemon = message.tradePokemon;
 
     //Checking if users have pokemon avaiable to trade
-    this.tradeService.checkUsersPokemon(username, currentUsername, userPokemon,tradePokemon).subscribe({
+    this.tradeSub = this.tradeService.checkUsersPokemon(username, currentUsername, userPokemon,tradePokemon).subscribe({
       next: resp => {
         let hasPokemon = resp;
         console.log('Have Pokemon?', resp);
@@ -99,7 +104,7 @@ export class InboxComponent implements OnInit {
 
          //users have pokemon available to trade
     if(hasPokemon){
-      this.tradeService.completeTrade(username, currentUsername,userPokemon, tradePokemon).subscribe({
+      this.completeTradeSub = this.tradeService.completeTrade(username, currentUsername,userPokemon, tradePokemon).subscribe({
         next: resp => {
           console.log('Trade: ', resp);
         },
@@ -129,24 +134,26 @@ export class InboxComponent implements OnInit {
   }
 //deletes message from user inbox
   deleteMessage(message: Message): void {
-    this.tradeService.deleteUserMessage(message).subscribe({
+   this.deleteMsgSub = this.tradeService.deleteUserMessage(message).subscribe({
       next: resp => {
-        console.log('response', resp)
+        //removing msg from inbox then pushing back to behaviorSubject
+        if(resp){
+          this.userInbox.messages.forEach((msg,index) => {
+            if(msg === message){
+              this.userInbox.messages.splice(index,1);
+            }
+          });
+          this.inboxSubject.next(this.userInbox);
+        }
       },
-
       error: err => {
         console.log('err', err)
       },
-
       complete: () => {
-
       }
-
     });
-
-
-
   }
+
 //---------------------------------------SNACKBARS---------------------------
   declineSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
        return this.snackBar.open(message, action, {
@@ -166,9 +173,35 @@ export class InboxComponent implements OnInit {
     });
   }
 
-
-
+//------------------LifeCycle Hooks-----------------------
   ngOnInit(): void {
+   this.userSub = this.currentUser$.subscribe({
+      next: resp => {
+          this.userId = resp.id || 0;
+          console.log('user', resp)
+      },
+      error: err => console.log('error: ', err)
+    })
+
+    this.inboxSub = this.userProfileService.getUserMessages(1).subscribe({
+      next: resp => {
+        console.log(resp);
+        this.userInbox.messages = resp;
+        console.log('userMessages', resp);
+        this.inboxSubject.next(this.userInbox);
+      },
+      error: err => console.log('err', err)
+    })
+
+  }
+
+  ngOnDestroy(): void {
+    this.inboxSub.unsubscribe();
+    this.userSub.unsubscribe();
+    this.deleteMsgSub.unsubscribe();
+    this.tradeSub.unsubscribe();
+    this.completeTradeSub.unsubscribe();
+    this.declineMsgSub.unsubscribe();
   }
 
 }

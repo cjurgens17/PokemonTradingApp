@@ -29,9 +29,9 @@ export class TradeService {
     }
 
   //deleting messages from users inbox
-  deleteUserMessage(message: Message): Observable<any> {
+  deleteUserMessage(message: Message): Observable<Boolean> {
     const options = {headers: environment.headers, body: message};
-   return this.http.delete<Message>(`${this.apiUrl}/deleteMessage`, options).pipe(catchError(this.handleError));
+   return this.http.delete<Boolean>(`${this.apiUrl}/deleteMessage`, options).pipe(catchError(this.handleError));
   }
 
   //checking if users have current pokemon
