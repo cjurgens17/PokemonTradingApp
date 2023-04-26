@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
-import { BehaviorSubject, EMPTY, Subject, catchError, combineLatest, map, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Subject, catchError, combineLatest, map, takeUntil, tap } from 'rxjs';
 import { Pokemon } from '../pokemon';
 
 
@@ -12,7 +12,7 @@ import { Pokemon } from '../pokemon';
   styleUrls: ['./pokemoncards.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PokemonCardsComponent {
+export class PokemonCardsComponent implements OnDestroy {
 
   private _searchFilter = '';
   // Loading after Search
@@ -27,6 +27,9 @@ export class PokemonCardsComponent {
     this._searchFilter = value;
     console.log(this.searchFilter);
   }
+
+  private ngUnsubscribe = new Subject<void>();
+
 //Catch errors
 private errorMessageSubject = new Subject<string>();
 errorMessage$ = this.errorMessageSubject.asObservable();
@@ -89,16 +92,19 @@ searchInput$ = this.onSearchSubject.asObservable();
     console.log(newPoke.index);
     console.log(newPoke);
 
-    this.pokemonService.updatePokemon(newPoke, userId).subscribe({
-
-      next: response => {
-        console.log('Respons: ', response);
-      },
-
-      error: err => {
-        console.log('Error: ', err);
-      }
+    this.pokemonService.updatePokemon(newPoke, userId)
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
+      next: response =>  console.log('Respons: ', response),
+      error: err => console.log('Error: ', err)
     });
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }

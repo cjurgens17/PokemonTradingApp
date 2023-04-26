@@ -20,7 +20,8 @@ export class UserProfileService {
     tradePokemon: '',
     tradePokemonImage: '',
     username: '',
-    currentUsername: ''
+    currentUsername: '',
+    traded: false
   }
 
   currentUserLogin$ = this.userLoginService.getCurrentUser();

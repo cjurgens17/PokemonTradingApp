@@ -28,6 +28,14 @@ export class TradeService {
       )
     }
 
+    //update isTraded on message
+    updateIsTraded(message: Message):Observable<Message>{
+      return this.http.post<Message>(`${this.apiUrl}/${message.username}/updateIsTraded`, message, {headers: environment.headers})
+      .pipe(
+        catchError(this.handleError)
+      )
+    }
+
   //deleting messages from users inbox
   deleteUserMessage(message: Message): Observable<Boolean> {
     const options = {headers: environment.headers, body: message};

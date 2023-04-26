@@ -5,17 +5,7 @@
       </button>
       </div>
   </div>
-  <div *ngIf="userMessage$ | async as um" class="flex flex-col w-2/3 overflow-y-auto">
-    <h2 class="text-2xl">From: {{um.currentUsername}}</h2>
-    <br>
-    <p class="text-l">{{um.text}}</p>
-    <div class="grid grid-rows-1 grid-cols-2">
-      <div>Your Pokemon <img [src]="um.userPokemonImage"></div>
-      <div>Pokemon To Trade for <img [src]="um.tradePokemonImage"></div>
-    </div>
-    <div class="flex flex-row justify-evenly items-center">
-      <button mat-button color="primary" (click)="accept(um)" >Accept</button>
-      <button mat-button color="warn" (click)="decline(um)" >Decline</button>
-    </div>
   </div>
-</div>
+
+
+

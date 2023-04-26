@@ -5,13 +5,17 @@ import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { UserHomeGuard } from './user-home/user-home.guard';
 import { InboxComponent } from './inbox/inbox.component';
+import { InboxMessageComponent } from './inbox/inbox-message.component';
+import { InboxShellComponent } from './inbox/inbox-shell.component';
 
 
 
 @NgModule({
   declarations: [
     UserHomeComponent,
-    InboxComponent
+    InboxComponent,
+    InboxMessageComponent,
+    InboxShellComponent
   ],
   imports: [
     CommonModule,

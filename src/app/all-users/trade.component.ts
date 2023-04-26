@@ -97,7 +97,8 @@ export class TradeComponent implements OnInit, OnDestroy {
       tradePokemon: '',
       tradePokemonImage: '',
       username: '',
-      currentUsername: ''
+      currentUsername: '',
+      traded: false
     }
 
     this.message = tradeMsg;

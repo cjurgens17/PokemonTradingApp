@@ -3,6 +3,7 @@ import { BehaviorSubject, EMPTY, Observable, Subject, Subscription, catchError, 
 import { UserProfileService } from '../user-profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InboxComponent } from '../inbox/inbox.component';
+import { InboxShellComponent } from '../inbox/inbox-shell.component';
 
 
 @Component({
@@ -109,7 +110,8 @@ export class UserHomeComponent {
   }
 
   openInboxDialog(): void {
-    let dialogRef = this.dialog.open(InboxComponent, {
+    //had a dialogRef eariler
+  this.dialog.open(InboxShellComponent, {
       width: '900px',
       height: '900px'
     });

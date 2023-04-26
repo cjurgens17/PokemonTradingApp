@@ -6,5 +6,6 @@ export interface Message {
   tradePokemonImage: string;
   username: string;
   currentUsername: string;
+  traded: boolean;
 
 }

@@ -1,0 +1,15 @@
+
+<div *ngIf="message$ | async as um" class="h-screen" >
+  <h2 class="text-2xl">From: {{um.currentUsername}}</h2>
+  <br>
+  <p class="text-l">{{um.text}}</p>
+  <div class="grid grid-rows-1 grid-cols-2">
+    <div>Your Pokemon <img [src]="um.userPokemonImage"></div>
+    <div>Pokemon To Trade for <img [src]="um.tradePokemonImage"></div>
+  </div>
+  <div *ngIf="!um.traded" class="flex flex-row justify-evenly items-center">
+    <button mat-button color="primary" (click)="accept(um)">Accept</button>
+    <button mat-button color="warn" (click)="decline(um)">Decline</button>
+  </div>
+</div>
+
