@@ -19,7 +19,8 @@ export class UserInfoComponent implements OnInit {
     birthDate: null,
     password: null,
     username: null,
-    profilePicture: null
+    profilePicture: null,
+    pokeBalls: null
   }
 
   userInfo: User = {...this.originalUserInfo};

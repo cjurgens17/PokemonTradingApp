@@ -1,0 +1,16 @@
+<div class="h-screen">
+  <div class="flex justify-center items-center">
+
+    <h1 class="text-3xl font-medium">Pokemon Ball Center</h1>
+    <p>Get 5 pokemon balls every 24 hours</p>
+
+    <div>Clock {{currentTime}}</div>
+    PrevTime {{prevTime}}
+
+    <div>
+      <button *ngIf="getPokemonBalls" (click)="resetPokemonBalls()" >Get Pokemon Balls</button>
+      <h1 *ngIf="!getPokemonBalls" class="text-2xl">Come Back in 24 Hours to collect more!</h1>
+    </div>
+
+  </div>
+</div>

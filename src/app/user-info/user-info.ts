@@ -8,4 +8,5 @@ export interface User {
     password: string | null;
     username: string | null;
     profilePicture: string | null;
+    pokeBalls: number | null;
 }
