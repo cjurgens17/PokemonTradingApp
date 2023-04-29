@@ -22,8 +22,10 @@ export class PokeballsService {
   constructor(private http: HttpClient) { }
 
     //this reupdates the timer if we passed 24 hours from the last day
-    updateTimer(timer: Timer): Observable<Timer> {
-      return this.http.post<Timer>(`${this.apiUrl}/${this.timerId}/updateTimer`, timer, {headers: environment.headers})
+    updateTimer(nextAvailableDate: Date): Observable<Timer> {
+      const stringDate: string = nextAvailableDate.toISOString();
+
+      return this.http.post<Timer>(`${this.apiUrl}/${this.timerId}/updateTimer?date=${stringDate}`, {headers: environment.headers})
       .pipe(
         catchError(this.handleError)
       )

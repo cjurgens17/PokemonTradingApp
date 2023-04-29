@@ -2,10 +2,10 @@
   <div class="flex justify-center items-center">
 
     <h1 class="text-3xl font-medium">Pokemon Ball Center</h1>
-    <p>Get 5 pokemon balls every 24 hours</p>
+    <p>Get 10 pokemon balls every 24 hours</p>
 
-    <div>Clock {{currentTime}}</div>
-    PrevTime {{prevTime}}
+    <div>Clock {{currentTime.getTime()}}</div>
+    PrevTime {{initTimer.prevDate.getTime()}}
 
     <div>
       <button *ngIf="getPokemonBalls" (click)="resetPokemonBalls()" >Get Pokemon Balls</button>
