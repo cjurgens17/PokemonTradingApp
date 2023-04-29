@@ -49,7 +49,7 @@ import { PokeballsModule } from './pokeballs/pokeballs.module';
       {path: 'usersignup', loadChildren: () => import('./user-info/user-info.module').then(m => m.UserInfoModule)},
       {path: 'userlogin', loadChildren: () => import('./user-login/user-login.module').then(m => m.UserLoginModule)},
       {path: 'userprofile', loadChildren: () => import('./user-profile/user-profile.module').then(m => m.UserProfileModule)},
-      {path: 'usersignup', loadChildren: () => import('./pokemon/pokemon.module').then(m => m.PokemonModule)},
+      {path: 'pokemon', loadChildren: () => import('./pokemon/pokemon.module').then(m => m.PokemonModule)},
       {path: 'pokeballs', loadChildren: ()=> import('./pokeballs/pokeballs.module').then(m => m.PokeballsModule)}
     ]),
     PokemonModule,

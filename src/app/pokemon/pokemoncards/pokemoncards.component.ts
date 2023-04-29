@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { BehaviorSubject, EMPTY, Subject, catchError, combineLatest, map, takeUntil, tap } from 'rxjs';
 import { Pokemon } from '../pokemon';
+import { UserProfileService } from 'src/app/user-profile/user-profile.service';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 
 
 
@@ -12,12 +14,11 @@ import { Pokemon } from '../pokemon';
   styleUrls: ['./pokemoncards.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PokemonCardsComponent implements OnDestroy {
+export class PokemonCardsComponent implements OnInit, OnDestroy {
 
+  private userPokeBalls!: number | null;
+  private userId!: number | null;
   private _searchFilter = '';
-  // Loading after Search
-  // numColumns!: number;
-  // numRows!: number;
 
   get searchFilter(): string {
     return this._searchFilter;
@@ -37,6 +38,9 @@ errorMessage$ = this.errorMessageSubject.asObservable();
 //Filter Pokemon from Search Bar
 private onSearchSubject = new BehaviorSubject<string>('');
 searchInput$ = this.onSearchSubject.asObservable();
+
+  //Cold Observable that gets the currentUser info
+  currentUser$ = this.userProfileService.currentUser$;
 
   //Cold Observable that loads all the pokemon from the pokeApi to this page and sorts by name
   apiPokemon$ = this.pokemonService.getAllPokemon$
@@ -60,18 +64,25 @@ searchInput$ = this.onSearchSubject.asObservable();
     })
   )
 
-  constructor(private pokemonService: PokemonService) { }
-
+  constructor(
+    private pokemonService: PokemonService,
+    private userProfileService: UserProfileService,
+    private snackBar: MatSnackBar) { }
+//------------------------Functions-----------------------------------
   onSearchChange(): void {
     this.onSearchSubject.next(this._searchFilter);
   }
 
 //----------------------add pokemon to an existing users pokeIndex----------------
-  updatePokemon(pokemon: any): void{
+  updatePokemon(pokemon: any): void {
+    //Trade can not be complete
+    if(this.userPokeBalls != null && this.userPokeBalls < 5){
+        this.insufficientPokeBallsSnackBar("You do not have enough Poke Balls at this time!", 'Close');
+        return;
+    }
+
     const abNames: string[] = [];
     const statNames: string[] =[];
-    let savedUser = JSON.parse(localStorage.getItem('userLoginInfo') || '{}');
-    const userId = savedUser.id;
 
   for(var i = 0; i < pokemon.abilities.length; i++) {
     abNames.push(pokemon.abilities[i].ability.name);
@@ -92,14 +103,58 @@ searchInput$ = this.onSearchSubject.asObservable();
     console.log(newPoke.index);
     console.log(newPoke);
 
-    this.pokemonService.updatePokemon(newPoke, userId)
+    //Persists the clicked pokemon to the users pokemon collection
+    this.pokemonService.updatePokemon(newPoke, this.userId)
     .pipe(
       takeUntil(this.ngUnsubscribe)
     )
     .subscribe({
-      next: response =>  console.log('Respons: ', response),
+      next: response =>  console.log('Response: ', response),
       error: err => console.log('Error: ', err)
     });
+
+    //updates users pokemonballs on the backend
+    this.pokemonService.deleteUserPokeBalls(5,this.userId)
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
+      next: pokeBalls => console.log('Remaining PokeBalls: ', pokeBalls),
+      error: err => console.log('Error: ', err)
+    })
+
+    //updating userPokeBalls in component variable
+    if(this.userPokeBalls != null){
+      this.userPokeBalls -= 5;
+    }
+
+    //successful catch snackBar
+    this.caughtPokemonSnackBar(`Success, Check your Poke Index. ${this.userPokeBalls} Poke Balls left`, 'Close')
+  }
+
+  //------------------------SNACKBAR--------------------------
+  insufficientPokeBallsSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
+      return this.snackBar.open(message, action, {
+          duration: 3000
+      });
+  }
+
+  caughtPokemonSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
+    return this.snackBar.open(message, action, {
+      duration: 5000
+    })
+  }
+
+//-----------------------LifeCycle Hooks----------------------------------------------
+  ngOnInit(): void {
+      this.currentUser$
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe({
+         next: user =>{this.userPokeBalls = user.pokeBalls, this.userId = user.id},
+         error: err => console.log('Error getting User: ', err)
+    })
   }
 
   ngOnDestroy(): void {

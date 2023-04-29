@@ -15,6 +15,9 @@
       <!-- pokemon card -->
       <div *ngFor="let poke of pokemon" class="box-border border-4 border-black flex flex-col h-full overflow-y-hidden">
         <div class="shadow-xl hover:contrast-125 hover:saturate-100">
+          <div class="flex justify-center items-center border-b-2 border-black bg-white">
+            <h3 class="text-xl text-black font-medium leading-8">Poke Balls Required: 5</h3>
+          </div>
           <div class="flex justify-center items-start border-b-2 border-black bg-white flex-1">
             <figure class="px-10 pt-10">
               <img [src]="poke.sprites.front_shiny" alt="Clicked Pokemon" class="rounded-sm" />
@@ -38,7 +41,8 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
   </div>
-</div>
+
 

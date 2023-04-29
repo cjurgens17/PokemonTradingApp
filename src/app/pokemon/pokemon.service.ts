@@ -31,12 +31,20 @@ export class PokemonService {
   constructor (private http: HttpClient) { }
 
     //Adds Pokemon to users PokeIndex-----------------------
-    updatePokemon(pokemon: any, id: number): Observable<any>{
+    updatePokemon(pokemon: any, id: number | null): Observable<any>{
         const url = `${this.apiUrl}/${id}/addPokemon`;
         return this.http.post<any>(url, pokemon, {headers: environment.headers}).pipe(
             catchError(this.handleError)
         )
     }
+
+    deleteUserPokeBalls(pokeBalls: number, userId: number | null): Observable<Number> {
+      return this.http.post<Number>(`http://localhost:8080/timer/${userId}/deletePokeBalls`,pokeBalls, {headers: environment.headers})
+      .pipe(
+        catchError(this.handleError)
+      )
+    }
+
     //---------------------------------------------------------------------------------------------
 
     private handleError(err: HttpErrorResponse){
