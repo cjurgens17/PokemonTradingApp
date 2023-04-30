@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import {
   BehaviorSubject,
   EMPTY,
@@ -6,11 +6,14 @@ import {
   catchError,
   combineLatest,
   map,
+  takeUntil,
   tap,
 } from 'rxjs';
 import { UserProfileService } from '../user-profile.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { InboxShellComponent } from '../inbox/inbox-shell.component';
+import { Inbox } from '../inbox/inbox';
+import { ProfilePictureComponent } from './profile-picture.component';
 
 @Component({
   selector: 'app-user-home',
@@ -18,7 +21,13 @@ import { InboxShellComponent } from '../inbox/inbox-shell.component';
   styleUrls: ['./user-home.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserHomeComponent {
+export class UserHomeComponent implements OnInit, OnDestroy{
+
+  inbox: Inbox = {
+    messages: []
+  };
+  userId!: number;
+
   private _listFilter: string = '';
   // Loading after search
   // numCols!: number;
@@ -32,6 +41,11 @@ export class UserHomeComponent {
     this._listFilter = value;
     console.log(this.listFilter);
   }
+//used to unsubscribe OnDestroy
+  private ngUnsubscribe = new Subject<void>();
+
+  //profilePicture Observable
+  profilePicture$ = this.userProfileService.profilePicture$;
 
   //Action stream for getting user input to search for a pokemon
   private filteredPokemonInputSubject = new BehaviorSubject<string>('');
@@ -123,5 +137,51 @@ export class UserHomeComponent {
       width: '900px',
       height: '900px',
     });
+  }
+
+  openProfilePictureDialog(): void{
+    let dialogRef = this.dialog.open(ProfilePictureComponent, {
+      width: '500px',
+      height: '500px'
+    });
+
+    dialogRef
+    .afterClosed()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe({
+      next: (result) => console.log('The dialog was closed', result),
+      error: (err) => console.log('Error: ', err),
+    });
+  }
+//---------------LIFECYCLE HOOKS--------------------
+
+ngOnInit(): void {
+    //getting userId
+    this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
+
+    this.userProfileService
+      .getUserMessages(this.userId)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: resp => this.inbox.messages = resp,
+        error: err => console.log('err', err),
+      });
+
+      this.currentUser$
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe({
+        next: user => this.userProfileService.updateProfilePictureSubject(user.profilePicture || '{}'),
+        error: err => console.log('Error: ', err)
+      })
+    }
+
+
+
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

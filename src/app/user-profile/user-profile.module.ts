@@ -7,6 +7,7 @@ import { UserHomeGuard } from './user-home/user-home.guard';
 import { InboxComponent } from './inbox/inbox.component';
 import { InboxMessageComponent } from './inbox/inbox-message.component';
 import { InboxShellComponent } from './inbox/inbox-shell.component';
+import { ProfilePictureComponent } from './user-home/profile-picture.component';
 
 
 
@@ -15,7 +16,8 @@ import { InboxShellComponent } from './inbox/inbox-shell.component';
     UserHomeComponent,
     InboxComponent,
     InboxMessageComponent,
-    InboxShellComponent
+    InboxShellComponent,
+    ProfilePictureComponent
   ],
   imports: [
     CommonModule,

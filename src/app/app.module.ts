@@ -21,8 +21,6 @@ import { TradeComponent } from './all-users/trade.component';
 import { PokeballsModule } from './pokeballs/pokeballs.module';
 
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +32,6 @@ import { PokeballsModule } from './pokeballs/pokeballs.module';
     PokeDetailComponent,
     FooterComponent,
     TradeComponent,
-
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
+  BehaviorSubject,
   EMPTY,
   Observable,
   catchError,
@@ -13,6 +14,7 @@ import { Pokemon } from '../pokemon/pokemon';
 import { User } from '../user-info/user-info';
 import { UserLoginService } from '../user-login/user-login-service';
 import { Message } from '../all-users/message';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +34,9 @@ export class UserProfileService {
   };
 
   currentUserLogin$ = this.userLoginService.getCurrentUser();
+
+  private profilePictureSubject = new BehaviorSubject<string>('');
+  profilePicture$ = this.profilePictureSubject.asObservable();
 
   currentUser$ = this.currentUserLogin$.pipe(
     filter((userLogin) => Boolean(userLogin)),
@@ -58,6 +63,10 @@ export class UserProfileService {
     private http: HttpClient,
     private userLoginService: UserLoginService
   ) {}
+
+  updateProfilePictureSubject(picture: string): void {
+    this.profilePictureSubject.next(picture);
+  }
   //gets users messages
   getUserMessages(id: number): Observable<Message[]> {
     return this.http
@@ -65,6 +74,17 @@ export class UserProfileService {
       .pipe(catchError(this.handleError));
   }
 
+  updateUserProfilePicture(id: number, profilePicture: string): Observable<Boolean> {
+    return this.http
+      .post<Boolean>(`${this.userUrl}/${id}/updateProfilePicture?profilePicture=${profilePicture}`,
+      profilePicture,
+      { headers: environment.headers}
+      )
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  //------Error handler------------------------
   private handleError(err: HttpErrorResponse) {
     let errorMessage = '';
     if (err.error instanceof ErrorEvent) {

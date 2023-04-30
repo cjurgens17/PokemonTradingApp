@@ -1,20 +1,24 @@
+
 <div *ngIf="userProfile$ | async as profile">
 <div class="h-max min-h-screen bg-cover bg-no-repeat filter saturate-150 bg-fixed" style="background-image: url('https://images.alphacoders.com/119/119223.jpg')">
   <!-- flex for user profile info and pokemon display to the right -->
-  <div class="flex flex-row w-screen h-16 border-t-2 border-white justify-between">
-    <div class="demo-section">
-      <button mat-raised-button color="primary"
-          matBadge="8" matBadgePosition="after" matBadgeColor="accent" (click)="openInboxDialog()">
+  <div class="flex flex-row justify-center items-center border-t-2 border-white">
+    <h1 class="text-white font-bold text-2xl items-center">Profile Page</h1>
+  </div>
+  <div class="flex flex-row h-16 justify-start">
+    <div class="demo-section ml-4">
+      <button mat-raised-button color="primary" (click)="openInboxDialog()">
         Inbox
+        <span matBadge="{{inbox.messages.length}}" *ngIf="inbox.messages.length > 0"
+              matBadgePosition="after" matBadgeColor="accent"></span>
       </button>
     </div>
-<h1 class="text-white font-bold text-2xl items-center">Profile Page</h1>
   </div>
   <div class="h-1/4 flex flex-row justify-evenly">
     <div class="flex flex-col w-1/2 justify-center items-center">
       <!-- profile card -->
       <div class="photo-wrapper p-2">
-        <img class="w-32 h-32 rounded-full mx-auto" [src]="profile.currentUser.profilePicture" alt="Good Old John Doe">
+        <img *ngIf="profilePicture$ | async as picture" class="w-32 h-32 rounded-full mx-auto" [src]="picture" alt="Good Old John Doe">
         </div>
         <div class="p-2">
         <h3 class="text-xl text-center text-white font-medium leading-8">{{profile.currentUser.firstName | titlecase}} {{profile.currentUser.lastName | titlecase}}</h3>
@@ -30,6 +34,7 @@
               </tr>
             </tbody>
         </table>
+        <button class="bg-purple-700 hover:bg-amber-500 transition ease-in text-white font-bold py-2 px-4 rounded-full" (click)="openProfilePictureDialog()">Change Profile Picture</button>
     </div>
     <div *ngIf="profile.clickedPokemon" class="flex flex-col w-1/2 justify-center items-center">
       <!-- pokemon face -->
