@@ -5,39 +5,38 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PokeballsService {
-
   private apiUrl = 'http://localhost:8080/timer';
   private timerId = 1;
 
+  timer$ = this.http
+    .get<Timer>(`${this.apiUrl}/${this.timerId}/getTimer`)
+    .pipe(catchError(this.handleError));
 
+  constructor(private http: HttpClient) {}
 
-  timer$ = this.http.get<Timer>(`${this.apiUrl}/${this.timerId}/getTimer`)
-  .pipe(
-    catchError(this.handleError)
-  )
+  //this reupdates the timer if we passed 24 hours from the last day
+  updateTimer(nextAvailableDate: Date): Observable<Timer> {
+    const stringDate: string = nextAvailableDate.toISOString();
 
-  constructor(private http: HttpClient) { }
-
-    //this reupdates the timer if we passed 24 hours from the last day
-    updateTimer(nextAvailableDate: Date): Observable<Timer> {
-      const stringDate: string = nextAvailableDate.toISOString();
-
-      return this.http.post<Timer>(`${this.apiUrl}/${this.timerId}/updateTimer?date=${stringDate}`, {headers: environment.headers})
-      .pipe(
-        catchError(this.handleError)
+    return this.http
+      .post<Timer>(
+        `${this.apiUrl}/${this.timerId}/updateTimer?date=${stringDate}`,
+        { headers: environment.headers }
       )
-    }
+      .pipe(catchError(this.handleError));
+  }
 
-    //update current Users current PokeBalls
-    updateUserPokeBalls(id: number, pokeBalls: number): Observable<Number>{
-      return this.http.post<Number>(`${this.apiUrl}/${id}/addPokeBalls`, pokeBalls, {headers: environment.headers})
-      .pipe(
-        catchError(this.handleError)
-      )
-    }
+  //update current Users current PokeBalls
+  updateUserPokeBalls(id: number, pokeBalls: number): Observable<Number> {
+    return this.http
+      .post<Number>(`${this.apiUrl}/${id}/addPokeBalls`, pokeBalls, {
+        headers: environment.headers,
+      })
+      .pipe(catchError(this.handleError));
+  }
 
   private handleError(err: HttpErrorResponse): Observable<never> {
     // in a real world app, we may send the server to some remote logging infrastructure

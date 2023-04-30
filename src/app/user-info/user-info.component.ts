@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from './user-info';
 import { NgForm } from '@angular/forms';
 import { UserService } from './user-service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
-  styleUrls: ['./user-info.component.css']
+  styleUrls: ['./user-info.component.css'],
 })
-export class UserInfoComponent implements OnInit {
-
+export class UserInfoComponent implements OnInit, OnDestroy {
   originalUserInfo: User = {
     id: null,
     firstName: null,
@@ -20,39 +20,38 @@ export class UserInfoComponent implements OnInit {
     password: null,
     username: null,
     profilePicture: null,
-    pokeBalls: null
-  }
+    pokeBalls: null,
+  };
 
-  userInfo: User = {...this.originalUserInfo};
+  userInfo: User = { ...this.originalUserInfo };
   postError: boolean = false;
   postErrorMessage: string = '';
+
+  private ngUnsubscribe = new Subject<void>();
 
   constructor(private userService: UserService) {}
 
   onSubmit(form: NgForm) {
-    console.log('In onSubmit: ', form.valid);
-
-    if(form.valid){
+    if (form.valid) {
       //do some data service to post the user info to backend api
-      this.userService.postUser(this.userInfo).subscribe({
-        next: data => {
-          console.log('data: ', data);
-        },
-
-        error: err => {
-          console.log('error: ', err)
-        }
-
-      });
-      console.log('submit successfully');
-    }else{
+      this.userService
+        .postUser(this.userInfo)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (data) => console.log('data: ', data),
+          error: (err) => console.log('error: ', err),
+        });
+    } else {
       this.postError = true;
-      this.postErrorMessage = "Please fix the above errors";
+      this.postErrorMessage = 'Please fix the above errors';
     }
   }
+  //------------------------LIFECYCLE HOOKS----------------------------------
 
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
-
 }

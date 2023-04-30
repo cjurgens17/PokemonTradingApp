@@ -1,50 +1,55 @@
-import { Component, OnInit, Input, Inject, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  OnDestroy,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Message } from './message';
 import { UserProfileService } from '../user-profile/user-profile.service';
 import { EMPTY, Subject, catchError, map, takeUntil } from 'rxjs';
-import { AllUsersService } from './all-users.service';
-import { inject } from '@angular/core/testing';
 import { TradeService } from './trade.service';
 import { FormControl } from '@angular/forms';
-import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
-
+import {
+  MatSnackBar,
+  MatSnackBarRef,
+  SimpleSnackBar,
+} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-trade',
   templateUrl: './trade.component.html',
-  styleUrls: ['./trade.component.css']
+  styleUrls: ['./trade.component.css'],
 })
 export class TradeComponent implements OnInit, OnDestroy {
-
   text = new FormControl('');
   username = new FormControl('');
-  message!:Message;
+  message!: Message;
 
   private ngUnsubscribe = new Subject<void>();
 
   //This gets all currentUsers pokemon so we can select to trade
-  userPokemon$ = this.userProfileService.userPokemon$
-  .pipe(
+  userPokemon$ = this.userProfileService.userPokemon$.pipe(
     map((pokemon) => {
-     return pokemon.sort((a,b) => a.name.localeCompare(b.name));
+      return pokemon.sort((a, b) => a.name.localeCompare(b.name));
     }),
-    catchError(err => {
+    catchError((err) => {
       console.log('error: ', err);
       return EMPTY;
     })
   );
-    //used to get username
+  //used to get username
   currentUser$ = this.userProfileService.currentUser$;
 
   constructor(
-  private dialogRef: MatDialogRef<TradeComponent>,
-  private userProfileService: UserProfileService,
-  @Inject(MAT_DIALOG_DATA) public data: any,
-  private tradeService: TradeService,
-  private snackBar: MatSnackBar) {}
+    private dialogRef: MatDialogRef<TradeComponent>,
+    private userProfileService: UserProfileService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private tradeService: TradeService,
+    private snackBar: MatSnackBar
+  ) {}
 
-  getImage(image: string){
+  getImage(image: string) {
     this.message.tradePokemonImage = image;
   }
 
@@ -54,35 +59,24 @@ export class TradeComponent implements OnInit, OnDestroy {
     this.message.username = this.data.passedUsername;
     this.message.userPokemonImage = this.data.passedUserPokemon;
     this.message.currentUsername = this.username.value || '{}';
-    console.log(this.message);
 
-    this.tradeService.addToUserInbox(this.message)
-    .pipe(
-      takeUntil(this.ngUnsubscribe)
-    )
-    .subscribe({
-      next: response => {
-        console.log('response: ', response);
-      },
-
-      error: err => {
-        console.log('Error: ', err)
-      },
-
-      complete: () => {
-
-      }
-
-    });
-
+    this.tradeService
+      .addToUserInbox(this.message)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response) => console.log('response: ', response),
+        error: (err) => console.log('Error: ', err),
+      });
     this.tradeSentSnackBar('Message Sent', 'Close');
-
   }
 
-  tradeSentSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
+  tradeSentSnackBar(
+    message: string,
+    action: string
+  ): MatSnackBarRef<SimpleSnackBar> {
     const snackBarRef = this.snackBar.open(message, action, {
       duration: 5000,
-      data: this.dialogRef
+      data: this.dialogRef,
     });
     this.dialogRef.close();
     return snackBarRef;
@@ -98,16 +92,14 @@ export class TradeComponent implements OnInit, OnDestroy {
       tradePokemonImage: '',
       username: '',
       currentUsername: '',
-      traded: false
-    }
+      traded: false,
+    };
 
     this.message = tradeMsg;
-
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
-
 }
