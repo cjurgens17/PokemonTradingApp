@@ -5,12 +5,12 @@
   <div class="flex flex-row justify-center items-center border-t-2 border-white">
     <h1 class="text-white font-bold text-2xl items-center">Profile Page</h1>
   </div>
-  <div class="flex flex-row h-16 justify-start">
-    <div class="demo-section ml-4">
+  <div class="flex flex-row h-16 justify-start ml-4">
+    <div *ngIf="inbox$ | async as inbox" class="demo-section">
       <button mat-raised-button color="primary" (click)="openInboxDialog()">
         Inbox
-        <span matBadge="{{inbox.messages.length}}" *ngIf="inbox.messages.length > 0"
-              matBadgePosition="after" matBadgeColor="accent"></span>
+        <span *ngIf="inbox.length > 0" class="ml-2" matBadge="{{inbox.length}}"
+              matBadgePosition="before" matBadgeColor="accent"></span>
       </button>
     </div>
   </div>

@@ -4,6 +4,7 @@ import {
   BehaviorSubject,
   EMPTY,
   Observable,
+  Subject,
   catchError,
   filter,
   switchMap,
@@ -35,6 +36,9 @@ export class UserProfileService {
 
   currentUserLogin$ = this.userLoginService.getCurrentUser();
 
+  private inboxSubject = new BehaviorSubject<Message[]>([]);
+  inbox$ = this.inboxSubject.asObservable();
+
   private profilePictureSubject = new BehaviorSubject<string>('');
   profilePicture$ = this.profilePictureSubject.asObservable();
 
@@ -63,6 +67,10 @@ export class UserProfileService {
     private http: HttpClient,
     private userLoginService: UserLoginService
   ) {}
+
+  updateInboxSubject(messages: Message[]): void {
+    this.inboxSubject.next(messages);
+  }
 
   updateProfilePictureSubject(picture: string): void {
     this.profilePictureSubject.next(picture);

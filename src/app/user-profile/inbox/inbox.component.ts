@@ -73,6 +73,7 @@ export class InboxComponent implements OnInit, OnDestroy {
               }
             });
             this.inboxSubject.next(this.userInbox);
+            this.userProfileService.updateInboxSubject(this.userInbox.messages);
           }
         },
         error: (err) => console.log('err', err),

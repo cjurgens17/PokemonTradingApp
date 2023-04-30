@@ -23,9 +23,7 @@ import { ProfilePictureComponent } from './profile-picture.component';
 })
 export class UserHomeComponent implements OnInit, OnDestroy{
 
-  inbox: Inbox = {
-    messages: []
-  };
+
   userId!: number;
 
   private _listFilter: string = '';
@@ -58,6 +56,8 @@ export class UserHomeComponent implements OnInit, OnDestroy{
   //Action Stream for handling errors
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
+
+  inbox$ = this.userProfileService.inbox$;
 
   //Cold Observable that grabs the current Users information
   currentUser$ = this.userProfileService.currentUser$;
@@ -158,12 +158,12 @@ export class UserHomeComponent implements OnInit, OnDestroy{
 ngOnInit(): void {
     //getting userId
     this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
-
+    //fix inbox length, create a subject and pass to it onIT, then when delete message pass inbox back to subject/or just the length?
     this.userProfileService
       .getUserMessages(this.userId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: resp => this.inbox.messages = resp,
+        next: resp => this.userProfileService.updateInboxSubject(resp),
         error: err => console.log('err', err),
       });
 
@@ -176,9 +176,6 @@ ngOnInit(): void {
         error: err => console.log('Error: ', err)
       })
     }
-
-
-
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
