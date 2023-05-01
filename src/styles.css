@@ -27,7 +27,15 @@ div.card {
 }
 
 .profilePicture {
-  @apply shadow-xl shadow-amber-50
+  @apply shadow-xl shadow-black
+}
+
+.text-standard {
+  @apply text-white font-extralight text-xl
+}
+
+.text-title {
+  @apply text-white font-normal text-3xl
 }
 
 
