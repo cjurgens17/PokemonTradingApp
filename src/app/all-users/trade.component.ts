@@ -9,7 +9,7 @@ import { Message } from './message';
 import { UserProfileService } from '../user-profile/user-profile.service';
 import { EMPTY, Subject, catchError, map, takeUntil } from 'rxjs';
 import { TradeService } from './trade.service';
-import { FormControl } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import {
   MatSnackBar,
   MatSnackBarRef,
@@ -22,13 +22,18 @@ import {
   styleUrls: ['./trade.component.css'],
 })
 export class TradeComponent implements OnInit, OnDestroy {
-  //subscribe to current user OnInit to get username
-  //fill the trade request with the currentUsers username and make it read only
-  //the in trade method pass in username value from onInit to message.username
-  text = new FormControl('');
+
+  tradeForm = new FormGroup({
+    text: new FormControl('', [Validators.required]),
+    selectedPokemon: new FormControl('', [Validators.required])
+  });
+
   message!: Message;
   username!: string | null;
+  selected!: boolean;
+  postError: boolean = false;
 
+  //Used to unSubscribe OnDestroy
   private ngUnsubscribe = new Subject<void>();
 
   //This gets all currentUsers pokemon so we can select to trade
@@ -51,14 +56,28 @@ export class TradeComponent implements OnInit, OnDestroy {
     private tradeService: TradeService,
     private snackBar: MatSnackBar
   ) {}
-
-  getImage(image: string) {
+//--------------------FUNCTIONS--------------------------------------
+  getImage(image: string): void {
     this.message.tradePokemonImage = image;
   }
 
+  pokemonSelected(): void {
+    this.selected = true;
+  }
+
+  cancelTrade(): void {
+    this.cancelTradeSnackBar('Trade Cancelled', 'Close');
+  }
+//-------------------------HTTP CALLS-----------------------------------
   trade(): void {
+
+    if(this.tradeForm.invalid){
+      this.postError = true;
+      return;
+    }
+
     this.message.tradePokemon = this.data.passedPokemonName;
-    this.message.text = this.text.value || '{}';
+    this.message.text = this.tradeForm.get('text')?.value || '{}';
     this.message.username = this.data.passedUsername;
     this.message.userPokemonImage = this.data.passedUserPokemon;
     this.message.currentUsername = this.username || '{}';
@@ -70,9 +89,9 @@ export class TradeComponent implements OnInit, OnDestroy {
         next: (response) => console.log('response: ', response),
         error: (err) => console.log('Error: ', err),
       });
-    this.tradeSentSnackBar('Message Sent', 'Close');
+    this.tradeSentSnackBar('Requested Trade', 'Close');
   }
-
+//-----------------SNACKBARS----------------------------------------
   tradeSentSnackBar(
     message: string,
     action: string
@@ -85,6 +104,34 @@ export class TradeComponent implements OnInit, OnDestroy {
     return snackBarRef;
   }
 
+  cancelTradeSnackBar(
+    message: string,
+    action: string
+  ): MatSnackBarRef<SimpleSnackBar> {
+    const snackBarRef = this.snackBar.open(message, action, {
+      duration: 5000,
+      data: this.dialogRef,
+    });
+    this.dialogRef.close();
+    return snackBarRef;
+  }
+//----------------Form Error Messages-------------------------------------------
+  textErrorMessage() {
+    if (this.tradeForm.controls.text.hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.tradeForm.controls.text.hasError('Pokemon') ? 'Not a valid Pokemon' : '';
+  }
+
+  selectedPokemonErrorMessage() {
+    if (this.tradeForm.controls.selectedPokemon.hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.tradeForm.controls.selectedPokemon.hasError('Pokemon') ? 'Not a valid Pokemon' : '';
+  }
+//----------------------------LIFECYCLE HOOKS---------------------------------------
   ngOnInit(): void {
 
 

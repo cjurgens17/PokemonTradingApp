@@ -34,6 +34,11 @@ div.card {
   @apply text-white font-extralight text-xl
 }
 
+
+.text-standard-black {
+  @apply text-black font-extralight text-xl
+}
+
 .text-title {
   @apply text-white font-normal text-3xl
 }

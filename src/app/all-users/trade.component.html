@@ -1,46 +1,72 @@
-<h2 mat-dialog-title>Request to Trade</h2>
+<h2 mat-dialog-title>Trade Request</h2>
 
 <mat-dialog-content>
 
-  <form class="example-form">
+  <form class="example-form" [formGroup]="tradeForm">
+
     <mat-form-field *ngIf="currentUser$ | async as user" class="example-full-width">
       <mat-label>Username</mat-label>
       <input matInput placeholder="Enter username" [value]="username" readonly>
     </mat-form-field>
 
-    <mat-form-field class="example-full-width">
-      <mat-label>Leave a comment</mat-label>
-      <textarea matInput placeholder="Enter text" [formControl]="text"></textarea>
-    </mat-form-field>
-  </form>
-
-  <h2 class="font-bold ">Choose a Pokemon to Trade</h2>
+  <h2 class="font-semibold">Choose a Pokemon to Trade</h2>
   <br>
+
   <mat-form-field *ngIf="userPokemon$ | async as userPokemon" appearance="fill">
-    <mat-label>Select an option</mat-label>
-    <mat-select [(ngModel)]="message.userPokemon">
+    <mat-label>Choose</mat-label>
+    <mat-select [(ngModel)]="message.userPokemon" [formControl]="tradeForm.controls.selectedPokemon" required>
       <mat-select-trigger>
         {{message.userPokemon | titlecase}}
       </mat-select-trigger>
       <mat-optgroup *ngFor="let pokemon of userPokemon" [label]="pokemon.name | titlecase">
-      <mat-option [value]="pokemon.name" (click)="getImage(pokemon.image)">
-       <img class="h-full w-auto" [src]="pokemon.image">
+      <mat-option [value]="pokemon.name" (click)="getImage(pokemon.image)" (click)="pokemonSelected()">
+       <img class="h-full w-auto" [src]="pokemon.image" >
       </mat-option>
       </mat-optgroup>
+      <mat-error *ngIf="tradeForm.controls.selectedPokemon.invalid">{{selectedPokemonErrorMessage()}}</mat-error>
     </mat-select>
   </mat-form-field>
-  <p>Pokemon you wish to Trade: {{message.userPokemon | titlecase}}</p>
-  <br>
-  <img [src]="data.passedUserPokemon">
-  <br>
-  <h2>Pokemon you wish to get: {{data.passedPokemonName}}</h2>
+
+    <!-- pokemon images should be side to side: First is pokemon used to trade, Second pokemon waiting to get from the trade -->
+  <div *ngIf="selected" class="flex flex-row justify-evenly items-center mb-2">
+    <!-- First pokemon -->
+    <div class="flex flex-col justify-center items-center">
+      <h1 class="text-standard-black">Your Pokemon</h1>
+      <img class="w-16 h-16 rounded-full mx-auto mb-2" [src]="message.tradePokemonImage">
+      <h1 class="text-standard-black">{{message.userPokemon | titlecase}}</h1>
+    </div>
+    <!-- Second Pokemon -->
+    <div class="flex flex-col justify-center items-center">
+      <h1 class="text-standard-black">{{data.passedUsername}}'s Pokemon</h1>
+      <img class="w-16 h-16 rounded-full mx-auto mb-2" [src]="data.passedUserPokemon">
+      <h1 class="text-standard-black">{{data.passedPokemonName | titlecase}}</h1>
+    </div>
+  </div>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Leave a comment</mat-label>
+    <textarea matInput placeholder="Enter text" [formControl]="tradeForm.controls.text" required></textarea>
+    <mat-error *ngIf="tradeForm.controls.text.invalid">{{textErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+</form>
+
 </mat-dialog-content>
+<div class="flex flex-row justify-center items-center" [hidden]="!postError">
+  <mat-error>Fill in all required areas</mat-error>
+</div>
 <mat-dialog-actions>
-
-  <button mat-button color="primary" (click)="trade()">
-    <mat-icon>Submit</mat-icon>
+  <div class="flex flex-row justify-evenly items-center min-w-full">
+  <button class="bg-blue-600 hover:bg-blue-800 text-white font-normal py-2 px-4 rounded-full mt-1" (click)="trade()">
+    Submit
   </button>
-
-
-
+  <button class="bg-blue-600 hover:bg-blue-800 text-white font-normal py-2 px-4 rounded-full mt-1" (click)="cancelTrade()">
+    Cancel
+  </button>
+</div>
 </mat-dialog-actions>
+
+
+
+
+
