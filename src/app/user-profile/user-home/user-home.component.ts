@@ -134,8 +134,8 @@ export class UserHomeComponent implements OnInit, OnDestroy{
   openInboxDialog(): void {
     //had a dialogRef eariler
     this.dialog.open(InboxShellComponent, {
-      width: '900px',
-      height: '900px',
+      width: '800px',
+      height: '500px',
     });
   }
 
