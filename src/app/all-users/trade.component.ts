@@ -22,9 +22,12 @@ import {
   styleUrls: ['./trade.component.css'],
 })
 export class TradeComponent implements OnInit, OnDestroy {
+  //subscribe to current user OnInit to get username
+  //fill the trade request with the currentUsers username and make it read only
+  //the in trade method pass in username value from onInit to message.username
   text = new FormControl('');
-  username = new FormControl('');
   message!: Message;
+  username!: string | null;
 
   private ngUnsubscribe = new Subject<void>();
 
@@ -58,7 +61,7 @@ export class TradeComponent implements OnInit, OnDestroy {
     this.message.text = this.text.value || '{}';
     this.message.username = this.data.passedUsername;
     this.message.userPokemonImage = this.data.passedUserPokemon;
-    this.message.currentUsername = this.username.value || '{}';
+    this.message.currentUsername = this.username || '{}';
 
     this.tradeService
       .addToUserInbox(this.message)
@@ -83,7 +86,16 @@ export class TradeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
+
+
+    this.currentUser$.pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
+      next: resp => this.username = resp.username || '',
+      error: err => console.log('Error: ', err)
+    })
+
     let tradeMsg: Message = {
       text: '',
       userPokemon: '',

@@ -5,7 +5,7 @@
   <form class="example-form">
     <mat-form-field *ngIf="currentUser$ | async as user" class="example-full-width">
       <mat-label>Username</mat-label>
-      <input matInput placeholder="Enter username" [value]="user.username" [formControl]="username">
+      <input matInput placeholder="Enter username" [value]="username" readonly>
     </mat-form-field>
 
     <mat-form-field class="example-full-width">

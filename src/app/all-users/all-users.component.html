@@ -1,14 +1,14 @@
-<h1 class="text-2xl text-center border-b-2 border-black">Pokemon Trainers </h1>
+<h1 class="text-3xl font-normal text-center border-b-2 border-black">Pokemon Trainers </h1>
 <div *ngIf="allUsers$ | async as users" class="h-screen">
   <div *ngFor="let user of users" class="border-b-2 border-black">
     <div [ngClass]="{active : user?.id === (selectedUser$ | async)?.id}">
       <div class="flex flex-col items-center pt-2 pb-2">
-        <img class="w-16 h-16 rounded-full mx-auto" [src]="user.profilePicture">
-        <h1><span class="font-semibold mt-1">Username: </span>{{user.username}}</h1>
-        <h1><span class="font-semibold t-1">Name: </span>{{user.firstName | titlecase}} {{user.lastName | titlecase}}
+        <img class="w-16 h-16 rounded-full mx-auto mb-2" [src]="user.profilePicture">
+        <h1 class="mb-2"><span class="font-normal mt-1">Username: </span>{{user.username}}</h1>
+        <h1 class="mb-2"><span class="font-normal t-1">Name: </span>{{user.firstName | titlecase}} {{user.lastName | titlecase}}
         </h1>
         <button type="button" (click)="onSelected(user.id)"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-1">View</button>
+          class="bg-blue-600 hover:bg-blue-800 text-white font-normal py-2 px-4 rounded-full mt-1">View</button>
       </div>
     </div>
   </div>

@@ -7,7 +7,7 @@
   </div>
   <div class="flex flex-row h-16 justify-start ml-4">
     <div *ngIf="inbox$ | async as inbox" class="demo-section">
-      <button mat-raised-button color="primary" (click)="openInboxDialog()">
+      <button class="font-normal" mat-raised-button color="primary" (click)="openInboxDialog()">
         Inbox
         <span *ngIf="inbox.length > 0" class="ml-2" matBadge="{{inbox.length}}"
               matBadgePosition="before" matBadgeColor="accent"></span>
@@ -34,7 +34,7 @@
               </tr>
             </tbody>
         </table>
-        <button class="bg-purple-700 hover:bg-amber-500 transition ease-in text-white font-normal py-2 px-4 rounded-full" (click)="openProfilePictureDialog()">
+        <button class="bg-purple-700 hover:bg-black transition ease-in text-white font-normal py-2 px-4 rounded-full border-white border-2" (click)="openProfilePictureDialog()">
           Change Profile Picture
         </button>
     </div>

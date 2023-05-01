@@ -1,11 +1,10 @@
 <div *ngIf="userDetails$ | async as ud" class="h-screen">
   <!-- User Info -->
-  <h1 class="font-bold text-2xl text-center">{{ud.user?.username}}'s Details</h1>
+  <h1 class="font-bold text-2xl text-center">{{ud.user?.username}}</h1>
   <div class="flex justify-center items-center pt-2"><img class="rounded-full" [src]="ud.user?.profilePicture" alt="Profile Picture"></div>
   <div class="flex flex-col justify start border-b-2 border-black">
-    <h1 class="text-xl">First Name: {{ud.user?.firstName}}</h1>
-    <h1 class="text-xl">Last Name: {{ud.user?.lastName}}</h1>
-    <h1 #passedUsername class="text-xl">Username: {{ud.user?.username}}</h1>
+    <h1 class="text-xl font-normal">Trainer: {{ud.user?.firstName}} {{ud.user?.lastName}}</h1>
+    <h1 class="text-xl font-normal">Total Pokemon Caught: {{ud.userPokemon.length}}</h1>
   </div>
   <div class="text-bold text-2xl py-2 text-center underline">Pokemon Collection</div>
   <!-- Table -->
@@ -31,7 +30,7 @@
                 <td class="whitespace-nowrap px-6 py-4">{{pokemon.index}}</td>
                 <td class="whitespace-nowrap px-6 py-4"><img [src]="pokemon.image" alt="pokemon"></td>
                 <td class="whitespace-nowrap px-6 py-4">
-                  <button class="btn btn-primary"
+                  <button class="btn btn-primary bg-blue-600 hover:bg-blue-800"
                   (click)="fillPokemon(pokemon.image, pokemon.name, ud.user?.username)"
                   (click)="openTradeDialog()">
                   Initiate
