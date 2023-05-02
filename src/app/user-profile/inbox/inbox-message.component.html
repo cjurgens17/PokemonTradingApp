@@ -1,15 +1,44 @@
 
-<div *ngIf="message$ | async as um" class="h-screen" >
-  <h2 class="text-2xl">From: {{um.currentUsername}}</h2>
-  <br>
-  <p class="text-l">{{um.text}}</p>
-  <div class="grid grid-rows-1 grid-cols-2">
-    <div>Your Pokemon <img [src]="um.userPokemonImage"></div>
-    <div>Pokemon To Trade for <img [src]="um.tradePokemonImage"></div>
+<div *ngIf="message$ | async as um" class="h-screen bg-black">
+  <!-- title -->
+  <div class="flex justify-center items-center">
+  <h2 class="text-title">From: {{um.currentUsername}}</h2>
   </div>
+  <br>
+  <!-- text -->
+  <div class="flex flex-col justify-start items-start ml-2">
+  <h1 class="text-title">Message:</h1>
+  <hr>
+  <p class="text-standard mb-2">{{um.text}}</p>
+  <hr>
+  </div>
+  <!-- pokemon display -->
+  <div class="flex flex-row justify-evenly items-center mb-2">
+    <!-- First pokemon -->
+    <div class="flex flex-col justify-center items-center">
+      <h1 class="text-standard">Pokemon To Trade For</h1>
+      <div class="photo-wrapper p-2">
+        <img  class="w-32 h-32 rounded-full mx-auto saturate-100 contrast-150" [src]="um.userPokemonImage" alt="User Pokemon">
+      </div>
+      <h1 class="text-standard">{{um.tradePokemon | titlecase}}</h1>
+    </div>
+    <!-- Second Pokemon -->
+    <div class="flex flex-col justify-center items-center">
+      <h1 class="text-standard">Your Pokemon</h1>
+      <div class="photo-wrapper p-2">
+        <img class="w-32 h-32 rounded-full mx-auto saturate-100 contrast-150" [src]="um.tradePokemonImage" alt="Trade Pokemon">
+        </div>
+      <h1 class="text-standard">{{um.userPokemon | titlecase}}</h1>
+    </div>
+    </div>
+    <!-- button display -->
   <div *ngIf="!um.traded" class="flex flex-row justify-evenly items-center">
-    <button mat-button color="primary" (click)="accept(um)">Accept</button>
-    <button mat-button color="warn" (click)="decline(um)">Decline</button>
+    <button class="bg-green-700 hover:bg-black transition ease-in text-white font-normal py-2 px-4 rounded-full border-white border-2" (click)="accept(um)">
+      Accept
+    </button>
+    <button class="bg-red-700 hover:bg-black transition ease-in text-white font-normal py-2 px-4 rounded-full border-white border-2" (click)="decline(um)">
+      Decline
+    </button>
   </div>
 </div>
 

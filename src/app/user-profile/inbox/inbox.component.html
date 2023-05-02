@@ -1,15 +1,16 @@
-
-<div *ngIf="inbox$ | async as inbox" class="flex flex-col justify-center items-center">
-    <div *ngFor="let msg of inbox.messages" class="block mb-2 w-full">
-      <button class="mr-2" mat-button color="primary" (click)="onViewMessage(msg)">
-        Message
-      </button>
-      <h1>from {{msg.currentUsername}} sdfsdfsdfsdf</h1>
-       <button class="ml-2" mat-fab color="primary" aria-label="Delete Icon" (click)="deleteMessage(msg)">
-          <mat-icon>delete</mat-icon>
-      </button>
-      </div>
+<div *ngIf="inbox$ | async as inbox" class="grid grid-cols-1 auto-rows-{{inbox.messages.length}} justify-center items-center w-full">
+  <div *ngFor="let msg of inbox.messages" class="flex flex-row justify-between items-center mb-2 w-full">
+    <button class="mr-1" mat-button color="primary" ripple="matRipple" (click)="onViewMessage(msg)">
+      Message
+    </button>
+    <div class="flex w-24 truncate ml-2">
+      <p>{{msg.currentUsername}}</p>
   </div>
+    <button class="mr-1" mat-fab color="primary" ripple="matRipple" aria-label="Delete Icon" (click)="deleteMessage(msg)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</div>
 
 
 

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, map, share, takeUntil, timer } from 'rxjs';
 import { PokeballsService } from './pokeballs.service';
 import { Timer } from './timer';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-pokeballs',
@@ -22,7 +23,9 @@ export class PokeballsComponent implements OnInit, OnDestroy {
   //For unsubscribing
   private ngUnsubscribe = new Subject<void>();
 
-  constructor(private pokeBallsService: PokeballsService) {}
+  constructor(
+    private pokeBallsService: PokeballsService,
+    private snackBar: MatSnackBar) {}
 
   //-------------------Functions----------------------------------------------------------------------
   //adds pokeBalls to user and takes away button from the DOM with structural directive in template
@@ -51,6 +54,15 @@ export class PokeballsComponent implements OnInit, OnDestroy {
     this.initTimer.prevDate = nextAvaiablePokemonDate;
 
     this.getPokemonBalls = false;
+    this.confirmPokeBallsSnackBar('10 Poke Balls acquired!', 'Close');
+  }
+
+  //-----------------------SNACKBAR-----------------------
+
+  confirmPokeBallsSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
+    return this.snackBar.open(message, action, {
+      duration: 5000
+    });
   }
 
   //------------------------LifeCycle Hooks-------------------------------------
