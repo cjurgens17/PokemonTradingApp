@@ -9,13 +9,16 @@ import { environment } from 'src/environments/environment';
 })
 export class PokeballsService {
   private apiUrl = 'http://localhost:8080/timer';
-  private timerId = 1;
-
-  timer$ = this.http
-    .get<Timer>(`${this.apiUrl}/${this.timerId}/getTimer`)
-    .pipe(catchError(this.handleError));
+  private userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
 
   constructor(private http: HttpClient) {}
+
+  //gets the currentUsers Timer
+  getTimer(): Observable<Timer> {
+    return this.http
+      .get<Timer>(`${this.apiUrl}/${this.userId}/getTimer`, {headers: environment.headers})
+      .pipe(catchError(this.handleError));
+  }
 
   //this reupdates the timer if we passed 24 hours from the last day
   updateTimer(nextAvailableDate: Date): Observable<Timer> {
@@ -23,7 +26,7 @@ export class PokeballsService {
 
     return this.http
       .post<Timer>(
-        `${this.apiUrl}/${this.timerId}/updateTimer?date=${stringDate}`,
+        `${this.apiUrl}/${this.userId}/updateTimer?date=${stringDate}`,
         { headers: environment.headers }
       )
       .pipe(catchError(this.handleError));

@@ -30,12 +30,14 @@ export class UserLoginComponent implements OnInit, OnDestroy {
   onSubmit(form: NgForm) {
     console.log('In onSubmit: ', form.valid);
     if (form.valid) {
+      console.log(this.userLoginInfo);
       this.userLoginService.setCurrentUser(this.userLoginInfo);
       this.userLoginService
         .loginUser(this.userLoginInfo)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
           next: (data) => {
+            console.log('Data: ', data);
             this.router.navigate(['home']);
             let json = JSON.stringify(data);
             localStorage.setItem('userLoginInfo', json);
