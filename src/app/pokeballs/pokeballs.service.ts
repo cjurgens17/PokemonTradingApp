@@ -9,22 +9,22 @@ import { environment } from 'src/environments/environment';
 })
 export class PokeballsService {
   private apiUrl = 'http://localhost:8080/timer';
-  private userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
 
   //Bs for timer
   private timerSubject = new BehaviorSubject<Timer>({
-    id: 0,
-    prevDate: new Date()
-  });
+      id: 0,
+      prevDate: new Date(),
+  }
+  );
 
   timerSubject$ = this.timerSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
   //gets the currentUsers Timer
-  getTimer(): Observable<Timer> {
+  getTimer(id: number): Observable<Timer> {
     return this.http
-      .get<Timer>(`${this.apiUrl}/${this.userId}/getTimer`, {headers: environment.headers})
+      .get<Timer>(`${this.apiUrl}/${id}/getTimer`, {headers: environment.headers})
       .pipe(
         map( timer => {
           timer.prevDate = new Date(timer.prevDate);
@@ -35,12 +35,10 @@ export class PokeballsService {
   }
 
   //this reupdates the timer if we passed 24 hours from the last day
-  updateTimer(nextAvailableDate: Date): Observable<Timer> {
-    const stringDate: string = nextAvailableDate.toISOString();
-
+  updateTimer(id: number): Observable<Timer> {
     return this.http
       .post<Timer>(
-        `${this.apiUrl}/${this.userId}/updateTimer?date=${stringDate}`,
+        `${this.apiUrl}/${id}/updateTimer`,
         { headers: environment.headers }
       )
       .pipe(

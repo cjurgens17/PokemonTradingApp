@@ -9,7 +9,8 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
   styleUrls: ['./pokeballs.component.css'],
 })
 export class PokeballsComponent implements OnInit, OnDestroy {
-  currentTime = new Date();
+  currentTime: Date = new Date();
+  userId: number = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
 
   //updated Timer from subject in pokeball service
   timer$ = this.pokeBallsService.timerSubject$;
@@ -25,24 +26,20 @@ export class PokeballsComponent implements OnInit, OnDestroy {
   //adds pokeBalls to user and takes away button from the DOM with structural directive in template
   resetPokemonBalls(): void {
     let newPokeBalls = 10;
-    let userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
     //Add to the users pokemonBalls
     this.pokeBallsService
-      .updateUserPokeBalls(userId, newPokeBalls)
+      .updateUserPokeBalls(this.userId, newPokeBalls)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (resp) => console.log(`New pokeBall Count: `, resp),
         error: (err) => console.log(`Error: `, err),
       });
-    //setting new date to 24 hours ahead of currentDate so button to get pokeBalls resets every 24 hours
-    let nextAvaiablePokemonDate = new Date();
-    nextAvaiablePokemonDate.setDate(this.currentTime.getDate() + 1);
 
     //updating the timer
     this.pokeBallsService
-      .updateTimer(nextAvaiablePokemonDate)
+      .updateTimer(this.userId)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((resp) => this.pokeBallsService.updateTimerSubject(resp));
+      .subscribe((timer) => this.pokeBallsService.updateTimerSubject(timer));
     this.confirmPokeBallsSnackBar('10 Poke Balls acquired!', 'Close');
   }
 
@@ -57,7 +54,7 @@ export class PokeballsComponent implements OnInit, OnDestroy {
   //------------------------LifeCycle Hooks-------------------------------------
   ngOnInit(): void {
     //setting behaviorSubject for timer
-    this.pokeBallsService.getTimer()
+    this.pokeBallsService.getTimer(this.userId)
     .pipe(
       takeUntil(this.ngUnsubscribe)
     )
