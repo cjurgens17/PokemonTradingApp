@@ -21,6 +21,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     username: null,
     profilePicture: null,
     pokeBalls: null,
+    timer: null
   };
 
   userInfo: User = { ...this.originalUserInfo };

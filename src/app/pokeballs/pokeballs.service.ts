@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Timer } from './timer';
-import { Observable, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -11,13 +11,27 @@ export class PokeballsService {
   private apiUrl = 'http://localhost:8080/timer';
   private userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
 
+  //Bs for timer
+  private timerSubject = new BehaviorSubject<Timer>({
+    id: 0,
+    prevDate: new Date()
+  });
+
+  timerSubject$ = this.timerSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
   //gets the currentUsers Timer
   getTimer(): Observable<Timer> {
     return this.http
       .get<Timer>(`${this.apiUrl}/${this.userId}/getTimer`, {headers: environment.headers})
-      .pipe(catchError(this.handleError));
+      .pipe(
+        map( timer => {
+          timer.prevDate = new Date(timer.prevDate);
+          return timer;
+        }),
+        catchError(this.handleError),
+        );
   }
 
   //this reupdates the timer if we passed 24 hours from the last day
@@ -29,7 +43,13 @@ export class PokeballsService {
         `${this.apiUrl}/${this.userId}/updateTimer?date=${stringDate}`,
         { headers: environment.headers }
       )
-      .pipe(catchError(this.handleError));
+      .pipe(
+        map(timer => {
+          timer.prevDate = new Date(timer.prevDate);
+          return timer;
+        }),
+        catchError(this.handleError)
+        );
   }
 
   //update current Users current PokeBalls
@@ -39,6 +59,11 @@ export class PokeballsService {
         headers: environment.headers,
       })
       .pipe(catchError(this.handleError));
+  }
+
+  //updates timer subject
+  updateTimerSubject(timer: Timer){
+    this.timerSubject.next(timer);
   }
 
   private handleError(err: HttpErrorResponse): Observable<never> {

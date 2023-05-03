@@ -1,3 +1,5 @@
+import { Timer } from "../pokeballs/timer";
+
 export interface User {
     id: number | null;
     firstName: string | null;
@@ -9,4 +11,5 @@ export interface User {
     username: string | null;
     profilePicture: string | null;
     pokeBalls: number | null;
+    timer: Timer | null;
 }

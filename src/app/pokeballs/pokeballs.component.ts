@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, map, share, takeUntil, timer } from 'rxjs';
 import { PokeballsService } from './pokeballs.service';
-import { Timer } from './timer';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -10,16 +9,10 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
   styleUrls: ['./pokeballs.component.css'],
 })
 export class PokeballsComponent implements OnInit, OnDestroy {
-  //******** */
-  // getPokemonBalls!: boolean;
   currentTime = new Date();
-  // initTimer: Timer = {
-  //   id: 1,
-  //   prevDate: new Date(),
-  // };
 
-  //Timer from backend--subscribing in OnInit
-  timer$ = this.pokeBallsService.getTimer();
+  //updated Timer from subject in pokeball service
+  timer$ = this.pokeBallsService.timerSubject$;
 
   //For unsubscribing
   private ngUnsubscribe = new Subject<void>();
@@ -49,12 +42,7 @@ export class PokeballsComponent implements OnInit, OnDestroy {
     this.pokeBallsService
       .updateTimer(nextAvaiablePokemonDate)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((resp) => console.log(`Updated Timer: `, resp));
-
-    //updating initTimer so if clause in OnInit is read properly
-    // this.initTimer.prevDate = nextAvaiablePokemonDate;
-    //********* */
-    // this.getPokemonBalls = false;
+      .subscribe((resp) => this.pokeBallsService.updateTimerSubject(resp));
     this.confirmPokeBallsSnackBar('10 Poke Balls acquired!', 'Close');
   }
 
@@ -68,11 +56,16 @@ export class PokeballsComponent implements OnInit, OnDestroy {
 
   //------------------------LifeCycle Hooks-------------------------------------
   ngOnInit(): void {
-    //Subscribing to get time until next pokeballs can be added again
-    // this.timer$.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-    //   next: (resp) => (this.initTimer.prevDate = new Date(resp.prevDate)),
-    //   error: (err) => console.log(`Error: `, err),
-    // });
+    //setting behaviorSubject for timer
+    this.pokeBallsService.getTimer()
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
+      next: timer => this.pokeBallsService.updateTimerSubject(timer),
+      error: err => console.log('Error: ', err)
+    })
+
 
     //getting current time and comparing to last updated time(last time pokeballs were added)
     timer(0, 1000)
@@ -82,16 +75,7 @@ export class PokeballsComponent implements OnInit, OnDestroy {
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe({
-        next: (time) => {
-          this.currentTime = time;
-          // if (this.initTimer.prevDate.toISOString() <= time.toISOString()) {
-
-          //   this.getPokemonBalls = true;
-          // } else {
-
-          //   this.getPokemonBalls = false;
-          // }
-        },
+        next: (time) => this.currentTime = time,
         error: (err) => console.log('Error: ', err),
       });
   }
@@ -101,9 +85,3 @@ export class PokeballsComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 }
-
-
-
-//golden Ticket
-
-// this.initTimer.prevDate.toISOString() <= time.toISOString()
