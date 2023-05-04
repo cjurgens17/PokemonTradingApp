@@ -1,34 +1,34 @@
 
-<div *ngIf="message$ | async as um" class="h-screen bg-black">
+<div *ngIf="message$ | async as um; else viewMessage" class="h-screen border-y-2 border-r-2 border-black" style="background-color: #ffde22;">
   <!-- title -->
   <div class="flex justify-center items-center">
-  <h2 class="text-title">From: {{um.currentUsername}}</h2>
+  <h2 class="text-title text-black">From: {{um.currentUsername}}</h2>
   </div>
   <br>
   <!-- text -->
   <div class="flex flex-col justify-start items-start ml-2">
-  <h1 class="text-title">Message:</h1>
+  <h1 class="text-title text-black">Message:</h1>
   <hr>
-  <p class="text-standard mb-2">{{um.text}}</p>
+  <p class="text-standard mb-2 text-black">{{um.text}}</p>
   <hr>
   </div>
   <!-- pokemon display -->
   <div class="flex flex-row justify-evenly items-center mb-2">
     <!-- First pokemon -->
     <div class="flex flex-col justify-center items-center">
-      <h1 class="text-standard">Pokemon To Trade For</h1>
+      <h1 class="text-standard text-black">Your Pokemon</h1>
       <div class="photo-wrapper p-2">
         <img  class="w-32 h-32 rounded-full mx-auto saturate-100 contrast-150" [src]="um.userPokemonImage" alt="User Pokemon">
       </div>
-      <h1 class="text-standard">{{um.tradePokemon | titlecase}}</h1>
+      <h1 class="text-standard text-black">{{um.tradePokemon | titlecase}}</h1>
     </div>
     <!-- Second Pokemon -->
     <div class="flex flex-col justify-center items-center">
-      <h1 class="text-standard">Your Pokemon</h1>
+      <h1 class="text-standard text-black">Pokemon To Trade For</h1>
       <div class="photo-wrapper p-2">
         <img class="w-32 h-32 rounded-full mx-auto saturate-100 contrast-150" [src]="um.tradePokemonImage" alt="Trade Pokemon">
         </div>
-      <h1 class="text-standard">{{um.userPokemon | titlecase}}</h1>
+      <h1 class="text-standard text-black">{{um.userPokemon | titlecase}}</h1>
     </div>
     </div>
     <!-- button display -->
@@ -40,5 +40,17 @@
       Decline
     </button>
   </div>
-</div>
+  <!-- Message Can be Safely Deleted -->
+  <div *ngIf="um.traded" class="flex flex-row justify-center items-center">
+    <h1 class="text-3xl font-semibold m-2">This message Can Be Safely<br><span class="flex text-red-600 justify-center items-center">Deleted</span></h1>
+  </div>
+  </div>
+
+<!-- Before User has clicked a message -->
+<ng-template #viewMessage>
+  <div class="flex flex-row justify-center items-center">
+    <h1 class="text-3xl font-semibold">Open a Message to View</h1>
+  </div>
+</ng-template>
+
 

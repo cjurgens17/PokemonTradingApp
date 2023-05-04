@@ -38,6 +38,11 @@ export class InboxMessageComponent implements OnInit, OnDestroy {
     //this changes the usernames so decline msg displays proper names in view/client side
     let to = message.currentUsername;
     let from = message.username;
+    //swap pokemon images
+    let toPokemon = message.tradePokemonImage
+    let fromPokemon = message.userPokemonImage;
+    let toPokemonName = message.tradePokemon;
+    let fromPokemonName = message.userPokemon;
 
     //update original message so trade status is true
     let updateCurrentMessageIsTraded = {
@@ -51,6 +56,10 @@ export class InboxMessageComponent implements OnInit, OnDestroy {
     let declineMessage = {
       ...message,
       text: `${message.username} has declined your trade.`,
+      userPokemonImage: toPokemon,
+      tradePokemonImage: fromPokemon,
+      userPokemon: toPokemonName,
+      tradePokemon: fromPokemonName,
       username: to,
       currentUsername: from,
       traded: true,

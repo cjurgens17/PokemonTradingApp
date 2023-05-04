@@ -7,6 +7,7 @@ import {
   Subject,
   catchError,
   filter,
+  map,
   switchMap,
   tap,
   throwError,
@@ -24,6 +25,7 @@ export class UserProfileService {
   private userUrl = 'http://localhost:8080/user';
 
   msg: Message = {
+    id: 0,
     text: '',
     userPokemon: '',
     userPokemonImage: '',
@@ -79,7 +81,12 @@ export class UserProfileService {
   getUserMessages(id: number): Observable<Message[]> {
     return this.http
       .get<Message[]>(`${this.userUrl}/${id}/userMessages`)
-      .pipe(catchError(this.handleError));
+      .pipe(
+        map((message) => {
+          return message.sort((a, b) => a.id - b.id);
+        }),
+        catchError(this.handleError)
+        );
   }
 
   updateUserProfilePicture(id: number, profilePicture: string): Observable<Boolean> {

@@ -27,6 +27,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   userInbox: Inbox = {
     messages: [],
   };
+  selectedMessage!: Message;
 
   //subject to unsubscribe onDestroy
   private ngUnsubscribe = new Subject<void>();
@@ -55,6 +56,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
   //------------------PASSING to subjects methods-----------------------
   onViewMessage(message: Message) {
+    this.selectedMessage = message;
     this.inboxService.passMessage(message);
   }
   //----------------HTTP CALLS---------------------------------------
@@ -74,6 +76,7 @@ export class InboxComponent implements OnInit, OnDestroy {
             });
             this.inboxSubject.next(this.userInbox);
             this.userProfileService.updateInboxSubject(this.userInbox.messages);
+            this.inboxService.emptyMessage();
           }
         },
         error: (err) => console.log('err', err),

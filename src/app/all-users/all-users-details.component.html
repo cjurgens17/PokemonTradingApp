@@ -1,4 +1,4 @@
-<div *ngIf="userDetails$ | async as ud" class="h-screen">
+<div *ngIf="userDetails$ | async as ud; else notClicked" class="h-screen">
   <!-- User Info -->
   <h1 class="font-bold text-2xl text-center">{{ud.user?.username}}</h1>
   <div class="flex justify-center items-center pt-2"><img class="rounded-full" [src]="ud.user?.profilePicture" alt="Profile Picture"></div>
@@ -44,6 +44,13 @@
     </div>
   </div>
 </div>
+
+<!-- User hasnt clicked a to view a trade yet -->
+<ng-template #notClicked>
+  <div class="flex flex-row justify-center items-center">
+    <h1 class="text-3xl font-semibold">View a User to Trade</h1>
+  </div>
+</ng-template>
   <!-- User has no Pokemon -->
   <ng-template #noPokemon>
     <div class="alert alert-warning">

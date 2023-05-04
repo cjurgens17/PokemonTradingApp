@@ -1,16 +1,27 @@
 <div *ngIf="inbox$ | async as inbox" class="grid grid-cols-1 auto-rows-{{inbox.messages.length}} justify-center items-center w-full">
-  <div *ngFor="let msg of inbox.messages" class="flex flex-row justify-between items-center mb-2 w-full">
-    <button class="mr-1" mat-button color="primary" ripple="matRipple" (click)="onViewMessage(msg)">
+  <div *ngIf="inbox.messages.length > 0; else noInbox">
+  <div *ngFor="let msg of inbox.messages"
+        [ngClass]="{'msgBackground': selectedMessage === msg}"
+        class="flex flex-row justify-between items-center mb-2 w-full bg-gray-300">
+    <button class="mx-1 bg-purple-700 hover:bg-black transition ease-in text-white font-normal py-2 px-4 rounded"(click)="onViewMessage(msg)">
       Message
     </button>
     <div class="flex w-24 truncate ml-2">
       <p>{{msg.currentUsername}}</p>
   </div>
-    <button class="mr-1" mat-fab color="primary" ripple="matRipple" aria-label="Delete Icon" (click)="deleteMessage(msg)">
+    <button class="m-1" mat-fab color="primary" ripple="matRipple" aria-label="Delete Icon" (click)="deleteMessage(msg)">
       <mat-icon>delete</mat-icon>
     </button>
   </div>
-</div>
+  </div>
+  </div>
+  
+  <!-- Displays if user has No messages in the inbox -->
+  <ng-template #noInbox>
+    <div class="flex flex-row justify-center items-center">
+      <h1 class="text-3xl font-semibold">No Messages</h1>
+    </div>
+  </ng-template>
 
 
 

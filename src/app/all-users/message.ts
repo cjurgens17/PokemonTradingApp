@@ -1,4 +1,5 @@
 export interface Message {
+  id: number;
   text: string;
   userPokemon: string;
   userPokemonImage: string;
@@ -7,5 +8,4 @@ export interface Message {
   username: string;
   currentUsername: string;
   traded: boolean;
-
 }

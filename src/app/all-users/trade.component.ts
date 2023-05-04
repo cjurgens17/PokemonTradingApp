@@ -144,6 +144,7 @@ export class TradeComponent implements OnInit, OnDestroy {
     })
 
     let tradeMsg: Message = {
+      id: 0,
       text: '',
       userPokemon: '',
       userPokemonImage: '',

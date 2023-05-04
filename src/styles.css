@@ -43,6 +43,10 @@ div.card {
   @apply text-white font-normal text-3xl
 }
 
+.msgBackground {
+  @apply bg-gray-300 border-2 border-black
+}
+
 
 
 
