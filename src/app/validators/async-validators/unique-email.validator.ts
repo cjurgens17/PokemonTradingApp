@@ -1,13 +1,13 @@
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from "@angular/forms";
 import { Observable, delay, map } from "rxjs";
-import { UserService } from "src/app/user-info/user-service";
+import { SignUpService } from "src/app/sign-up/sign-up.service";
 
 
 export const uniqueEmailValidator = (
-  userService: UserService
+  signUpService: SignUpService
 ): AsyncValidatorFn => {
   return (control: AbstractControl): Observable<ValidationErrors | null> => {
-    return userService.emailExist(control?.value)
+    return signUpService.emailExist(control?.value)
     .pipe(
       map(resp => {
         return resp ? {checkEmail: true} : null;

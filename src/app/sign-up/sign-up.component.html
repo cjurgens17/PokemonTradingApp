@@ -31,7 +31,7 @@
       <div class="w-full mb-2">
       <mat-form-field class="w-full">
         <mat-label>Email</mat-label>
-        <input ng-pending matInput placeholder="Enter Email" [formControl]="signUpForm.controls.email">
+        <input ng-pending matInput placeholder="Enter Email" [formControl]="signUpForm.controls.email" spellcheck="false">
         <mat-spinner diameter="25" *ngIf="signUpForm.controls.email.pending"></mat-spinner>
         <mat-error *ngIf="signUpForm.controls.email.hasError('email')">Enter a valid email</mat-error>
         <mat-error *ngIf="signUpForm.controls.email.hasError('checkEmail')">Email already registered</mat-error>
@@ -41,7 +41,7 @@
 
       <div class="w-full mb-2">
       <mat-form-field class="w-full" appearance="fill">
-        <mat-label>Enter Birth Date</mat-label>
+        <mat-label>Choose Birth Date</mat-label>
         <input matInput [matDatepicker]="picker" [formControl]="signUpForm.controls.birthDate" readonly>
         <mat-icon color="primary" *ngIf="signUpForm.controls.birthDate.valid" matSuffix>check_circle</mat-icon>
         <mat-hint>MM/DD/YYYY</mat-hint>
@@ -55,7 +55,7 @@
       <div class="w-full mb-2">
       <mat-form-field class="w-full">
         <mat-label>Username</mat-label>
-        <input matInput placeholder="Enter Username" [formControl]="signUpForm.controls.username">
+        <input matInput placeholder="Enter Username" [formControl]="signUpForm.controls.username" spellcheck="false">
         <mat-spinner diameter="25" *ngIf="signUpForm.controls.username.pending"></mat-spinner>
         <mat-error *ngIf="signUpForm.controls.username.hasError('minlength')">Minimum of 5 characters</mat-error>
         <mat-error *ngIf="signUpForm.controls.username.hasError('maxlength')">Maximum of 15 characters</mat-error>

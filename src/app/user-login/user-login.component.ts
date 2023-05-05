@@ -37,6 +37,7 @@ export class UserLoginComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
           next: (data) => {
+            localStorage.clear();
             console.log('Data: ', data);
             this.router.navigate(['home']);
             let json = JSON.stringify(data);
