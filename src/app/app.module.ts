@@ -19,6 +19,7 @@ import { PokeDetailComponent } from './all-users/poke-detail.component';
 import { FooterComponent } from './footer/footer.component';
 import { TradeComponent } from './all-users/trade.component';
 import { PokeballsModule } from './pokeballs/pokeballs.module';
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { PokeballsModule } from './pokeballs/pokeballs.module';
     PokeDetailComponent,
     FooterComponent,
     TradeComponent,
+    SignUpComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,6 +43,7 @@ import { PokeballsModule } from './pokeballs/pokeballs.module';
     RouterModule.forRoot([
       {path: 'home', component: HomeComponent},
       {path: 'users', component: AllUsersShellComponent},
+      {path: 'signup', component: SignUpComponent},
       {path: '', redirectTo: 'home', pathMatch:'full'},
       {path: '**', redirectTo: 'home', pathMatch: 'full'},
       {path: 'usersignup', loadChildren: () => import('./user-info/user-info.module').then(m => m.UserInfoModule)},
@@ -55,8 +58,6 @@ import { PokeballsModule } from './pokeballs/pokeballs.module';
     UserProfileModule,
     PokeballsModule,
     SharedModule
-
-
   ],
   providers: [],
   bootstrap: [AppComponent]
