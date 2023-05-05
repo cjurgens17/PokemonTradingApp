@@ -1,97 +1,96 @@
 <div class="flex justify-center items-center bg-no-repeat bg-cover p-1 h-screen border-t-2 border-white filter saturate-150" style="background-image: url('https://wallpaperaccess.com/full/1242850.jpg')">
-<div class="container mx-auto w-1/3 box-border p-4 border-4 border-gray-400 bg-white mt-4 hover:shadow-2xl hover:transition hover:duration-400">
+  <div class="container mx-auto w-1/3 box-border p-4 border-4 border-gray-400 bg-white mt-4 hover:shadow-2xl hover:transition hover:duration-400">
 
 
-  <form class="example-form" [formGroup]="signUpForm">
+    <form class="example-form" [formGroup]="signUpForm">
 
-    <mat-toolbar class="flex justify-center items-center mb-2" color="primary">
-      <h1>Sign Up</h1>
-    </mat-toolbar>
+      <mat-toolbar class="flex justify-center items-center mb-2" color="primary">
+        <h1>Sign Up</h1>
+      </mat-toolbar>
 
-    <div class="w-full mb-2">
-    <mat-form-field class="w-full">
-      <mat-label>First Name</mat-label>
-      <mat-error *ngIf="signUpForm.controls.firstName.hasError('pattern')">Can only contain characters in the alphabet</mat-error>
-      <mat-error *ngIf="signUpForm.controls.firstName.hasError('maxlength')">Maximum of 15 characters</mat-error>
-      <input matInput placeholder="Enter First Name" [formControl]="signUpForm.controls.firstName">
-    </mat-form-field>
-    </div>
-
-    <div class="w-full mb-2">
-    <mat-form-field class="w-full">
-      <mat-label>Last Name</mat-label>
-      <mat-error *ngIf="signUpForm.controls.lastName.hasError('pattern')">Can only contain characters in the alphabet</mat-error>
-      <mat-error *ngIf="signUpForm.controls.lastName.hasError('maxlength')">Maximum of 20 characters</mat-error>
-      <input matInput placeholder="Enter Last Name" [formControl]="signUpForm.controls.lastName">
-    </mat-form-field>
-    </div>
-
-    <div class="w-full mb-2">
-    <mat-form-field class="w-full">
-      <mat-label>Email</mat-label>
-      <input matInput placeholder="Enter Email" [formControl]="signUpForm.controls.email">
-      <mat-error *ngIf="signUpForm.controls.email.hasError('email')">Enter a valid email</mat-error>
-    </mat-form-field>
-    </div>
-
-    <div class="w-full mb-2">
-    <mat-form-field class="w-full" appearance="fill">
-      <mat-label>Enter Birth Date</mat-label>
-      <input matInput [matDatepicker]="picker" [formControl]="signUpForm.controls.birthDate">
-      <mat-hint>MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="picker">
-        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-      </mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <!-- <mat-error *ngIf="signUpForm.get('birthDate')?.invalid && signUpForm.get('birthDate')?.touched">Please enter a valid birth date</mat-error> -->
-    </mat-form-field>
-  </div>
-
-    <div class="w-full mb-2">
-    <mat-form-field class="w-full">
-      <mat-label>Username</mat-label>
-      <mat-error *ngIf="signUpForm.controls.username.hasError('minlength')">Minimum of 5 characters</mat-error>
-      <mat-error *ngIf="signUpForm.controls.username.hasError('maxlength')">Maximum of 15 characters</mat-error>
-      <mat-error *ngIf="signUpForm.controls.username.hasError('username')">Can not contain special characters</mat-error>
-      <input matInput placeholder="Enter Username" [formControl]="signUpForm.controls.username">
-    </mat-form-field>
-    </div>
-
-    <div class="w-full mb-2">
-      <mat-form-field class="w-full" appearance="fill">
-        <mat-label>Password</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'" [formControl]="signUpForm.controls.password">
-        <mat-error *ngIf="signUpForm.controls.password.hasError('password')">Password must contain at least one uppercase letter, one lowercase letter, one number, and a special character</mat-error>
-        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
+      <div class="w-full mb-2">
+      <mat-form-field class="w-full">
+        <mat-label>First Name</mat-label>
+        <mat-error *ngIf="signUpForm.controls.firstName.hasError('pattern')">Can only contain characters in the alphabet</mat-error>
+        <mat-error *ngIf="signUpForm.controls.firstName.hasError('maxlength')">Maximum of 15 characters</mat-error>
+        <input matInput placeholder="Enter First Name" [formControl]="signUpForm.controls.firstName">
       </mat-form-field>
       </div>
 
       <div class="w-full mb-2">
-        <mat-form-field class="w-full mt-2" appearance="fill">
-          <mat-label>Confirm Password</mat-label>
-          <input matInput [type]="hide2 ? 'password' : 'text'" [formControl]="signUpForm.controls.confirmPassword">
-          <mat-error *ngIf="signUpForm.controls.confirmPassword.invalid">Passwords must match</mat-error>
-          <button mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
-            <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-form-field class="w-full">
+        <mat-label>Last Name</mat-label>
+        <mat-error *ngIf="signUpForm.controls.lastName.hasError('pattern')">Can only contain characters in the alphabet</mat-error>
+        <mat-error *ngIf="signUpForm.controls.lastName.hasError('maxlength')">Maximum of 20 characters</mat-error>
+        <input matInput placeholder="Enter Last Name" [formControl]="signUpForm.controls.lastName">
+      </mat-form-field>
+      </div>
+
+      <div class="w-full mb-2">
+      <mat-form-field class="w-full">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Enter Email" [formControl]="signUpForm.controls.email">
+        <mat-error *ngIf="signUpForm.controls.email.hasError('email')">Enter a valid email</mat-error>
+      </mat-form-field>
+      </div>
+
+      <div class="w-full mb-2">
+      <mat-form-field class="w-full" appearance="fill">
+        <mat-label>Enter Birth Date</mat-label>
+        <input matInput [matDatepicker]="picker" [formControl]="signUpForm.controls.birthDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker">
+          <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <!-- <mat-error *ngIf="signUpForm.get('birthDate')?.invalid && signUpForm.get('birthDate')?.touched">Please enter a valid birth date</mat-error> -->
+      </mat-form-field>
+    </div>
+
+      <div class="w-full mb-2">
+      <mat-form-field class="w-full">
+        <mat-label>Username</mat-label>
+        <mat-error *ngIf="signUpForm.controls.username.hasError('minlength')">Minimum of 5 characters</mat-error>
+        <mat-error *ngIf="signUpForm.controls.username.hasError('maxlength')">Maximum of 15 characters</mat-error>
+        <mat-error *ngIf="signUpForm.controls.username.hasError('username')">Can not contain special characters</mat-error>
+        <input matInput placeholder="Enter Username" [formControl]="signUpForm.controls.username">
+      </mat-form-field>
+      </div>
+
+      <div class="w-full mb-2">
+        <mat-form-field class="w-full" appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" [formControl]="signUpForm.controls.password">
+          <mat-error *ngIf="signUpForm.controls.password.hasError('password')">Password must contain at least one uppercase letter, one lowercase letter, one number, and a special character</mat-error>
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
         </mat-form-field>
         </div>
 
         <div class="w-full mb-2">
-        <mat-progress-bar class="w-full" mode="determinate" value="40"></mat-progress-bar>
-        </div>
+          <mat-form-field class="w-full mt-2" appearance="fill">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput [type]="hide2 ? 'password' : 'text'" [formControl]="signUpForm.controls.confirmPassword">
+            <mat-error *ngIf="signUpForm.controls.confirmPassword.hasError('passwordMismatch')">Passwords must match</mat-error>
+            <button mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
+              <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+          </div>
 
-        <div class="flex flex-row justify-center items-center" [hidden]="!postError">
-          <mat-error class="mt-2">Fill in all required areas</mat-error>
-        </div>
+          <div class="w-full mb-2">
+          <mat-progress-bar class="w-full" mode="determinate" value="40"></mat-progress-bar>
+          </div>
 
-        <div class="flex justify-center items-center">
-        <button class="mt-2" mat-raised-button color="primary" (click)="register()">Register</button>
-        </div>
+          <div class="flex flex-row justify-center items-center" [hidden]="!postError">
+            <mat-error class="mt-2">Fill in all required areas</mat-error>
+          </div>
 
-  </form>
-</div>
-</div>
+          <div class="flex justify-center items-center">
+          <button class="mt-2" mat-raised-button color="primary" (click)="register()">Register</button>
+          </div>
 
+    </form>
+  </div>
+  </div>
