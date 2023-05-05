@@ -16,7 +16,15 @@ export class UserService {
 
 
     postUser(user: User): Observable<any> {
-        return this.http.post<any>(`${this.userUrl}/new`, user, {headers: environment.headers});    
+        return this.http.post<any>(`${this.userUrl}/new`, user, {headers: environment.headers});
+    }
+
+    emailExist(email: string): Observable<boolean> {
+      return this.http.get<boolean>(`${this.userUrl}/${email}/checkEmail`, {headers: environment.headers});
+    }
+
+    usernameExist(username: string): Observable<boolean> {
+      return this.http.get<boolean>(`${this.userUrl}/${username}/checkUsername`, {headers: environment.headers});
     }
 
 

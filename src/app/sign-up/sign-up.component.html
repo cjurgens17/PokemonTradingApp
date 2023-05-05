@@ -11,49 +11,57 @@
       <div class="w-full mb-2">
       <mat-form-field class="w-full">
         <mat-label>First Name</mat-label>
+        <input matInput placeholder="Enter First Name" [formControl]="signUpForm.controls.firstName">
         <mat-error *ngIf="signUpForm.controls.firstName.hasError('pattern')">Can only contain characters in the alphabet</mat-error>
         <mat-error *ngIf="signUpForm.controls.firstName.hasError('maxlength')">Maximum of 15 characters</mat-error>
-        <input matInput placeholder="Enter First Name" [formControl]="signUpForm.controls.firstName">
+        <mat-icon color="primary" *ngIf="signUpForm.controls.firstName.valid" matSuffix>check_circle</mat-icon>
       </mat-form-field>
       </div>
 
       <div class="w-full mb-2">
       <mat-form-field class="w-full">
         <mat-label>Last Name</mat-label>
+        <input matInput placeholder="Enter Last Name" [formControl]="signUpForm.controls.lastName">
         <mat-error *ngIf="signUpForm.controls.lastName.hasError('pattern')">Can only contain characters in the alphabet</mat-error>
         <mat-error *ngIf="signUpForm.controls.lastName.hasError('maxlength')">Maximum of 20 characters</mat-error>
-        <input matInput placeholder="Enter Last Name" [formControl]="signUpForm.controls.lastName">
+        <mat-icon color="primary" *ngIf="signUpForm.controls.lastName.valid" matSuffix>check_circle</mat-icon>
       </mat-form-field>
       </div>
 
       <div class="w-full mb-2">
       <mat-form-field class="w-full">
         <mat-label>Email</mat-label>
-        <input matInput placeholder="Enter Email" [formControl]="signUpForm.controls.email">
+        <input ng-pending matInput placeholder="Enter Email" [formControl]="signUpForm.controls.email">
+        <mat-spinner diameter="25" *ngIf="signUpForm.controls.email.pending"></mat-spinner>
         <mat-error *ngIf="signUpForm.controls.email.hasError('email')">Enter a valid email</mat-error>
+        <mat-error *ngIf="signUpForm.controls.email.hasError('checkEmail')">Email already registered</mat-error>
+        <mat-icon email-element color="primary" *ngIf="signUpForm.controls.email.valid" matSuffix>check_circle</mat-icon>
       </mat-form-field>
       </div>
 
       <div class="w-full mb-2">
       <mat-form-field class="w-full" appearance="fill">
         <mat-label>Enter Birth Date</mat-label>
-        <input matInput [matDatepicker]="picker" [formControl]="signUpForm.controls.birthDate">
+        <input matInput [matDatepicker]="picker" [formControl]="signUpForm.controls.birthDate" readonly>
+        <mat-icon color="primary" *ngIf="signUpForm.controls.birthDate.valid" matSuffix>check_circle</mat-icon>
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker">
           <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
         </mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-        <!-- <mat-error *ngIf="signUpForm.get('birthDate')?.invalid && signUpForm.get('birthDate')?.touched">Please enter a valid birth date</mat-error> -->
       </mat-form-field>
     </div>
 
       <div class="w-full mb-2">
       <mat-form-field class="w-full">
         <mat-label>Username</mat-label>
+        <input matInput placeholder="Enter Username" [formControl]="signUpForm.controls.username">
+        <mat-spinner diameter="25" *ngIf="signUpForm.controls.username.pending"></mat-spinner>
         <mat-error *ngIf="signUpForm.controls.username.hasError('minlength')">Minimum of 5 characters</mat-error>
         <mat-error *ngIf="signUpForm.controls.username.hasError('maxlength')">Maximum of 15 characters</mat-error>
         <mat-error *ngIf="signUpForm.controls.username.hasError('username')">Can not contain special characters</mat-error>
-        <input matInput placeholder="Enter Username" [formControl]="signUpForm.controls.username">
+        <mat-error *ngIf="signUpForm.controls.username.hasError('checkUsername')">Username is taken</mat-error>
+        <mat-icon color="primary" *ngIf="signUpForm.controls.username.valid" matSuffix >check_circle</mat-icon>
       </mat-form-field>
       </div>
 
@@ -62,6 +70,7 @@
           <mat-label>Password</mat-label>
           <input matInput [type]="hide ? 'password' : 'text'" [formControl]="signUpForm.controls.password">
           <mat-error *ngIf="signUpForm.controls.password.hasError('password')">Password must contain at least one uppercase letter, one lowercase letter, one number, and a special character</mat-error>
+          <mat-icon color="primary" *ngIf="signUpForm.controls.password.valid" matSuffix>check_circle</mat-icon>
           <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
@@ -73,14 +82,11 @@
             <mat-label>Confirm Password</mat-label>
             <input matInput [type]="hide2 ? 'password' : 'text'" [formControl]="signUpForm.controls.confirmPassword">
             <mat-error *ngIf="signUpForm.controls.confirmPassword.hasError('passwordMismatch')">Passwords must match</mat-error>
+            <mat-icon color="primary" *ngIf="signUpForm.controls.confirmPassword.valid" matSuffix>check_circle</mat-icon>
             <button mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
               <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
           </mat-form-field>
-          </div>
-
-          <div class="w-full mb-2">
-          <mat-progress-bar class="w-full" mode="determinate" value="40"></mat-progress-bar>
           </div>
 
           <div class="flex flex-row justify-center items-center" [hidden]="!postError">
