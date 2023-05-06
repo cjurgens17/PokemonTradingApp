@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { PokemonModule } from './pokemon/pokemon.module';
-import { UserInfoModule } from './user-info/user-info.module';
 import { UserLoginModule } from './user-login/user-login.module';
 import { UserProfileModule } from './user-profile/user-profile.module';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -46,14 +45,12 @@ import { SignUpComponent } from './sign-up/sign-up.component';
       {path: 'signup', component: SignUpComponent},
       {path: '', redirectTo: 'home', pathMatch:'full'},
       {path: '**', redirectTo: 'home', pathMatch: 'full'},
-      {path: 'usersignup', loadChildren: () => import('./user-info/user-info.module').then(m => m.UserInfoModule)},
       {path: 'userlogin', loadChildren: () => import('./user-login/user-login.module').then(m => m.UserLoginModule)},
       {path: 'userprofile', loadChildren: () => import('./user-profile/user-profile.module').then(m => m.UserProfileModule)},
       {path: 'pokemon', loadChildren: () => import('./pokemon/pokemon.module').then(m => m.PokemonModule)},
       {path: 'pokeballs', loadChildren: ()=> import('./pokeballs/pokeballs.module').then(m => m.PokeballsModule)}
     ]),
     PokemonModule,
-    UserInfoModule,
     UserLoginModule,
     UserProfileModule,
     PokeballsModule,

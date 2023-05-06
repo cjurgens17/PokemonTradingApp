@@ -1,7 +1,7 @@
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from "@angular/forms";
 import { Observable, delay, map } from "rxjs";
 import { SignUpService } from "src/app/sign-up/sign-up.service";
-import { UserService } from "src/app/user-info/user-service";
+
 
 
 export const uniqueUsernameValidator = (

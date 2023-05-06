@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../user-info/user-info';
+import { User } from '../sign-up/user-info';
 import { Observable, Subject, catchError, combineLatest, filter, map, switchMap, tap, throwError } from 'rxjs';
 import { Pokemon } from '../pokemon/pokemon';
 

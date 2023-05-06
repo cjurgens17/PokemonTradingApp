@@ -14,7 +14,7 @@ export class UserHomeGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       if(!this.userProfileService.isLoggedIn()){
         alert("You must sign in or create an account");
-        this.router.navigate(['/usersignup']);
+        this.router.navigate(['signup']);
         return false;
       }
     return true;

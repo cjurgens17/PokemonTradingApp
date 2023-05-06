@@ -13,7 +13,7 @@ import {
   throwError,
 } from 'rxjs';
 import { Pokemon } from '../pokemon/pokemon';
-import { User } from '../user-info/user-info';
+import { User } from '../sign-up/user-info';
 import { UserLoginService } from '../user-login/user-login-service';
 import { Message } from '../all-users/message';
 import { environment } from 'src/environments/environment';

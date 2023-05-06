@@ -39,7 +39,7 @@ export class UserLoginComponent implements OnInit, OnDestroy {
           next: (data) => {
             localStorage.clear();
             console.log('Data: ', data);
-            this.router.navigate(['home']);
+            this.router.navigate(['userprofile']);
             let json = JSON.stringify(data);
             localStorage.setItem('userLoginInfo', json);
           },
