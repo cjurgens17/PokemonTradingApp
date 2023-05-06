@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -49,6 +49,7 @@ import { MatTableModule } from '@angular/material/table';
   exports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatAutocompleteModule,
     MatCheckboxModule,
     MatDatepickerModule,

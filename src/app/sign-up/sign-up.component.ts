@@ -56,7 +56,7 @@ export class SignUpComponent implements OnDestroy {
       updateOn: 'blur',
     }),
     password: new FormControl('', {
-      validators: [Validators.required, passwordValidator, confirmPasswordValidator()],
+      validators: [Validators.required, passwordValidator],
       updateOn: 'change'
     }),
     confirmPassword: new FormControl('', {

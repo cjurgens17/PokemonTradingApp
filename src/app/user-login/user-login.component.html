@@ -1,31 +1,47 @@
-<div class="bg-no-repeat bg-cover p-1 h-screen border-t-2 border-white filter saturate-150" style="background-image: url('https://wallpapercave.com/wp/vFtdTLh.jpg')">
-<div class="container mx-auto w-1/3 box-border p-4 border-4 border-white bg-black mt-4 hover:shadow-2xl hover:transition hover:duration-400">
-    <h2 class="text-6xl mb-4 text-white font-normal">Log In</h2>
+<div class="flex justify-center items-center bg-no-repeat bg-cover p-1 h-screen border-t-2 border-white filter saturate-150"
+  style="background-image: url('https://wallpapercave.com/wp/vFtdTLh.jpg')">
+  <div
+    class="container mx-auto w-1/3 box-border p-4 border-4 border-gray-400 bg-white mt-4 hover:shadow-2xl hover:transition hover:duration-400">
 
-    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+ <form class="example-from" [formGroup]="loginForm">
 
-        <div class="form-group text-standard">
-            <label for="username">Username:</label>
-            <input name="username" id="username" class="form-control" [(ngModel)]="userLoginInfo.username" required
-            #nameField="ngModel"
-            [class.field-error]="!form.submitted && nameField.valid">
-            <div [hidden]="!form.submitted || nameField.value" class="alert alert-danger">Enter Username</div>
+      <mat-toolbar class="flex justify-center items-center mb-2" color="primary">
+        <h1>Log In</h1>
+      </mat-toolbar>
+
+      <div class="w-full mb-2">
+        <mat-form-field class="w-full mt-2">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="Enter Username" [formControl]="loginForm.controls.username" spellcheck="false">
+          <mat-icon color="primary" *ngIf="loginForm.controls.username.valid" matSuffix>check_circle</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="w-full mb-2">
+        <mat-form-field class="w-full mt-2">
+          <mat-label>Password</mat-label>
+          <input type="password" matInput placeholder="Enter Password" [formControl]="loginForm.controls.password" spellcheck="false">
+          <mat-icon color="primary" *ngIf="loginForm.controls.password.valid" matSuffix>check_circle</mat-icon>
+        </mat-form-field>
+      </div>
+
+    <div class="flex flex-row justify-center items-center">
+      <mat-error *ngIf="required" class="mt-2">Fill in all required areas</mat-error>
     </div>
 
-    <div class="form-group text-standard">
-        <label for="password">Password:</label>
-        <input class="form-control" name="password" id="password" [(ngModel)]="userLoginInfo.password" required
-        #nameField="ngModel"
-        [class.field-error]="!form.submitted && nameField.valid">
-        <div [hidden]="!form.submitted || nameField.value" class="alert alert-danger">Enter Password</div>
+    <div class="flex flex-row justify-center items-center">
+      <mat-error *ngIf="badCredentials" class="mt-2 mb-2">Username or Password is Incorrect</mat-error>
     </div>
 
-    <div [hidden]="!postError"
-    class="alert alert-danger">
-        {{postErrorMessage}}
+    <div class="flex justify-center items-center">
+      <button class="mt-2" mat-raised-button color="primary" (click)="login()">Log In</button>
     </div>
-    <button class="btn btn-primary mt-2 font-normal">Send</button>
+
+    <div *ngIf="doYouHaveAccount" class="flex flex-row justify-center items-center mb-2 mt-2">
+      <h1 class="mr-2 text-black text-lg">Do You Have An Account?</h1>
+      <a color="primary" routerLink="/signup">Sign Up</a>
+    </div>
+
     </form>
+  </div>
 </div>
-</div>
-

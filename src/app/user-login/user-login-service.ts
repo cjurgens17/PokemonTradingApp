@@ -27,6 +27,10 @@ export class UserLoginService {
     });
   }
 
+  checkCredentials(loginRequest: UserLogin): Observable<boolean> {
+    return this.http.post<boolean>(`${this.userUrl}/checkCredentials`, loginRequest, {headers: environment.headers})
+  }
+
   setCurrentUser(user: UserLogin) {
     this.currentUser.next(user);
   }
