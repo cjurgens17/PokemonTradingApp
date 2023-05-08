@@ -1,5 +1,5 @@
 
-<div *ngIf="userProfile$ | async as profile">
+<div *ngIf="userProfile$ | async as profile; else notSignedUp">
 <div class="h-max min-h-screen bg-cover bg-no-repeat filter saturate-150 bg-fixed" style="background-image: url('https://images.alphacoders.com/119/119223.jpg')">
   <!-- flex for user profile info and pokemon display to the right -->
   <div class="flex flex-row justify-center items-center border-t-2 border-white">
@@ -89,7 +89,6 @@
     </div>
 </div>
 </div>
-
   </div>
   </div>
 
@@ -97,6 +96,16 @@
   *ngIf="errorMessage$ | async as errorMessage">
   {{errorMessage}}
   </div>
+
+  <ng-template #notSignedUp>
+    <div class="bg-slate-800 bg-opacity-50 flex justify-center items-center min-h-screen bg-cover bg-no-repeat filter saturate-150 bg-fixed border-t-2 border-white" style="background-image: url('https://images.alphacoders.com/119/119223.jpg')">
+      <div class="bg-white px-16 py-14 rounded-md text-center">
+        <h1 class="text-xl mb-4 font-bold text-slate-500">Do You Have An Account?</h1>
+        <button color="primary" class="bg-purple-700 px-4 py-2 rounded-md text-md text-white" routerLink="/userlogin">Log In</button>
+        <button class="bg-indigo-600 px-7 py-2 ml-2 rounded-md text-md text-white" routerLink="/signup">Sign Up</button>
+      </div>
+    </div>
+  </ng-template>
 
 
 
