@@ -3,35 +3,51 @@ import {
   OnInit,
   Inject,
   OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Message } from './message';
 import { UserProfileService } from '../user-profile/user-profile.service';
 import { EMPTY, Subject, catchError, map, takeUntil } from 'rxjs';
 import { TradeService } from './trade.service';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   MatSnackBar,
   MatSnackBarRef,
   SimpleSnackBar,
 } from '@angular/material/snack-bar';
+import { wordLengthValidator } from '../validators/sync-validators/word-length.validator';
 
 @Component({
   selector: 'app-trade',
   templateUrl: './trade.component.html',
   styleUrls: ['./trade.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TradeComponent implements OnInit, OnDestroy {
-
-  tradeForm = new FormGroup({
-    text: new FormControl('', [Validators.required]),
-    selectedPokemon: new FormControl('', [Validators.required])
-  });
 
   message!: Message;
   username!: string | null;
   selected!: boolean;
   postError: boolean = false;
+
+//Form for Pokemon Trade
+  tradeForm = new FormGroup({
+    text: new FormControl('',{
+      validators: [
+        Validators.required,
+        Validators.pattern('^[a-zA-Z ?,.!@]+$'),
+        wordLengthValidator
+        ],
+        updateOn: 'change'
+      }),
+    selectedPokemon: new FormControl('',{
+       validators: [
+        Validators.required,
+      ],
+      updateOn: 'change'
+    }),
+  });
 
   //Used to unSubscribe OnDestroy
   private ngUnsubscribe = new Subject<void>();
@@ -75,7 +91,7 @@ export class TradeComponent implements OnInit, OnDestroy {
       this.postError = true;
       return;
     }
-
+    this.message.userPokemon = this.tradeForm.get('selectedPokemon')?.value || '';
     this.message.tradePokemon = this.data.passedPokemonName;
     this.message.text = this.tradeForm.get('text')?.value || '{}';
     this.message.username = this.data.passedUsername;
@@ -114,22 +130,6 @@ export class TradeComponent implements OnInit, OnDestroy {
     });
     this.dialogRef.close();
     return snackBarRef;
-  }
-//----------------Form Error Messages-------------------------------------------
-  textErrorMessage() {
-    if (this.tradeForm.controls.text.hasError('required')) {
-      return 'You must enter a value';
-    }
-
-    return this.tradeForm.controls.text.hasError('Pokemon') ? 'Not a valid Pokemon' : '';
-  }
-
-  selectedPokemonErrorMessage() {
-    if (this.tradeForm.controls.selectedPokemon.hasError('required')) {
-      return 'You must enter a value';
-    }
-
-    return this.tradeForm.controls.selectedPokemon.hasError('Pokemon') ? 'Not a valid Pokemon' : '';
   }
 //----------------------------LIFECYCLE HOOKS---------------------------------------
   ngOnInit(): void {
