@@ -10,7 +10,7 @@
       </mat-toolbar>
 
       <div class="w-full mb-2">
-        <mat-form-field class="w-full mt-2">
+        <mat-form-field class="w-full mt-4">
           <mat-label>Username</mat-label>
           <input matInput placeholder="Enter Username" [formControl]="loginForm.controls.username" spellcheck="false">
           <mat-icon color="primary" *ngIf="loginForm.controls.username.valid" matSuffix>check_circle</mat-icon>
@@ -37,7 +37,7 @@
       <button class="mt-2" mat-raised-button color="primary" (click)="login()">Log In</button>
     </div>
 
-    <div *ngIf="doYouHaveAccount" class="flex flex-row justify-center items-center mb-2 mt-2">
+    <div class="flex flex-row justify-center items-center mb-2 mt-4">
       <h1 class="mr-2 text-black text-lg">Do You Have An Account?</h1>
       <a color="primary" routerLink="/signup">Sign Up</a>
     </div>

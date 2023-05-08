@@ -9,22 +9,27 @@
   <div class="flex flex-col justify-start items-start ml-2">
   <h1 class="text-title text-black">Message:</h1>
   <hr>
-  <p class="text-standard mb-2 text-black">{{um.text}}</p>
+  <p class="font-medium mb-2 text-black ml-4">{{um.text}}</p>
   <hr>
   </div>
   <!-- pokemon display -->
   <div class="flex flex-row justify-evenly items-center mb-2">
     <!-- First pokemon -->
-    <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-col justify-center items-center border-r-2 border-black">
       <h1 class="text-standard text-black">Your Pokemon</h1>
       <div class="photo-wrapper p-2">
         <img  class="w-32 h-32 rounded-full mx-auto saturate-100 contrast-150" [src]="um.userPokemonImage" alt="User Pokemon">
       </div>
       <h1 class="text-standard text-black">{{um.tradePokemon | titlecase}}</h1>
     </div>
+
+    <div class="flex flex-col justify-center items-center border-y-2 border-black">
+      <h1 class="text-black font-bold">FOR</h1>
+    </div>
+
     <!-- Second Pokemon -->
-    <div class="flex flex-col justify-center items-center">
-      <h1 class="text-standard text-black">Pokemon To Trade For</h1>
+    <div class="flex flex-col justify-center items-center border-l-2 border-black">
+      <h1 class="text-standard text-black">{{um.currentUsername}}'s Pokemon</h1>
       <div class="photo-wrapper p-2">
         <img class="w-32 h-32 rounded-full mx-auto saturate-100 contrast-150" [src]="um.tradePokemonImage" alt="Trade Pokemon">
         </div>

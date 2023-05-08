@@ -4,7 +4,6 @@ import {
   BehaviorSubject,
   EMPTY,
   Observable,
-  Subject,
   catchError,
   filter,
   map,
@@ -24,25 +23,26 @@ import { environment } from 'src/environments/environment';
 export class UserProfileService {
   private userUrl = 'http://localhost:8080/user';
 
-  msg: Message = {
-    id: 0,
-    text: '',
-    userPokemon: '',
-    userPokemonImage: '',
-    tradePokemon: '',
-    tradePokemonImage: '',
-    username: '',
-    currentUsername: '',
-    traded: false,
-  };
-
-  currentUserLogin$ = this.userLoginService.getCurrentUser();
+  private currentUserPokemonSubject = new BehaviorSubject<Pokemon[]>([]);
+  currentUserPokemon$ = this.currentUserPokemonSubject.asObservable()
+  .pipe(
+    map((pokemon) => {
+      return pokemon.sort((a, b) => a.index - b.index);
+    })
+  );
 
   private inboxSubject = new BehaviorSubject<Message[]>([]);
-  inbox$ = this.inboxSubject.asObservable();
+  inbox$ = this.inboxSubject.asObservable()
+  .pipe(
+    map((message) => {
+      return message.sort((a, b) => a.id - b.id);
+    })
+  );
 
   private profilePictureSubject = new BehaviorSubject<string>('');
   profilePicture$ = this.profilePictureSubject.asObservable();
+
+  currentUserLogin$ = this.userLoginService.getCurrentUser();
 
   currentUser$ = this.currentUserLogin$.pipe(
     filter((userLogin) => Boolean(userLogin)),
@@ -56,19 +56,14 @@ export class UserProfileService {
     tap((user) => console.log(`current User`, user))
   );
 
-  //Hot Observable that shows and updates a users msgs initally and when they get deleted
-  userPokemon$ = this.currentUser$.pipe(
-    filter((user) => Boolean(user)),
-    switchMap((user) => {
-      return this.http.get<Pokemon[]>(`${this.userUrl}/${user.id}/userPokemon`);
-    }),
-    tap((pokemon) => console.log('user pokemon', pokemon))
-  );
-
   constructor(
     private http: HttpClient,
     private userLoginService: UserLoginService
   ) {}
+  //UPDATING SUBJECT METHODS---------------------------------------------------------
+  passUserPokemon(pokemonArray: Pokemon[]) {
+    this.currentUserPokemonSubject.next(pokemonArray);
+  }
 
   updateInboxSubject(messages: Message[]): void {
     this.inboxSubject.next(messages);
@@ -77,28 +72,38 @@ export class UserProfileService {
   updateProfilePictureSubject(picture: string): void {
     this.profilePictureSubject.next(picture);
   }
+
+  //------------------------------------------HTTP CALLS---------------------------------------
   //gets users messages
   getUserMessages(id: number): Observable<Message[]> {
-    return this.http
-      .get<Message[]>(`${this.userUrl}/${id}/userMessages`)
-      .pipe(
-        map((message) => {
-          return message.sort((a, b) => a.id - b.id);
-        }),
-        catchError(this.handleError)
-        );
+    return this.http.get<Message[]>(`${this.userUrl}/${id}/userMessages`).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  updateUserProfilePicture(id: number, profilePicture: string): Observable<Boolean> {
+  updateUserProfilePicture(
+    id: number,
+    profilePicture: string
+  ): Observable<Boolean> {
     return this.http
-      .post<Boolean>(`${this.userUrl}/${id}/updateProfilePicture?profilePicture=${profilePicture}`,
-      profilePicture,
-      { headers: environment.headers}
+      .post<Boolean>(
+        `${this.userUrl}/${id}/updateProfilePicture?profilePicture=${profilePicture}`,
+        profilePicture,
+        { headers: environment.headers }
       )
+      .pipe(catchError(this.handleError));
+  }
+
+  getUserPokemon(id: number): Observable<Pokemon[]> {
+    return this.http
+      .get<Pokemon[]>(`${this.userUrl}/${id}/userPokemon`, {
+        headers: environment.headers,
+      })
       .pipe(
         catchError(this.handleError)
       );
   }
+
   //------Error handler------------------------
   private handleError(err: HttpErrorResponse) {
     let errorMessage = '';

@@ -16,7 +16,7 @@
     <br>
     <!-- Selected Pokemon -->
     <div class="w-full mb-2">
-      <mat-form-field class="w-full" *ngIf="userPokemon$ | async as userPokemon">
+      <mat-form-field class="w-full" *ngIf="currentUserPokemon$ | async as userPokemon">
         <mat-label>Choose</mat-label>
         <mat-select matInput [formControl]="tradeForm.controls.selectedPokemon">
           <mat-select-trigger>
@@ -37,7 +37,6 @@
         <mat-label>Leave a comment</mat-label>
         <textarea matInput placeholder="Enter text" [formControl]="tradeForm.controls.text" spellcheck="false"></textarea>
         <mat-error *ngIf="tradeForm.controls.text.hasError('wordLength')">Maximum 75 Words</mat-error>
-        <mat-error *ngIf="tradeForm.controls.text.hasError('pattern')">Only Alphabetical Characters</mat-error>
       </mat-form-field>
     </div>
 

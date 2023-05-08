@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Message } from './message';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Pokemon } from '../pokemon/pokemon';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,14 @@ export class TradeService {
     return this.http
       .post<any>(`${this.apiUrl}/${message.username}/addMessage`, message, {
         headers: environment.headers,
+      })
+      .pipe(catchError(this.handleError));
+  }
+
+  addAcceptMessage(message: Message): Observable<boolean> {
+    return this.http
+      .post<boolean>(`${this.apiUrl}/${message.username}/addMessage`, message, {
+        headers: environment.headers
       })
       .pipe(catchError(this.handleError));
   }
@@ -68,7 +77,7 @@ export class TradeService {
     currentUsername: string,
     userPokemon: string,
     tradePokemon: string
-  ): Observable<Boolean> {
+  ): Observable<Pokemon[]> {
     //data object to be received on backend
     const trade = {
       username: username,
@@ -78,7 +87,7 @@ export class TradeService {
     };
 
     return this.http
-      .post<Boolean>(`${this.apiUrl}/tradePokemon`, trade, {
+      .post<Pokemon[]>(`${this.apiUrl}/tradePokemon`, trade, {
         headers: environment.headers,
       })
       .pipe(catchError(this.handleError));

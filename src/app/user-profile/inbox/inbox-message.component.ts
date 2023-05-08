@@ -8,6 +8,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Message } from 'src/app/all-users/message';
 import { TradeService } from 'src/app/all-users/trade.service';
 import { InboxService } from './inbox.service';
+import { UserProfileService } from '../user-profile.service';
 
 @Component({
   selector: 'app-inbox-message',
@@ -28,8 +29,9 @@ export class InboxMessageComponent implements OnInit, OnDestroy {
 
   constructor(
     private tradeService: TradeService,
+    private userProfileService: UserProfileService,
+    private inboxService: InboxService,
     private snackBar: MatSnackBar,
-    private inboxService: InboxService
   ) {}
 
   //----------------------------HTTP CALLS------------------------
@@ -87,11 +89,37 @@ export class InboxMessageComponent implements OnInit, OnDestroy {
 
   //accepts the trade between 2 users
   accept(message: Message): void {
-    console.log('In accept mesage is traded', message.traded);
-    //currentUsername == from
-    //username == to(so us)
-    //userPokemon == our pokemon
-    //tradePokemon == their pokemon
+    //here we are going to send back an accept message to original user to notify them that the trade has been processed
+    let to = message.currentUsername;
+    let from = message.username;
+
+    //swap pokemon images
+    let toPokemon = message.tradePokemonImage
+    let fromPokemon = message.userPokemonImage;
+    let toPokemonName = message.tradePokemon;
+    let fromPokemonName = message.userPokemon;
+
+      //creating accept message
+      let acceptMessage = {
+        ...message,
+        text: `${message.username} has accepted your trade. Check your pokemon collection for ${message.tradePokemon} `,
+        userPokemonImage: toPokemon,
+        tradePokemonImage: fromPokemon,
+        userPokemon: toPokemonName,
+        tradePokemon: fromPokemonName,
+        username: to,
+        currentUsername: from,
+        traded: true,
+      };
+      //send the accept message
+      this.tradeService.addAcceptMessage(acceptMessage)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe({
+        next: resp => console.log('response: ', resp),
+        error: err => console.log('error: ', err)
+    });
 
     let username = message.username;
     let currentUsername = message.currentUsername;
@@ -112,6 +140,7 @@ export class InboxMessageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (resp) => {
+          console.log('Current User?????????: ', username);
           let hasPokemon = resp;
           //users have pokemon available to trade
           if (hasPokemon) {
@@ -124,7 +153,9 @@ export class InboxMessageComponent implements OnInit, OnDestroy {
               )
               .pipe(takeUntil(this.ngUnsubscribe))
               .subscribe({
-                next: resp => console.log('Trade: ', resp),
+                //this can return a pokemon[]
+                //then we pass to the users BS to update poke index after call is complete
+                next: pokemon => { console.log('Passeds Pokemon -------------', pokemon),this.userProfileService.passUserPokemon(pokemon)},
                 error: err => console.log('error: ', err)
               });
             //success snackbar

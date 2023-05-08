@@ -30,13 +30,13 @@ export class TradeComponent implements OnInit, OnDestroy {
   username!: string | null;
   selected!: boolean;
   postError: boolean = false;
+  userId!: number;
 
 //Form for Pokemon Trade
   tradeForm = new FormGroup({
     text: new FormControl('',{
       validators: [
         Validators.required,
-        Validators.pattern('^[a-zA-Z ?,.!@]+$'),
         wordLengthValidator
         ],
         updateOn: 'change'
@@ -53,7 +53,7 @@ export class TradeComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
 
   //This gets all currentUsers pokemon so we can select to trade
-  userPokemon$ = this.userProfileService.userPokemon$.pipe(
+  currentUserPokemon$ = this.userProfileService.currentUserPokemon$.pipe(
     map((pokemon) => {
       return pokemon.sort((a, b) => a.name.localeCompare(b.name));
     }),
@@ -133,7 +133,8 @@ export class TradeComponent implements OnInit, OnDestroy {
   }
 //----------------------------LIFECYCLE HOOKS---------------------------------------
   ngOnInit(): void {
-
+    //curret user ID
+    this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id
 
     this.currentUser$.pipe(
       takeUntil(this.ngUnsubscribe)
@@ -156,6 +157,16 @@ export class TradeComponent implements OnInit, OnDestroy {
     };
 
     this.message = tradeMsg;
+
+    //sets current User pokemon to BS in user-profileService
+    this.userProfileService.getUserPokemon(this.userId)
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
+      next: pokemon =>  this.userProfileService.passUserPokemon(pokemon),
+      error: err => console.log('Error: ', err)
+    })
   }
 
   ngOnDestroy(): void {

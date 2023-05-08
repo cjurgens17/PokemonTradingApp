@@ -23,7 +23,6 @@ export class UserLoginComponent implements OnInit, OnDestroy {
 
   // userLoginInfo: UserLogin = { ...this.userLogin };
   badCredentials!: boolean;
-  doYouHaveAccount!: boolean;
   hide: boolean = true;
   required!: boolean;
   // postErrorMessage: string = '';
@@ -59,7 +58,6 @@ export class UserLoginComponent implements OnInit, OnDestroy {
       next: resp => {
         if(!resp){
           this.badCredentials = true;
-          this.doYouHaveAccount = true;
           console.log('Bad Credentials')
           return;
         }else{

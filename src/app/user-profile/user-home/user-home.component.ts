@@ -10,10 +10,10 @@ import {
   tap,
 } from 'rxjs';
 import { UserProfileService } from '../user-profile.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { InboxShellComponent } from '../inbox/inbox-shell.component';
-import { Inbox } from '../inbox/inbox';
 import { ProfilePictureComponent } from './profile-picture.component';
+
 
 @Component({
   selector: 'app-user-home',
@@ -27,9 +27,7 @@ export class UserHomeComponent implements OnInit, OnDestroy{
   userId!: number;
 
   private _listFilter: string = '';
-  // Loading after search
-  // numCols!: number;
-  // numRows!:number;
+
 
   get listFilter(): string {
     return this._listFilter;
@@ -44,6 +42,9 @@ export class UserHomeComponent implements OnInit, OnDestroy{
 
   //profilePicture Observable
   profilePicture$ = this.userProfileService.profilePicture$;
+
+  //Observer of BS in userprofileService
+  currentUserPokemon$ = this.userProfileService.currentUserPokemon$;
 
   //Action stream for getting user input to search for a pokemon
   private filteredPokemonInputSubject = new BehaviorSubject<string>('');
@@ -62,24 +63,13 @@ export class UserHomeComponent implements OnInit, OnDestroy{
   //Cold Observable that grabs the current Users information
   currentUser$ = this.userProfileService.currentUser$;
 
-  //Cold Observable that grabs all users pokemon and sorts them by name order
-  userPokemon$ = this.userProfileService.userPokemon$.pipe(
-    map((pokemon) => {
-      return pokemon.sort((a, b) => a.index - b.index);
-    }),
-    catchError((err) => {
-      this.errorMessageSubject.next(err);
-      return EMPTY;
-    })
-  );
-
   //Hot Observable that displays filtered pokemon based off user input
   filteredPokemon$ = combineLatest([
-    this.userPokemon$,
+    this.currentUserPokemon$,
     this.filteredPokemonInput$,
   ]).pipe(
-    map(([userPokemon, filteredInput]) =>
-      userPokemon
+    map(([currentUserPokemon, filteredInput]) =>
+      currentUserPokemon
         .filter((pokemon) => pokemon.name.toLowerCase().includes(filteredInput))
         .sort()
     ),
@@ -90,7 +80,7 @@ export class UserHomeComponent implements OnInit, OnDestroy{
   );
   //Hot Observable that passes latest clicked pokemon
   clickedPokemon$ = combineLatest([
-    this.userPokemon$,
+    this.currentUserPokemon$,
     this.clickedPokemonInput$,
   ]).pipe(
     map(([pokemon, clicked]) => pokemon.find((poke) => poke.name === clicked)),
@@ -104,12 +94,10 @@ export class UserHomeComponent implements OnInit, OnDestroy{
   //combining all Observables together for HTML ease
   userProfile$ = combineLatest([
     this.clickedPokemon$,
-    this.filteredPokemon$,
     this.currentUser$,
   ]).pipe(
-    map(([clickedPokemon, filteredPokemon, currentUser]) => ({
+    map(([clickedPokemon, currentUser]) => ({
       clickedPokemon,
-      filteredPokemon,
       currentUser,
     })),
     catchError((err) => {
@@ -175,6 +163,17 @@ ngOnInit(): void {
         next: user => this.userProfileService.updateProfilePictureSubject(user.profilePicture || '{}'),
         error: err => console.log('Error: ', err)
       })
+
+      //set BS in userProfile service to set current User pokemon
+   this.userProfileService.getUserPokemon(this.userId)
+   .pipe(
+    takeUntil(this.ngUnsubscribe)
+   )
+   .subscribe({
+    next: pokemon => this.userProfileService.passUserPokemon(pokemon),
+    error: err => console.log('Error: ', err)
+   })
+
     }
 
   ngOnDestroy(): void {
