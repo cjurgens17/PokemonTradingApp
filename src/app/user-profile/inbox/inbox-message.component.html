@@ -1,4 +1,3 @@
-
 <div *ngIf="message$ | async as um; else viewMessage" class="h-screen border-y-2 border-r-2 border-black" style="background-color: #ffde22;">
   <!-- title -->
   <div class="flex justify-center items-center">
@@ -6,34 +5,42 @@
   </div>
   <br>
   <!-- text -->
-  <div class="flex flex-col justify-start items-start ml-2">
+  <div class="flex flex-col justify-start items-start mx-2">
   <h1 class="text-title text-black">Message:</h1>
   <hr>
   <p class="font-medium mb-2 text-black ml-4">{{um.text}}</p>
   <hr>
   </div>
   <!-- pokemon display -->
-  <div class="flex flex-row justify-evenly items-center mb-2">
+  <div class="flex justify-between items-center mb-2">
     <!-- First pokemon -->
-    <div class="flex flex-col justify-center items-center border-r-2 border-black">
+    <div class="flex flex-col justify-center items-center flex-wrap mx-2">
+      <div class="w-36 h-28 p-2">
       <h1 class="text-standard text-black">Your Pokemon</h1>
-      <div class="photo-wrapper p-2">
-        <img  class="w-32 h-32 rounded-full mx-auto saturate-100 contrast-150" [src]="um.userPokemonImage" alt="User Pokemon">
+    </div>
+      <div class="w-32 h-32 p-2">
+        <img  class="object-fit rounded-full mx-auto saturate-100 contrast-150"  [src]="um.userPokemonImage" alt="User Pokemon">
       </div>
-      <h1 class="text-standard text-black">{{um.tradePokemon | titlecase}}</h1>
+      <div class="w-28 h-28 p-2">
+      <h1 class="text-standard text-black ml-2">{{um.tradePokemon | titlecase}}</h1>
+    </div>
     </div>
 
-    <div class="flex flex-col justify-center items-center border-y-2 border-black">
-      <h1 class="text-black font-bold">FOR</h1>
+    <div class="container mx-auto flex justify-center">
+      <h1 class="text-black font-bold mx-6">FOR</h1>
     </div>
 
     <!-- Second Pokemon -->
-    <div class="flex flex-col justify-center items-center border-l-2 border-black">
+    <div class="flex flex-wrap flex-col justify-center items-center mx-2">
+      <div class="w-36 h-28 p-2">
       <h1 class="text-standard text-black">{{um.currentUsername}}'s Pokemon</h1>
-      <div class="photo-wrapper p-2">
-        <img class="w-32 h-32 rounded-full mx-auto saturate-100 contrast-150" [src]="um.tradePokemonImage" alt="Trade Pokemon">
+      </div>
+      <div class="w-32 h-32 p-2">
+        <img class="object-fit rounded-full mx-auto saturate-100 contrast-150" [src]="um.tradePokemonImage" alt="Trade Pokemon">
         </div>
+        <div class="w-28 h-28 p-2">
       <h1 class="text-standard text-black">{{um.userPokemon | titlecase}}</h1>
+      </div>
     </div>
     </div>
     <!-- button display -->
@@ -57,5 +64,4 @@
     <h1 class="text-3xl font-semibold">Open a Message to View</h1>
   </div>
 </ng-template>
-
 
