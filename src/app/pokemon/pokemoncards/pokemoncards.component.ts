@@ -21,6 +21,8 @@ import {
   MatSnackBarRef,
   SimpleSnackBar,
 } from '@angular/material/snack-bar';
+import { PokemonguardComponent } from '../pokemonguard/pokemonguard.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-practice',
@@ -78,11 +80,36 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
   constructor(
     private pokemonService: PokemonService,
     private userProfileService: UserProfileService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
   //------------------------Functions-----------------------------------
   onSearchChange(): void {
-    this.onSearchSubject.next(this._searchFilter);
+    this.onSearchSubject.next(this._searchFilter.toLowerCase());
+  }
+  //guard if no user signed in
+  pokemonGuard(): void {
+    let dialogRef = this.dialog.open(PokemonguardComponent, {
+      width: '450px'
+    })
+
+    dialogRef
+    .afterClosed()
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
+      next: res => console.log('Dialog was closed', res),
+      error: err => console.log('Error', err)
+    });
+  }
+  //adds poke if user signed in else calls pokemon guard to open dialog
+  addToCollection(poke: any): void {
+    if(this.userId !== null && this.userId > 0){
+      this.updatePokemon(poke);
+    }else{
+      this.pokemonGuard();
+    }
   }
 
   //----------------------add pokemon to an existing users pokeIndex----------------

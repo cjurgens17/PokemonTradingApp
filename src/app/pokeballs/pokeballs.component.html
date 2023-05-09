@@ -1,3 +1,4 @@
+<div *ngIf="userId > 0; else notSignedIn">
 <div *ngIf="timer$ | async as timer"
   class="bg-no-repeat bg-cover p-1 h-screen border-t-2 border-white filter saturate-150 flex justify-center items-center"
   style="background-image: url('https://images7.alphacoders.com/661/661986.jpg')">
@@ -37,4 +38,15 @@
       </div>
     </div>
   </div>
+</div>
+
+  <ng-template #notSignedIn>
+    <div class="bg-slate-800 bg-opacity-50 flex justify-center items-center min-h-screen bg-cover bg-no-repeat filter saturate-150 bg-fixed border-t-2 border-white" style="background-image: url('https://images7.alphacoders.com/661/661986.jpg')">
+      <div class="bg-white px-16 py-14 rounded-md text-center">
+        <h1 class="text-xl mb-4 font-bold text-slate-500">Do You Have An Account?</h1>
+        <button color="primary" class="bg-purple-700 px-4 py-2 rounded-md text-md text-white" routerLink="/userlogin">Log In</button>
+        <button class="bg-indigo-600 px-7 py-2 ml-2 rounded-md text-md text-white" routerLink="/signup">Sign Up</button>
+      </div>
+    </div>
+  </ng-template>
 

@@ -6,8 +6,8 @@
     <button class="mx-1 bg-purple-700 hover:bg-black transition ease-in text-white font-normal py-2 px-4 rounded"(click)="onViewMessage(msg)">
       Message
     </button>
-    <div class="flex w-24 truncate ml-2">
-      <p>{{msg.currentUsername}}</p>
+    <div class="flex w-14 ml-2">
+      <p class="truncate">{{msg.currentUsername}}</p>
   </div>
     <button class="m-1" mat-fab color="primary" ripple="matRipple" aria-label="Delete Icon" (click)="deleteMessage(msg)">
       <mat-icon>delete</mat-icon>
@@ -15,7 +15,7 @@
   </div>
   </div>
   </div>
-  
+
   <!-- Displays if user has No messages in the inbox -->
   <ng-template #noInbox>
     <div class="flex flex-row justify-center items-center">

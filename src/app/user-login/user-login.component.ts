@@ -11,21 +11,16 @@ import { UserLogin } from './user-login';
   styleUrls: ['./user-login.component.css'],
 })
 export class UserLoginComponent implements OnInit, OnDestroy {
-  // userLogin: UserLogin = {
-  //   username: null,
-  //   password: null,
-  // };
 
   loginForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
     password: new FormControl('',[Validators.required])
 });
 
-  // userLoginInfo: UserLogin = { ...this.userLogin };
   badCredentials!: boolean;
   hide: boolean = true;
   required!: boolean;
-  // postErrorMessage: string = '';
+
 
   private ngUnsubscribe = new Subject<void>();
 

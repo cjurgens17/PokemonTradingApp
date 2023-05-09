@@ -10,7 +10,7 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
 })
 export class PokeballsComponent implements OnInit, OnDestroy {
   currentTime: Date = new Date();
-  userId: number = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
+  userId!:number;
 
   //updated Timer from subject in pokeball service
   timer$ = this.pokeBallsService.timerSubject$;
@@ -53,7 +53,9 @@ export class PokeballsComponent implements OnInit, OnDestroy {
 
   //------------------------LifeCycle Hooks-------------------------------------
   ngOnInit(): void {
-    //setting behaviorSubject for timer
+    this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
+      //setting behaviorSubject for timer
+    if(this.userId > 0){
     this.pokeBallsService.getTimer(this.userId)
     .pipe(
       takeUntil(this.ngUnsubscribe)
@@ -62,6 +64,7 @@ export class PokeballsComponent implements OnInit, OnDestroy {
       next: timer => this.pokeBallsService.updateTimerSubject(timer),
       error: err => console.log('Error: ', err)
     })
+  }
 
 
     //getting current time and comparing to last updated time(last time pokeballs were added)

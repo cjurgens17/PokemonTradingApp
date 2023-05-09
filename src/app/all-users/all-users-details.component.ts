@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { AllUsersService } from './all-users.service';
 import {
@@ -15,6 +16,7 @@ import {
 } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { TradeComponent } from './trade.component';
+import { TradeguardComponent } from './tradeguard/tradeguard.component';
 
 export interface IpassDialog {
   image: string;
@@ -28,13 +30,14 @@ export interface IpassDialog {
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AllUsersDetailsComponent implements OnDestroy {
+export class AllUsersDetailsComponent implements OnInit, OnDestroy {
   //dialog data pass
   pass: IpassDialog = {
     image: '',
     name: '',
     username: '',
   };
+  userId!: number;
 
   //unsubscribe OnDestroy
   private ngUnsubscribe = new Subject<void>();
@@ -104,6 +107,31 @@ export class AllUsersDetailsComponent implements OnDestroy {
         error: (err) => console.log('Error: ', err),
       });
   }
+
+  //Guard Function if user is not signed in
+  guardDialog():void {
+    let dialogRef = this.dialog.open(TradeguardComponent, {
+      width: '450px'
+    })
+
+    dialogRef
+    .afterClosed()
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe({
+      next: res => console.log('Dialog was closed', res),
+      error: err => console.log('Error', err)
+    });
+  }
+  //shows trade request or sign up/login guard dependent if user is signed in or not.
+  initiate(): void {
+    if(this.userId > 0){
+      this.openTradeDialog();
+    }else{
+      this.guardDialog();
+    }
+  }
   //function to pass pokemon to service function which will update a subject to pass to poke-detail component
   onTap(name: string): void {
     this.allUsersService.onTap(name);
@@ -119,6 +147,11 @@ export class AllUsersDetailsComponent implements OnDestroy {
     this.pass.username = username || null || undefined;
   }
   //--------------------------------LIFECYCLE HOOKS-----------------------------------
+
+  ngOnInit(): void {
+   this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id
+  }
+
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

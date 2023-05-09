@@ -18,6 +18,7 @@ import { FooterComponent } from './footer/footer.component';
 import { TradeComponent } from './all-users/trade.component';
 import { PokeballsModule } from './pokeballs/pokeballs.module';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { TradeguardComponent } from './all-users/tradeguard/tradeguard.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     FooterComponent,
     TradeComponent,
     SignUpComponent,
+    TradeguardComponent,
   ],
   imports: [
     BrowserModule,

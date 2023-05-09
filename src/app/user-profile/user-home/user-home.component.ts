@@ -25,7 +25,6 @@ export class UserHomeComponent implements OnInit, OnDestroy{
 
 
   userId!: number;
-
   private _listFilter: string = '';
 
 
@@ -146,7 +145,7 @@ export class UserHomeComponent implements OnInit, OnDestroy{
 ngOnInit(): void {
     //getting userId
     this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
-    //fix inbox length, create a subject and pass to it onIT, then when delete message pass inbox back to subject/or just the length?
+    if(this.userId > 0){
     this.userProfileService
       .getUserMessages(this.userId)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -173,6 +172,7 @@ ngOnInit(): void {
     next: pokemon => this.userProfileService.passUserPokemon(pokemon),
     error: err => console.log('Error: ', err)
    })
+  }
 
     }
 
