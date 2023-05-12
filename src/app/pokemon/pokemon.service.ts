@@ -18,11 +18,14 @@ import { environment } from 'src/environments/environment';
 export class PokemonService {
   private productUrl = 'https://pokeapi.co/api/v2/pokemon/';
   private apiUrl = 'http://localhost:8080/pokemon';
-  private limit: number = 21;
   private start: number = 2;
+  private limit: number = 101;
 
   private nextUrlSubject = new BehaviorSubject<string>(this.productUrl + 1);
   nextUrl$ = this.nextUrlSubject.asObservable();
+
+  private pokemonSubject = new BehaviorSubject<any[]>([]);
+  loadedPokemon$ = this.pokemonSubject.asObservable();
 
   getAllPokemon$ = this.nextUrl$.pipe(
     mergeMap((url) => this.http.get(url)),
@@ -32,6 +35,11 @@ export class PokemonService {
   );
 
   constructor(private http: HttpClient) {}
+
+  //passPokemon to BS
+  passPokemon(pokemon: any[]){
+    this.pokemonSubject.next(pokemon);
+  }
 
   //Adds Pokemon to users PokeIndex-----------------------
   updatePokemon(pokemon: any, id: number | null): Observable<any> {
@@ -66,6 +74,5 @@ export class PokemonService {
     return throwError(() => errorMessage);
   }
 }
-function sort(): import('rxjs').OperatorFunction<any[], unknown> {
-  throw new Error('Function not implemented.');
-}
+
+
