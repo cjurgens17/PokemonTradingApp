@@ -1,6 +1,4 @@
 export interface Pokemon {
-   
-
     name: string;
     weight: number;
     image: string;
@@ -8,7 +6,4 @@ export interface Pokemon {
     backImage: string;
     abilities: any[];
     stats: any[];
-
-
-
 }

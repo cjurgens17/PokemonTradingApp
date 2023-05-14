@@ -1,3 +1,23 @@
 .demo-section + .demo-section {
   margin-top: 16px;
 }
+
+
+.hologram:hover {
+  animation: glow-contrast 1.5s ease-in-out infinite;
+}
+
+@keyframes glow-contrast {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    filter: contrast(100%);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+    filter: contrast(200%);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    filter: contrast(100%);
+  }
+}

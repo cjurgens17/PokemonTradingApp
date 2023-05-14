@@ -58,7 +58,7 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
 
   //Cold Observable that gets the currentUser info
   currentUser$ = this.userProfileService.currentUser$;
-  
+
   //Hot Observable that filters api pokemon based on user input
   searchedPokemon$ = combineLatest([this.pokemon$, this.searchInput$]).pipe(
     map(([pokemon, searchInput]) =>
@@ -142,7 +142,7 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
 
     //Persists the clicked pokemon to the users pokemon collection
     this.pokemonService
-      .updatePokemon(pokemon, this.userId)
+      .updatePokemon(newPoke, this.userId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response) => console.log('Response: ', response),

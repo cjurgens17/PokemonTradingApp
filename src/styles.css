@@ -9,7 +9,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 div.card-header {
  font-size: large;
 }
@@ -46,8 +45,6 @@ div.card {
 .msgBackground {
   @apply bg-gray-300 border-2 border-black
 }
-
-
 
 
 

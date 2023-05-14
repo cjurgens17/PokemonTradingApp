@@ -42,7 +42,7 @@
     </div>
     <div class="flex flex-col w-1/2 justify-center items-center">
       <!-- pokemon face -->
-        <div  *ngIf="profile.clickedPokemon" class="card w-96 bg-base-100 shadow-xl border-4 border-black hover:contrast-200 hover:shadow-amber-50">
+        <div  *ngIf="profile.clickedPokemon" class="card w-96 bg-base-100 shadow-xl border-4 border-black hover:contrast-200 hover:shadow-amber-50 hologram">
           <div class="flex justify-center items-start border-b-2 border-white bg-black">
           <figure class="px-10 pt-10">
             <img [src]="profile.clickedPokemon.image" alt="Clicked Pokemon" class="rounded-sm"/>
