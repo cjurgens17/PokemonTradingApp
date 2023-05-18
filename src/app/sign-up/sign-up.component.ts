@@ -43,7 +43,7 @@ export class SignUpComponent implements OnDestroy {
       asyncValidators: [uniqueEmailValidator(this.signUpService)],
       updateOn: 'blur',
     }),
-    birthDate: new FormControl(null, {
+    birthDate: new FormControl(new Date(), {
       validators: [Validators.required],
     }),
     username: new FormControl('', {
