@@ -1,5 +1,8 @@
-<div class="bg-white px-16 py-14 rounded-md text-center">
+<div class="bg-white px-8 md:px-16 py-10 md:py-14 rounded-md text-center">
   <h1 class="text-xl mb-4 font-bold text-slate-500">Do You Have An Account?</h1>
-  <button color="primary" class="bg-purple-700 px-4 py-2 rounded-md text-md text-white" routerLink="/userlogin" (click)="closeDialog()">Log In</button>
-  <button class="bg-indigo-600 px-7 py-2 ml-2 rounded-md text-md text-white" routerLink="/signup" (click)="closeDialog()">Sign Up</button>
+  <div class="flex flex-col md:flex-row justify-center items-center">
+    <button color="primary" class="bg-purple-700 px-4 py-2 rounded-md text-md text-white mb-2 md:mb-0 md:mr-2" routerLink="/userlogin" (click)="closeDialog()">Log In</button>
+    <button class="bg-indigo-600 px-4 md:px-7 py-2 rounded-md text-md text-white mb-2" routerLink="/signup" (click)="closeDialog()">Sign Up</button>
+  </div>
 </div>
+

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { UserHomeComponent } from './user-home/user-home.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { UserHomeGuard } from './user-home/user-home.guard';
 import { InboxComponent } from './inbox/inbox.component';
 import { InboxMessageComponent } from './inbox/inbox-message.component';
 import { InboxShellComponent } from './inbox/inbox-shell.component';
@@ -23,9 +22,7 @@ import { ProfilePictureComponent } from './user-home/profile-picture.component';
     CommonModule,
     SharedModule,
     RouterModule.forChild([
-      {path: 'userprofile',
-      canActivate: [UserHomeGuard],
-      component: UserHomeComponent}
+      {path: 'userprofile', component: UserHomeComponent}
     ])
   ],
   bootstrap: [UserHomeComponent]

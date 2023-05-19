@@ -11,7 +11,14 @@
   </div>
   <!-- grid for pokemon -->
   <div class="flex justify-center pb-2">
-    <div *ngIf="searchedPokemon$ | async as pokemon" class="grid grid-rows-auto grid-cols-5 gap-4 h-auto mx-auto grid-flow-row">
+    <ng-container *ngIf="searchedPokemon$ | async as pokemon">
+    <div [ngClass]="{
+      'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5': pokemon.length >= 5,
+      'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2': pokemon.length === 4,
+      'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-1': pokemon.length === 3,
+      'grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1': pokemon.length <= 2
+    }"
+     class="grid gap-4 h-auto mx-auto">
       <!-- pokemon card -->
       <div *ngFor="let poke of pokemon" class="box-border border-4 border-gray-500 flex flex-col h-full overflow-y-hidden">
         <div class="shadow-xl hover:contrast-125 hover:saturate-100">
@@ -39,5 +46,9 @@
         </div>
       </div>
       </div>
+    </ng-container>
     </div>
   </div>
+
+
+  <!-- <div *ngIf="searchedPokemon$ | async as pokemon" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-auto mx-auto"> -->
