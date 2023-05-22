@@ -1,4 +1,4 @@
-<div *ngIf="message$ | async as um; else viewMessage" class="h-screen border-y-2 border-r-2 border-black" style="background-color: #ffde22;">
+<div *ngIf="message$ | async as um; else viewMessage" class="w-auto min-h-screen border-y-2 border-r-2 border-black flex flex-col" style="background-color: #ffde22;">
   <!-- title -->
   <div class="flex justify-center items-center">
   <h2 class="text-title text-black">From: {{um.currentUsername}}</h2>
@@ -8,13 +8,14 @@
   <div class="flex flex-col justify-start items-start mx-2">
   <h1 class="text-title text-black">Message:</h1>
   <hr>
-  <p class="font-medium mb-2 text-black ml-4">{{um.text}}</p>
+  <p class="font-medium mb-2 text-black ml-4 overflow-auto">{{um.text}}</p>
   <hr>
   </div>
   <!-- pokemon display -->
-  <div class="flex justify-between items-center mb-2">
+  <div class="flex flex-col md:flex-row justify-between items-center mb-2 flex-grow">
     <!-- First pokemon -->
-    <div class="flex flex-col justify-center items-center flex-wrap mx-2">
+    <!-- <div class="flex flex-col justify-center items-center flex-wrap mx-2"> -->
+      <div class="flex flex-col justify-center items-center flex-wrap mx-2 mb-4 md:mb-0">
       <div class="w-36 h-28 p-2">
       <h1 class="text-standard text-black">Your Pokemon</h1>
     </div>
@@ -66,4 +67,8 @@
     <h1 class="text-3xl font-semibold">Open a Message to View</h1>
   </div>
 </ng-template>
+
+
+
+
 

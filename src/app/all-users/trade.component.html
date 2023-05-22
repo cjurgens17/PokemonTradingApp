@@ -47,9 +47,9 @@
   </form>
 
   <!-- pokemon images -->
-  <div *ngIf="selected" class="flex flex-row justify-evenly items-center mb-2">
+  <div *ngIf="selected" class="flex flex-col md:flex-row justify-evenly items-center mb-2">
     <!-- First pokemon -->
-    <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-col justify-center items-center mb-2 md:mb-0">
       <h1 class="text-standard-black">Your Pokemon</h1>
       <img class="w-16 h-16 rounded-full mx-auto mb-2" [src]="message.tradePokemonImage">
       <h1 class="text-standard-black"> {{tradeForm.controls.selectedPokemon.value | titlecase}}</h1>
@@ -69,7 +69,7 @@
       <button class="mt-2" mat-raised-button color="primary" (click)="trade()">Trade</button>
     </div>
     <div class="flex justify-center items-center">
-      <button class="mt-2" mat-raised-button color="warn" (click)="cancelTrade()">Cancel</button>
+      <button class="mt-2 md:mt-0" mat-raised-button color="warn" (click)="cancelTrade()">Cancel</button>
     </div>
   </div>
 
