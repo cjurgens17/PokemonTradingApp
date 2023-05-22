@@ -118,6 +118,8 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
       return;
     }
 
+    console.log("pokemon: ",pokemon);
+
     const abNames: string[] = [];
     const statNames: string[] = [];
 
@@ -133,7 +135,8 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
       weight: pokemon.weight,
       image: pokemon.sprites.front_shiny,
       index: pokemon.id,
-      backImage: pokemon.sprites.back_shiny,
+      //this should be sprites.official-artwork.front-default
+      backImage: pokemon.sprites.other['official-artwork'].front_default,
       abilities: abNames,
       stats: statNames,
     };
