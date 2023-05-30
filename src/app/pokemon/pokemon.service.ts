@@ -17,7 +17,7 @@ import { environment } from 'src/environments/environment';
 })
 export class PokemonService {
   private productUrl = 'https://pokeapi.co/api/v2/pokemon/';
-  private apiUrl = 'http://localhost:8080/pokemon';
+  private apiUrl = 'https://pokemon-server.herokuapp.com/pokemon';
   private start: number = 2;
   private limit: number = 101;
 
@@ -55,7 +55,7 @@ export class PokemonService {
   ): Observable<Number> {
     return this.http
       .post<Number>(
-        `http://localhost:8080/timer/${userId}/deletePokeBalls`,
+        `https://pokemon-server.herokuapp.com/timer/${userId}/deletePokeBalls`,
         pokeBalls,
         { headers: environment.headers }
       )

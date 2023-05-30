@@ -21,7 +21,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class UserProfileService {
-  private userUrl = 'http://localhost:8080/user';
+  private userUrl = 'https://pokemon-server.herokuapp.com/user';
 
   private currentUserPokemonSubject = new BehaviorSubject<Pokemon[]>([]);
   currentUserPokemon$ = this.currentUserPokemonSubject.asObservable()
@@ -116,17 +116,4 @@ export class UserProfileService {
     console.error(errorMessage);
     return throwError(() => errorMessage);
   }
-
-  //auth service for user-profile guard, if user is signed it will retrun true
-  //else it will return false;
-  //update this when we implement a behavior subject??
-  // isLoggedIn(): boolean {
-  //   let user = JSON.parse(localStorage.getItem('userLoginInfo') || '{}');
-  //   const id = user.id;
-
-  //   if (id >= 1) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 }

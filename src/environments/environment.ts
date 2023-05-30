@@ -6,10 +6,10 @@ export const environment = {
 
   production: false,
   withCredentials: true,
-  baseUrl: "http://localhost:8080",
+  baseUrl: "https://pokemon-server.herokuapp.com/",
   headers: {
     'content-type' : 'application/json',
-    'Access-Control-Allow-Origin': 'http://localhost:4200'
+    'Access-Control-Allow-Origin': 'https://pokemon-trading.herokuapp.com/'
   },
 
 };

@@ -9,7 +9,7 @@ import { User } from './user-info';
   providedIn: 'root',
 })
 export class SignUpService {
-  private userUrl = 'http://localhost:8080/user';
+  private userUrl = 'https://pokemon-server.herokuapp.com/user';
 
   constructor(private http: HttpClient) {}
 

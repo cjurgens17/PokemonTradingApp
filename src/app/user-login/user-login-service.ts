@@ -9,7 +9,7 @@ import { User } from '../sign-up/user-info';
   providedIn: 'root',
 })
 export class UserLoginService {
-  private userUrl = 'http://localhost:8080/user';
+  private userUrl = 'https://pokemon-server.herokuapp.com/user';
 
   private currentUser = new BehaviorSubject<UserLogin>({
     username: '',
