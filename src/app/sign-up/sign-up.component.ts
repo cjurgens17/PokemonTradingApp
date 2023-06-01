@@ -97,30 +97,50 @@ export class SignUpComponent implements OnDestroy {
         next: (user) => {
           //setCurrentUser and save to localStorage
           console.log('New User: ', user);
+          //create user loginInfo
+          let userLoginInfo: UserLogin = {
+            username: user.username,
+            password: user.password,
+          };
+    //Signing Newly Created User In
+    this.userLoginService
+    .loginUser(userLoginInfo)
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe({
+      next: (user) => {
+        this.userLoginService.setCurrentUser(userLoginInfo);
+        localStorage.clear();
+        console.log('Logged In User: ', user);
+        this.router.navigate(['userprofile']);
+        let json = JSON.stringify(user);
+        localStorage.setItem('userLoginInfo', json);
+      },
+      error: (err) => console.log('error: ', err),
+    });
         },
         error: (err) => console.log('Error: ', err),
       });
     //Making User Login
-    let userLoginInfo: UserLogin = {
-      username: this.signUpForm.controls.username.value,
-      password: this.signUpForm.controls.password.value,
-    };
+    // let userLoginInfo: UserLogin = {
+    //   username: this.signUpForm.controls.username.value,
+    //   password: this.signUpForm.controls.password.value,
+    // };
 
     //Signing Newly Created User In
-    this.userLoginService
-      .loginUser(userLoginInfo)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (user) => {
-          this.userLoginService.setCurrentUser(userLoginInfo);
-          localStorage.clear();
-          console.log('Logged In User: ', user);
-          this.router.navigate(['userprofile']);
-          let json = JSON.stringify(user);
-          localStorage.setItem('userLoginInfo', json);
-        },
-        error: (err) => console.log('error: ', err),
-      });
+    // this.userLoginService
+    //   .loginUser(userLoginInfo)
+    //   .pipe(takeUntil(this.ngUnsubscribe))
+    //   .subscribe({
+    //     next: (user) => {
+    //       this.userLoginService.setCurrentUser(userLoginInfo);
+    //       localStorage.clear();
+    //       console.log('Logged In User: ', user);
+    //       this.router.navigate(['userprofile']);
+    //       let json = JSON.stringify(user);
+    //       localStorage.setItem('userLoginInfo', json);
+    //     },
+    //     error: (err) => console.log('error: ', err),
+    //   });
   }
   //--------------------LIFECYCLE HOOKS-----------------------
   ngOnDestroy(): void {
