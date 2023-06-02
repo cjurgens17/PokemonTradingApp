@@ -8,7 +8,6 @@ import {
   filter,
   map,
   switchMap,
-  tap,
   throwError,
 } from 'rxjs';
 import { Pokemon } from '../pokemon/pokemon';
@@ -52,8 +51,7 @@ export class UserProfileService {
       } else {
         return EMPTY;
       }
-    }),
-    tap((user) => console.log(`current User`, user))
+    })
   );
 
   constructor(

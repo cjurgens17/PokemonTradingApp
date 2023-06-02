@@ -57,16 +57,6 @@ export class ProfilePictureComponent implements OnDestroy {
   }
 
   //-------------------SNACKBAR------------------
-
-  // pictureChangedSnackBar(
-  //   message: string,
-  //   action: string
-  // ): MatSnackBarRef<SimpleSnackBar> {
-  //   return this.snackBar.open(message, action, {
-  //     duration: 3000,
-  //   });
-  // }
-
   pictureChangedSnackBar(
     message: string,
     action: string

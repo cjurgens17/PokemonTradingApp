@@ -9,8 +9,6 @@ import { Register } from './register';
 import { SignUpService } from './sign-up.service';
 import { Router } from '@angular/router';
 import { UserLoginService } from '../user-login/user-login-service';
-import { UserLogin } from '../user-login/user-login';
-import { User } from './user-info';
 
 @Component({
   selector: 'app-sign-up',
@@ -68,7 +66,6 @@ export class SignUpComponent implements OnDestroy {
 
   constructor(
     private signUpService: SignUpService,
-    private userLoginService: UserLoginService,
     private router: Router
   ) {}
 
@@ -97,10 +94,8 @@ export class SignUpComponent implements OnDestroy {
       .subscribe({
         next: (user) => {
           //setCurrentUser and save to localStorage then route to profile page
-          console.log('New User: ', user);
           this.signUpService.setCurrentUser(user);
           localStorage.clear();
-          console.log('Logged In User: ', user);
           let json = JSON.stringify(user);
           localStorage.setItem('userLoginInfo', json);
           this.router.navigate(['userprofile']);

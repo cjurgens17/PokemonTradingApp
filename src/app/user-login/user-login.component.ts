@@ -63,11 +63,9 @@ export class UserLoginComponent implements OnInit, OnDestroy {
             .subscribe({
               next: (data) => {
                 localStorage.clear();
-                console.log('LoggedInUser: ', data);
                 this.router.navigate(['userprofile']);
                 let json = JSON.stringify(data);
                 localStorage.setItem('userLoginInfo', json);
-                console.log('Login Successful')
               },
               error: (err) => console.log('error: ', err),
             });

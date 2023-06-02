@@ -140,7 +140,6 @@ export class InboxMessageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (resp) => {
-          console.log('Current User?????????: ', username);
           let hasPokemon = resp;
           //users have pokemon available to trade
           if (hasPokemon) {
