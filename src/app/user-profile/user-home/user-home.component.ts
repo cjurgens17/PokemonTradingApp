@@ -147,7 +147,7 @@ ngOnInit(): void {
     //getting userId
     this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
     if(this.userId > 0){
-    this.signedIn = false;
+    this.signedIn = true;
     this.userProfileService
       .getUserMessages(this.userId)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -175,7 +175,7 @@ ngOnInit(): void {
     error: err => console.log('Error: ', err)
    })
   }else{
-    this.signedIn = true;
+    this.signedIn = false;
   }
 
     }
