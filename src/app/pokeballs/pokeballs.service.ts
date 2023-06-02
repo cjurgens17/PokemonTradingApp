@@ -43,8 +43,11 @@ export class PokeballsService {
       )
       .pipe(
         map(timer => {
-          timer.prevDate = new Date(timer.prevDate);
-          return timer;
+      const serverDateTime = new Date(timer.prevDate);
+      // Convert the UTC date and time to the client's time zone
+      const clientDateTime = new Date(serverDateTime.toLocaleString('en-US', { timeZone: 'UTC' }));
+      timer.prevDate = clientDateTime;
+      return timer;
         }),
         catchError(this.handleError)
         );

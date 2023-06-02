@@ -11,9 +11,16 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
 export class PokeballsComponent implements OnInit, OnDestroy {
   currentTime: Date = new Date();
   userId!:number;
+  clientTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   //updated Timer from subject in pokeball service
-  timer$ = this.pokeBallsService.timerSubject$;
+  timer$ = this.pokeBallsService.timerSubject$
+  .pipe(
+    map((timer) => {
+      const formattedDateTime = timer.prevDate.toLocaleString('en-US', { timeZone: this.clientTimeZone })
+      return formattedDateTime;
+    })
+  );
 
   //For unsubscribing
   private ngUnsubscribe = new Subject<void>();
@@ -38,8 +45,14 @@ export class PokeballsComponent implements OnInit, OnDestroy {
     //updating the timer
     this.pokeBallsService
       .updateTimer(this.userId)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((timer) => this.pokeBallsService.updateTimerSubject(timer));
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+        )
+      .subscribe({
+        next: (timer) => {
+        this.pokeBallsService.updateTimerSubject(timer)},
+        error: (err) => console.log('Error: ', err)
+      });
     this.confirmPokeBallsSnackBar('10 Poke Balls acquired!', 'Close');
   }
 
