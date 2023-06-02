@@ -10,6 +10,7 @@ import { SignUpService } from './sign-up.service';
 import { Router } from '@angular/router';
 import { UserLoginService } from '../user-login/user-login-service';
 import { UserLogin } from '../user-login/user-login';
+import { User } from './user-info';
 
 @Component({
   selector: 'app-sign-up',
@@ -95,52 +96,17 @@ export class SignUpComponent implements OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (user) => {
-          //setCurrentUser and save to localStorage
+          //setCurrentUser and save to localStorage then route to profile page
           console.log('New User: ', user);
-          //create user loginInfo
-          let userLoginInfo: UserLogin = {
-            username: user.username,
-            password: user.password,
-          };
-    //Signing Newly Created User In
-    this.userLoginService
-    .loginUser(userLoginInfo)
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe({
-      next: (user) => {
-        this.userLoginService.setCurrentUser(userLoginInfo);
-        localStorage.clear();
-        console.log('Logged In User: ', user);
-        this.router.navigate(['userprofile']);
-        let json = JSON.stringify(user);
-        localStorage.setItem('userLoginInfo', json);
-      },
-      error: (err) => console.log('error: ', err),
-    });
+          this.signUpService.setCurrentUser(user);
+          localStorage.clear();
+          console.log('Logged In User: ', user);
+          let json = JSON.stringify(user);
+          localStorage.setItem('userLoginInfo', json);
+          this.router.navigate(['userprofile']);
         },
         error: (err) => console.log('Error: ', err),
       });
-    //Making User Login
-    // let userLoginInfo: UserLogin = {
-    //   username: this.signUpForm.controls.username.value,
-    //   password: this.signUpForm.controls.password.value,
-    // };
-
-    //Signing Newly Created User In
-    // this.userLoginService
-    //   .loginUser(userLoginInfo)
-    //   .pipe(takeUntil(this.ngUnsubscribe))
-    //   .subscribe({
-    //     next: (user) => {
-    //       this.userLoginService.setCurrentUser(userLoginInfo);
-    //       localStorage.clear();
-    //       console.log('Logged In User: ', user);
-    //       this.router.navigate(['userprofile']);
-    //       let json = JSON.stringify(user);
-    //       localStorage.setItem('userLoginInfo', json);
-    //     },
-    //     error: (err) => console.log('error: ', err),
-    //   });
   }
   //--------------------LIFECYCLE HOOKS-----------------------
   ngOnDestroy(): void {
