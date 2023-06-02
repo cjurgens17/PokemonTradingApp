@@ -47,7 +47,7 @@ export class UserProfileService {
   currentUser$ = this.currentUserLogin$.pipe(
     filter((userLogin) => Boolean(userLogin)),
     switchMap((userLogin) => {
-      if (userLogin?.username) {
+      if (userLogin?.username !== '') {
         return this.http.get<User>(`${this.userUrl}/${userLogin.username}`);
       } else {
         return EMPTY;
