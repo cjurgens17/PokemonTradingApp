@@ -1,4 +1,5 @@
-<div *ngIf="userProfile$ | async as profile; else notSignedUp">
+<div *ngIf="signedIn; else notSignedUp">
+<div *ngIf="userProfile$ | async as profile">
 <div class="h-max min-h-screen bg-cover bg-no-repeat filter saturate-150 bg-fixed" style="background-image: url('assets/static/images/profileBackground.jpg')">
   <!-- flex for user profile info and pokemon display to the right -->
   <div class="flex flex-row justify-center items-center border-t-2 border-white">
@@ -90,6 +91,7 @@
 </div>
   </div>
   </div>
+</div>
 
   <div class="alert alert-danger"
   *ngIf="errorMessage$ | async as errorMessage">

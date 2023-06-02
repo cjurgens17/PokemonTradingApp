@@ -23,6 +23,7 @@ import { ProfilePictureComponent } from './profile-picture.component';
 })
 export class UserHomeComponent implements OnInit, OnDestroy{
 
+  signedIn!:boolean;
 
   userId!: number;
   private _listFilter: string = '';
@@ -146,6 +147,7 @@ ngOnInit(): void {
     //getting userId
     this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
     if(this.userId > 0){
+    this.signedIn = false;
     this.userProfileService
       .getUserMessages(this.userId)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -172,6 +174,8 @@ ngOnInit(): void {
     next: pokemon => this.userProfileService.passUserPokemon(pokemon),
     error: err => console.log('Error: ', err)
    })
+  }else{
+    this.signedIn = true;
   }
 
     }
