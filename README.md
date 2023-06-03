@@ -1,6 +1,7 @@
 # Pokemon Trading App
 
 The Pokemon Trading App is a client-side application built using Angular 14, TypeScript, Tailwind CSS, HTML, and Angular Material. It interacts with a custom Java/Spring API and offers various features for users to create profiles, collect Pokemon, trade with other users, and personalize their experience.
+The repository link for the custom backend server is here [https://github.com/cjurgens17/PokemonTradingAppBackend]
 
 ## Features
 
