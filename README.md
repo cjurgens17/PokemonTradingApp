@@ -1,27 +1,65 @@
-# PokemonTrading Frontend
+# Pokemon Trading App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
+The Pokemon Trading App is a client-side application built using Angular 14, TypeScript, Tailwind CSS, HTML, and Angular Material. It interacts with a custom Java/Spring API and offers various features for users to create profiles, collect Pokemon, trade with other users, and personalize their experience.
 
-## Development server
+## Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- User Profile: Create and maintain user profiles with customizable profile pictures.
+- Pokemon Collection: Add, view, and trade Pokemon in your collection.
+- Login Rewards: Receive Pokemon balls for logging in, allowing you to catch more Pokemon.
+- Pokemon Trading: Initiate trades and communicate with other users for Pokemon exchanges.
+- Inbox System: Manage trade offers received from other users through the inbox system.
+- Stylish Profile Pictures: Choose from a selection of stylish profile pictures.
 
-## Code scaffolding
+## Deployment
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The app is deployed on Heroku and can be accessed at [https://pokemon-trading.herokuapp.com/].
 
-## Build
+## Technologies Used
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Angular 14
+- TypeScript
+- Tailwind CSS
+- HTML
+- Angular Material
+- Java
+- Spring Framework (Spring Web, Spring Data JPA, Spring Boot)
+- RxJS
 
-## Running unit tests
+## Getting Started
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+To run the app locally, follow these steps:
 
-## Running end-to-end tests
+1. Clone the repository from GitHub.
+2. Ensure that Node.js and Angular CLI are installed on your system.
+3. Install project dependencies:
+`npm install`
+4. Configure the API endpoint in the app's configuration files to connect with the Java/Spring API.
+5. Build and run the app:
+`ng serve`
+6. Access the app in your web browser at `http://localhost:4200`.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Usage
 
-## Further help
+- Create a user profile and set a profile picture.
+- Collect Pokemon by adding them to your collection.
+- Log in regularly to receive Pokemon balls and catch more Pokemon.
+- Initiate trade requests and communicate with other users for Pokemon trading.
+- Manage trade offers received through the inbox system.
+- Change your profile picture from the available stylish options.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Contributions
+
+Contributions to the Pokemon Trading App are welcome! To contribute:
+
+1. Fork the repository on GitHub.
+2. Create a new branch with a descriptive name for your feature or bug fix.
+3. Make changes that follow the project's coding standards.
+4. Thoroughly test your changes.
+5. Submit a pull request to the original repository, providing details of your changes.
+
+## Conclusion
+
+The Pokemon Trading App offers an enjoyable experience for users to collect Pokemon, trade with others, and customize their profiles. Explore the codebase to understand the implementation details and extend the functionality.
+
+For any questions or issues, feel free to reach out.
