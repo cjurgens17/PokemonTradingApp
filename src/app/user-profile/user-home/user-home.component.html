@@ -1,6 +1,8 @@
 <div *ngIf="signedIn; else notSignedUp">
 <div *ngIf="userProfile$ | async as profile">
-<div class="h-max min-h-screen bg-cover bg-no-repeat filter saturate-150 bg-fixed" style="background-image: url('assets/static/images/profileBackground.jpg')">
+<div class="h-max min-h-screen bg-cover bg-no-repeat filter saturate-150 bg-fixed"
+id="bg"
+>
   <!-- flex for user profile info and pokemon display to the right -->
   <div class="flex flex-row justify-center items-center border-t-2 border-white">
     <h1 class="text-title items-center">Profile Page</h1>

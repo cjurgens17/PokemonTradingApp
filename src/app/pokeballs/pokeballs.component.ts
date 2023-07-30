@@ -12,6 +12,7 @@ export class PokeballsComponent implements OnInit, OnDestroy {
   currentTime: Date = new Date();
   userId!:number;
   clientTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  imageUrl: string = 'assets/static/images/collectBackground.jpg';
 
   //updated Timer from subject in pokeball service
   timer$ = this.pokeBallsService.timerSubject$
@@ -56,6 +57,16 @@ export class PokeballsComponent implements OnInit, OnDestroy {
     this.confirmPokeBallsSnackBar('10 Poke Balls acquired!', 'Close');
   }
 
+  preloadImage(): void {
+    const bImage: HTMLImageElement = new Image();
+    bImage.src = this.imageUrl;
+    bImage.onload = () => {
+      //if signed in bg
+      let bElement = document.querySelector('#bg') as HTMLElement;
+      bElement.style.backgroundImage = `url(${bImage.src})`;
+    }
+  }
+
   //-----------------------SNACKBAR-----------------------
 
   confirmPokeBallsSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
@@ -76,7 +87,11 @@ export class PokeballsComponent implements OnInit, OnDestroy {
     .subscribe({
       next: timer => this.pokeBallsService.updateTimerSubject(timer),
       error: err => console.log('Error: ', err)
-    })
+    });
+
+    //set background Image
+    this.preloadImage();
+
   }
 
 

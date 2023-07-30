@@ -24,6 +24,7 @@ import { ProfilePictureComponent } from './profile-picture.component';
 export class UserHomeComponent implements OnInit, OnDestroy{
 
   signedIn!:boolean;
+  imageUrl:string = 'assets/static/images/profileBackground.jpg';
 
   userId!: number;
   private _listFilter: string = '';
@@ -141,9 +142,22 @@ export class UserHomeComponent implements OnInit, OnDestroy{
       error: (err) => console.log('Error: ', err),
     });
   }
+
+  //load background
+  preload(): void {
+    const bImage: HTMLImageElement = new Image();
+    bImage.src = this.imageUrl;
+
+    bImage.onload = () => {
+      let bElement = document.querySelector('#bg') as HTMLElement;
+      bElement.style.backgroundImage = `url(${bImage.src})`;
+    }
+  }
 //---------------LIFECYCLE HOOKS--------------------
 
 ngOnInit(): void {
+    //load in background
+    this.preload();
     //getting userId
     this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
     if(this.userId > 0){

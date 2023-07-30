@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserLoginService } from './user-login-service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { UserLogin } from './user-login';
 
@@ -20,13 +20,16 @@ export class UserLoginComponent implements OnInit, OnDestroy {
   badCredentials!: boolean;
   hide: boolean = true;
   required!: boolean;
+  imageUrl: string = 'assets/static/images/LogInBackground.jpg';
+
 
 
   private ngUnsubscribe = new Subject<void>();
 
   constructor(
     private userLoginService: UserLoginService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   login() {
@@ -73,10 +76,36 @@ export class UserLoginComponent implements OnInit, OnDestroy {
       },
       error: err => console.log('Error: ', err)
     })
+    }
 
+    //load background
+    preload(): void {
+      const bImage: HTMLImageElement = new Image();
+      bImage.src = this.imageUrl;
+
+      bImage.onload = () => {
+        let bElement = document.querySelector('#bg') as HTMLElement;
+        bElement.style.backgroundImage = `url(${bImage.src})`;
+      }
     }
   //-------------------------------LIFECYCLE HOOKS---------------------------------------
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  //load in background
+  this.preload();
+
+  //for guest login
+  this.route.queryParams
+  .pipe(
+    takeUntil(this.ngUnsubscribe)
+  )
+  .subscribe((params) => {
+    const guestValues = {
+    username: params['username'] || '',
+    password: params['password'] || ''
+    }
+    this.loginForm.setValue(guestValues);
+  });
+  }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();

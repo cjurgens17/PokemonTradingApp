@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { passwordValidator } from '../validators/sync-validators/password.validator';
 import { confirmPasswordValidator } from '../validators/sync-validators/confirm-password.validator';
@@ -8,17 +8,18 @@ import { Subject, takeUntil } from 'rxjs';
 import { Register } from './register';
 import { SignUpService } from './sign-up.service';
 import { Router } from '@angular/router';
-import { UserLoginService } from '../user-login/user-login-service';
+
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css'],
 })
-export class SignUpComponent implements OnDestroy {
+export class SignUpComponent implements OnInit, OnDestroy {
   hide: boolean = true;
   hide2: boolean = true;
   postError: boolean = false;
+  imageUrl: string = 'assets/static/images/signUpBackground.jpg';
 
   private ngUnsubscribe = new Subject<void>();
 
@@ -103,7 +104,25 @@ export class SignUpComponent implements OnDestroy {
         error: (err) => console.log('Error: ', err),
       });
   }
+
+  //preload background
+  preload(): void {
+    const bImage: HTMLImageElement = new Image();
+    bImage.src = this.imageUrl;
+
+    bImage.onload = () => {
+      let bElement = document.querySelector('#bg') as HTMLElement;
+      bElement.style.backgroundImage = `url(${bImage.src})`;
+    }
+  }
   //--------------------LIFECYCLE HOOKS-----------------------
+
+  ngOnInit(): void {
+    //load in background
+    this.preload();
+  }
+
+
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
