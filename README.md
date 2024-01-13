@@ -15,7 +15,7 @@ The repository link for the custom backend server is here [https://github.com/cj
 
 ## Deployment
 
-The app is deployed on Heroku and can be accessed at [https://pokemon-trading.herokuapp.com/].
+The app is deployed on Heroku and can be accessed at [https://pokemon-trading-app.vercel.app/home].
 
 ## Technologies Used
 
