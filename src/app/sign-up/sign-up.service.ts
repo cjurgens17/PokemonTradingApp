@@ -10,7 +10,7 @@ import { UserLoginService } from '../user-login/user-login-service';
   providedIn: 'root',
 })
 export class SignUpService {
-  private userUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/';
+  private userUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com';
 
   constructor(private http: HttpClient, private userLoginService: UserLoginService) {}
 
