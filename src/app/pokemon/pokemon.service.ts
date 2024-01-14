@@ -55,7 +55,7 @@ export class PokemonService {
   ): Observable<Number> {
     return this.http
       .post<Number>(
-        `https://pokemon-server.herokuapp.com/timer/${userId}/deletePokeBalls`,
+        `https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/timer/${userId}/deletePokeBalls`,
         pokeBalls,
         { headers: environment.headers }
       )
