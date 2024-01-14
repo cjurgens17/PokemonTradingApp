@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class PokeballsService {
-  private apiUrl = 'https://pokemon-server.herokuapp.com/timer';
+  private apiUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/timer';
 
   //Bs for timer
   private timerSubject = new BehaviorSubject<Timer>({

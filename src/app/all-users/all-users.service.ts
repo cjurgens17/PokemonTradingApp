@@ -10,7 +10,7 @@ import { Pokemon } from '../pokemon/pokemon';
 export class AllUsersService {
 
 
-  private userUrl = 'https://pokemon-server.herokuapp.com/user';
+  private userUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/user';
 
   //cold observable which gets a list of users from database
   allUsers$ = this.http.get<User[]>(`${this.userUrl}/getAllUsers`)

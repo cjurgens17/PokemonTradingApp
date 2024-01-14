@@ -20,7 +20,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class UserProfileService {
-  private userUrl = 'https://pokemon-server.herokuapp.com/user';
+  private userUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/user';
 
   private currentUserPokemonSubject = new BehaviorSubject<Pokemon[]>([]);
   currentUserPokemon$ = this.currentUserPokemonSubject.asObservable()

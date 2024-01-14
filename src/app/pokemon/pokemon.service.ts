@@ -17,7 +17,7 @@ import { environment } from 'src/environments/environment';
 })
 export class PokemonService {
   private productUrl = 'https://pokeapi.co/api/v2/pokemon/';
-  private apiUrl = 'https://pokemon-server.herokuapp.com/pokemon';
+  private apiUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/pokemon';
   private start: number = 2;
   private limit: number = 101;
 

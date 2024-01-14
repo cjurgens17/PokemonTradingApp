@@ -9,7 +9,7 @@ import { Pokemon } from '../pokemon/pokemon';
   providedIn: 'root',
 })
 export class TradeService {
-  private apiUrl = 'https://pokemon-server.herokuapp.com/user';
+  private apiUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/user';
 
   constructor(private http: HttpClient) {}
   //adding messages to users inbox
