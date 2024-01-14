@@ -6,10 +6,10 @@ export const environment = {
 
   production: false,
   withCredentials: true,
-  baseUrl: "https://pokemon-server.herokuapp.com/",
+  baseUrl: "https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/",
   headers: {
     'content-type' : 'application/json',
-    'Access-Control-Allow-Origin': 'https://pokemon-trading.herokuapp.com/'
+    'Access-Control-Allow-Origin': 'https://pokemon-trading-app.vercel.app/'
   },
 
 };
