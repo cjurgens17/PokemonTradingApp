@@ -1,41 +1,39 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Timer } from './timer';
-import { BehaviorSubject, Observable, catchError, map, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PokeballsService {
-  private apiUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/timer';
+  private readonly apiUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/timer';
 
-  //Bs for timer
-  private timerSubject = new BehaviorSubject<Timer>({
-      id: 0,
-      prevDate: new Date(),
-  }
-  );
-
-  timerSubject$ = this.timerSubject.asObservable();
+  private timer$ = new Subject<Timer>();
 
   constructor(private http: HttpClient) {}
 
   //gets the currentUsers Timer
-  getTimer(id: number): Observable<Timer> {
+  getUserTimer(id: number): Observable<Timer> {
     return this.http
       .get<Timer>(`${this.apiUrl}/${id}/getTimer`, {headers: environment.headers})
       .pipe(
-        map( timer => {
-          timer.prevDate = new Date(timer.prevDate);
-          return timer;
-        }),
+        map( timer => ({
+          id: id,
+          prevDate: new Date(timer.prevDate)
+        })),
         catchError(this.handleError),
         );
   }
 
+  updateTimer(timer: Timer): void {
+    this.timer$.next(timer);
+  }
+
   //this reupdates the timer if we passed 24 hours from the last day
-  updateTimer(id: number): Observable<Timer> {
+  updateTimer24(id: number): Observable<Timer> {
     return this.http
       .post<Timer>(
         `${this.apiUrl}/${id}/updateTimer`,
@@ -60,11 +58,6 @@ export class PokeballsService {
         headers: environment.headers,
       })
       .pipe(catchError(this.handleError));
-  }
-
-  //updates timer subject
-  updateTimerSubject(timer: Timer){
-    this.timerSubject.next(timer);
   }
 
   private handleError(err: HttpErrorResponse): Observable<never> {

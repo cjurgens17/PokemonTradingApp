@@ -1,5 +1,5 @@
 <div *ngIf="userId > 0; else notSignedIn">
-<div *ngIf="timer$ | async as timer"
+<div *ngIf="timerFormat$ | async as timer"
   class="bg-no-repeat bg-cover p-1 h-screen border-t-2 border-white filter saturate-150 flex justify-center items-center"
   id="bg">
     <div class="container mx-auto px-4 sm:px-6 md:px-12 lg:px-24 xl:px-32">
