@@ -11,12 +11,26 @@ import { Timer } from './timer';
   styleUrls: ['./pokeballs.component.css'],
 })
 export class PokeballsComponent implements OnInit {
-  currentTime: Date = new Date();
+  currentTime$: Observable<Date> = timer(0, 1000)
+  .pipe(
+    map(() => new Date()),
+    share(),
+  )
+
   userId: number = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
   clientTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   collectImage: string = 'assets/static/images/collectBackground.jpg';
 
-  private currentUserTimer$ = this.pokeBallsService.getUserTimer(this.userId);
+  currentUserTimer$ = this.pokeBallsService.getUserTimer(this.userId);
+
+  updatedTimer$ = this.pokeBallsService.updateTimer24(this.userId);
+
+  currentTimer$: Observable<Timer> = combineLatest([this.currentUserTimer$, this.updatedTimer$]).pipe(
+    map(([time2,time1]) => ({
+      id: time1.id,
+      prevDate: time2.prevDate
+    }))
+  )
 
   //updated Timer from subject in pokeball service
   timerFormat$ = this.currentUserTimer$
@@ -39,13 +53,8 @@ export class PokeballsComponent implements OnInit {
     this.pokeBallsService.updateUserPokeBalls(this.userId, newPokeBalls)
 
     //updating the timer -> change to do in the template
-    this.pokeBallsService
-      .updateTimer24(this.userId)
-      .subscribe({
-        next: (timer) => {
-        this.pokeBallsService.updateTimer(timer)},
-        error: (err) => console.log('Error: ', err)
-      });
+    this.pokeBallsService.updateTimer24(this.userId)
+
     this.confirmPokeBallsSnackBar('10 Poke Balls acquired!', 'Close');
   }
 
@@ -69,19 +78,7 @@ export class PokeballsComponent implements OnInit {
 
   //------------------------LifeCycle Hooks-------------------------------------
   ngOnInit(): void {
-
     //set background Image
     this.preloadImage();
-
-    //getting current time and comparing to last updated time(last time pokeballs were added)
-    timer(0, 1000)
-      .pipe(
-        map(() => new Date()),
-        share(),
-      )
-      .subscribe({
-        next: (time) => this.currentTime = time,
-        error: (err) => console.log('Error: ', err),
-      });
   }
 }

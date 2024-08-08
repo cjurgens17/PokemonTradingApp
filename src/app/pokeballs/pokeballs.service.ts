@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Timer } from './timer';
-import { BehaviorSubject, Observable, Subject, catchError, map, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, catchError, map, shareReplay, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
 
@@ -11,7 +11,6 @@ import { MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
 export class PokeballsService {
   private readonly apiUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/timer';
 
-  private timer$ = new Subject<Timer>();
 
   constructor(private http: HttpClient) {}
 
@@ -23,15 +22,10 @@ export class PokeballsService {
         map( timer => ({
           id: id,
           prevDate: new Date(timer.prevDate)
-        })),
+        })),shareReplay({bufferSize: 1, refCount: true}),
         catchError(this.handleError),
         );
   }
-
-  updateTimer(timer: Timer): void {
-    this.timer$.next(timer);
-  }
-
   //this reupdates the timer if we passed 24 hours from the last day
   updateTimer24(id: number): Observable<Timer> {
     return this.http
