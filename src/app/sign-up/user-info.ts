@@ -1,4 +1,4 @@
-import { Timer } from "../pokeballs/timer";
+import { Timer } from "../pokeballs/shared/interfaces/timer";
 
 export interface User {
     id: number | null;

@@ -1,49 +1,39 @@
-import { Component, OnInit } from '@angular/core';
-import {  BehaviorSubject, combineLatest, map, Observable, share, Subject, switchMap, timer } from 'rxjs';
-import { PokeballsService } from './pokeballs.service';
+   import { Component } from '@angular/core';
+import { combineLatest, map, Observable, share, shareReplay, timer } from 'rxjs';
+import { PokeballsService } from './shared/services/pokeballs.service';
 import { UserLoginService } from '../user-login/user-login-service';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
-import { Timer } from './timer';
+import { Timer } from './shared/interfaces/timer';
 
 @Component({
   selector: 'app-pokeballs',
   templateUrl: './pokeballs.component.html',
   styleUrls: ['./pokeballs.component.css'],
 })
-export class PokeballsComponent implements OnInit {
+export class PokeballsComponent {
   currentTime$: Observable<Date> = timer(0, 1000)
   .pipe(
     map(() => new Date()),
-    share(),
+    shareReplay({bufferSize: 1, refCount: true}),
   )
 
   userId: number = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
   clientTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   collectImage: string = 'assets/static/images/collectBackground.jpg';
+  //==> if currentTime > user timer get pokeball else display user timer
+  currentUserTime$ = this.pokeBallsService.getUserTimer(this.userId);
 
-  currentUserTimer$ = this.pokeBallsService.getUserTimer(this.userId);
-
-  updatedTimer$ = this.pokeBallsService.updateTimer24(this.userId);
-
-  currentTimer$: Observable<Timer> = combineLatest([this.currentUserTimer$, this.updatedTimer$]).pipe(
-    map(([time2,time1]) => ({
-      id: time1.id,
-      prevDate: time2.prevDate
-    }))
-  )
-
-  //updated Timer from subject in pokeball service
-  timerFormat$ = this.currentUserTimer$
+  isPokeballs$ = combineLatest([this.currentUserTime$, this.currentTime$])
   .pipe(
-    map((timer) => {
-      const formattedDateTime = timer.prevDate.toLocaleString('en-US', { timeZone: this.clientTimeZone })
-      return formattedDateTime;
-    })
+    map(([currentUserTime, currentTime]) => (
+      currentUserTime.prevDate >= new Date(currentTime.getTime())
+    ))
   );
+
   constructor(
     private pokeBallsService: PokeballsService,
     private userLoginService: UserLoginService,
-    private snackBar: MatSnackBar) {}
+    private snackBar: MatSnackBar) {this.preloadImage();}
 
   //-------------------Functions----------------------------------------------------------------------
   //adds pokeBalls to user and takes away button from the DOM with structural directive in template
@@ -54,6 +44,7 @@ export class PokeballsComponent implements OnInit {
 
     //updating the timer -> change to do in the template
     this.pokeBallsService.updateTimer24(this.userId)
+    this.currentUserTime$ = this.pokeBallsService.getUserTimer(this.userId);
 
     this.confirmPokeBallsSnackBar('10 Poke Balls acquired!', 'Close');
   }
@@ -74,11 +65,5 @@ export class PokeballsComponent implements OnInit {
     return this.snackBar.open(message, action, {
       duration: 5000
     });
-  }
-
-  //------------------------LifeCycle Hooks-------------------------------------
-  ngOnInit(): void {
-    //set background Image
-    this.preloadImage();
   }
 }

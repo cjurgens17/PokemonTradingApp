@@ -1,16 +1,15 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Timer } from './timer';
+import { Timer } from '../interfaces/timer';
 import { BehaviorSubject, Observable, Subject, catchError, map, shareReplay, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class PokeballsService {
   private readonly apiUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/timer';
-
 
   constructor(private http: HttpClient) {}
 
@@ -26,6 +25,7 @@ export class PokeballsService {
         catchError(this.handleError),
         );
   }
+
   //this reupdates the timer if we passed 24 hours from the last day
   updateTimer24(id: number): Observable<Timer> {
     return this.http
@@ -33,16 +33,6 @@ export class PokeballsService {
         `${this.apiUrl}/${id}/updateTimer`,
         { headers: environment.headers }
       )
-      .pipe(
-        map(timer => {
-      const serverDateTime = new Date(timer.prevDate);
-      // Convert the UTC date and time to the client's time zone
-      const clientDateTime = new Date(serverDateTime.toLocaleString('en-US', { timeZone: 'UTC' }));
-      timer.prevDate = clientDateTime;
-      return timer;
-        }),
-        catchError(this.handleError)
-        );
   }
 
   //update current Users current PokeBalls

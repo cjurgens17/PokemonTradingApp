@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PokeballsComponent } from './pokeballs.component';
-import { PokeballsService } from './pokeballs.service';
+import { PokeballsService } from './shared/services/pokeballs.service';
 import { of } from 'rxjs';
-import { Timer } from './timer';
+import { Timer } from './shared/interfaces/timer';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('PokeballsComponent', () => {
