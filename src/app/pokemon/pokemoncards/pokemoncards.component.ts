@@ -13,6 +13,7 @@ import {
   combineLatest,
   map,
   takeUntil,
+  tap,
 } from 'rxjs';
 import { Pokemon } from '../pokemon';
 import { UserProfileService } from 'src/app/user-profile/user-profile.service';
@@ -46,8 +47,6 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe = new Subject<void>();
 
-  private pokemon$ = this.pokemonService.loadedPokemon$;
-
   //Catch errors
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
@@ -59,10 +58,13 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
   //Cold Observable that gets the currentUser info
   currentUser$ = this.userProfileService.currentUser$;
 
+  allFetchedPokemon$ = this.pokemonService.getAllPokemonTest$;
+
+
   //Hot Observable that filters api pokemon based on user input
-  searchedPokemon$ = combineLatest([this.pokemon$, this.searchInput$]).pipe(
+  searchedPokemon$ = combineLatest([this.allFetchedPokemon$, this.searchInput$]).pipe(
     map(([pokemon, searchInput]) =>
-      pokemon.filter((pokemon) =>
+      pokemon.filter((pokemon: Pokemon) =>
         pokemon.name.toLowerCase().includes(searchInput)
       )
     ),

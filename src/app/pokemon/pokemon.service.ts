@@ -3,11 +3,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
   BehaviorSubject,
   Observable,
+  ReplaySubject,
   catchError,
-  mergeMap,
-  scan,
-  takeWhile,
-  tap,
+  finalize,
+  forkJoin,
+  of,
+  share,
   throwError,
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -18,27 +19,38 @@ import { environment } from 'src/environments/environment';
 export class PokemonService {
   private productUrl = 'https://pokeapi.co/api/v2/pokemon/';
   private apiUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/pokemon';
-  private start: number = 2;
-  private limit: number = 101;
+  counter: number = 0;
+  progress!: number;
 
   private nextUrlSubject = new BehaviorSubject<string>(this.productUrl + 1);
   nextUrl$ = this.nextUrlSubject.asObservable();
 
-  private pokemonSubject = new BehaviorSubject<any[]>([]);
-  loadedPokemon$ = this.pokemonSubject.asObservable();
-
-  getAllPokemon$ = this.nextUrl$.pipe(
-    mergeMap((url) => this.http.get(url)),
-    takeWhile(() => this.start <= this.limit),
-    tap(() => this.nextUrlSubject.next(this.productUrl + this.start++)),
-    scan((item, pokemon) => [...item, pokemon], [] as any[])
-  );
+  getAllPokemonTest$: Observable<any[]> = this.getAllPokemonTest();
 
   constructor(private http: HttpClient) {}
-
-  //passPokemon to BS
-  passPokemon(pokemon: any[]){
-    this.pokemonSubject.next(pokemon);
+  
+  //Get and Cache 200 pokemon in parallel
+  getAllPokemonTest(): Observable<any[]> {
+    if (!this.getAllPokemonTest$) {
+      console.log("We are getting all Pokemon right Now")
+      this.getAllPokemonTest$ = forkJoin(
+        Array.from({ length: 200 }, (_, index) => index + 1).map((id) =>
+          this.http.get(`${this.productUrl}${id}`)
+        )
+      ).pipe(
+        catchError((errors) => of(errors)),
+        finalize(() => {
+          this.progress = (++this.counter / 200) * 100;
+        })
+      ),
+        share({
+          connector: () => new ReplaySubject(1),
+          resetOnRefCountZero: true,
+          resetOnComplete: true,
+          resetOnError: true,
+        });
+    }
+    return this.getAllPokemonTest$;
   }
 
   //Adds Pokemon to users PokeIndex-----------------------

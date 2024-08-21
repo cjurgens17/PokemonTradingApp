@@ -11,7 +11,7 @@
   </div>
   <!-- grid for pokemon -->
   <div class="flex justify-center pb-2">
-    <ng-container *ngIf="searchedPokemon$ | async as pokemon">
+    <ng-container *ngIf="searchedPokemon$ | async as pokemon; else loading">
     <div [ngClass]="{
       'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5': pokemon.length >= 5,
       'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2': pokemon.length === 4,
@@ -52,3 +52,5 @@
 
 
   <!-- <div *ngIf="searchedPokemon$ | async as pokemon" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-auto mx-auto"> -->
+
+    <ng-template #loading>Loading...</ng-template>
