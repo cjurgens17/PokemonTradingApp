@@ -1,22 +1,14 @@
 import {
   ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
+  Component
 } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import {
   BehaviorSubject,
-  EMPTY,
   Observable,
-  Subject,
   catchError,
   combineLatest,
-  from,
   map,
-  of,
-  takeUntil,
-  tap,
   throwError,
 } from 'rxjs';
 import { Pokemon } from '../pokemon';

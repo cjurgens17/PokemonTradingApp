@@ -26,7 +26,7 @@ export class UserHomeComponent implements OnInit, OnDestroy{
   signedIn!:boolean;
   imageUrl:string = 'assets/static/images/profileBackground.jpg';
 
-  userId!: number;
+  userId: number = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
   private _listFilter: string = '';
 
 
@@ -45,7 +45,10 @@ export class UserHomeComponent implements OnInit, OnDestroy{
   profilePicture$ = this.userProfileService.profilePicture$;
 
   //Observer of BS in userprofileService
-  currentUserPokemon$ = this.userProfileService.currentUserPokemon$;
+  currentUserPokemon$ = this.userProfileService.getUserPokemon(this.userId) .pipe(
+    map((pokemon) => {
+      return pokemon.sort((a, b) => a.index - b.index);
+    }));
 
   //Action stream for getting user input to search for a pokemon
   private filteredPokemonInputSubject = new BehaviorSubject<string>('');
@@ -85,7 +88,6 @@ export class UserHomeComponent implements OnInit, OnDestroy{
     this.clickedPokemonInput$,
   ]).pipe(
     map(([pokemon, clicked]) => pokemon.find((poke) => poke.name === clicked)),
-    tap((data) => console.log('Clicked Pokemon: ', data)),
     catchError((err) => {
       this.errorMessageSubject.next(err);
       return EMPTY;
@@ -110,7 +112,10 @@ export class UserHomeComponent implements OnInit, OnDestroy{
   constructor(
     private userProfileService: UserProfileService,
     private dialog: MatDialog
-  ) {}
+  ) {
+    //load background
+    this.preload();
+  }
 
   onFilterChange() {
     this.filteredPokemonInputSubject.next(this._listFilter);
@@ -156,10 +161,8 @@ export class UserHomeComponent implements OnInit, OnDestroy{
 //---------------LIFECYCLE HOOKS--------------------
 
 ngOnInit(): void {
-    //load in background
-    this.preload();
     //getting userId
-    this.userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
+    //to address all of these subscriptions -> Need global state -> BehaviorSubject for UserId -> create http request dependent on the userid -> if userId is < 0, we just return, else we make the server call -> in this component we initialize our observable streams to these http calls -> combineLatest or however we want to handle that data -> in the template when we subscribe we will have all of the users data each time we load this component -> Only caveat is not having absolute real-time data, but this out of the scope of this project anyways -> so this is a solution we can implement soon.
     if(this.userId > 0){
     this.signedIn = true;
     this.userProfileService
@@ -178,16 +181,6 @@ ngOnInit(): void {
         next: user => this.userProfileService.updateProfilePictureSubject(user.profilePicture || '{}'),
         error: err => console.log('Error: ', err)
       })
-
-      //set BS in userProfile service to set current User pokemon
-   this.userProfileService.getUserPokemon(this.userId)
-   .pipe(
-    takeUntil(this.ngUnsubscribe)
-   )
-   .subscribe({
-    next: pokemon => this.userProfileService.passUserPokemon(pokemon),
-    error: err => console.log('Error: ', err)
-   })
   }else{
     this.signedIn = false;
   }
