@@ -19,21 +19,23 @@ import { environment } from 'src/environments/environment';
 export class PokemonService {
   private productUrl = 'https://pokeapi.co/api/v2/pokemon/';
   private apiUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/pokemon';
+
+  //this is for a progress bar if we want to use it -> the fetch goes by so quick, probably not worth it.
   counter: number = 0;
   progress!: number;
 
   private nextUrlSubject = new BehaviorSubject<string>(this.productUrl + 1);
   nextUrl$ = this.nextUrlSubject.asObservable();
 
-  getAllPokemonTest$: Observable<any[]> = this.getAllPokemonTest();
+  getAllPokemon$: Observable<any[]> = this.getAllPokemon();
 
   constructor(private http: HttpClient) {}
-  
+
   //Get and Cache 200 pokemon in parallel
-  getAllPokemonTest(): Observable<any[]> {
-    if (!this.getAllPokemonTest$) {
+  getAllPokemon(): Observable<any[]> {
+    if (!this.getAllPokemon$) {
       console.log("We are getting all Pokemon right Now")
-      this.getAllPokemonTest$ = forkJoin(
+      this.getAllPokemon$ = forkJoin(
         Array.from({ length: 200 }, (_, index) => index + 1).map((id) =>
           this.http.get(`${this.productUrl}${id}`)
         )
@@ -50,7 +52,7 @@ export class PokemonService {
           resetOnError: true,
         });
     }
-    return this.getAllPokemonTest$;
+    return this.getAllPokemon$;
   }
 
   //Adds Pokemon to users PokeIndex-----------------------

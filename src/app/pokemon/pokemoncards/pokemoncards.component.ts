@@ -8,12 +8,16 @@ import { PokemonService } from '../pokemon.service';
 import {
   BehaviorSubject,
   EMPTY,
+  Observable,
   Subject,
   catchError,
   combineLatest,
+  from,
   map,
+  of,
   takeUntil,
   tap,
+  throwError,
 } from 'rxjs';
 import { Pokemon } from '../pokemon';
 import { UserProfileService } from 'src/app/user-profile/user-profile.service';
@@ -31,35 +35,21 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./pokemoncards.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonCardsComponent implements OnInit, OnDestroy {
-  private userPokeBalls!: number | null;
-  private userId!: number | null;
+export class PokemonCardsComponent {
   private _searchFilter = '';
-
   get searchFilter(): string {
     return this._searchFilter;
   }
-
   set searchFilter(value: string) {
     this._searchFilter = value;
-    console.log(this.searchFilter);
   }
-
-  private ngUnsubscribe = new Subject<void>();
-
-  //Catch errors
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
 
   //Filter Pokemon from Search Bar
   private onSearchSubject = new BehaviorSubject<string>('');
   searchInput$ = this.onSearchSubject.asObservable();
 
-  //Cold Observable that gets the currentUser info
   currentUser$ = this.userProfileService.currentUser$;
-
-  allFetchedPokemon$ = this.pokemonService.getAllPokemonTest$;
-
+  allFetchedPokemon$ = this.pokemonService.getAllPokemon$;
 
   //Hot Observable that filters api pokemon based on user input
   searchedPokemon$ = combineLatest([this.allFetchedPokemon$, this.searchInput$]).pipe(
@@ -68,11 +58,16 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
         pokemon.name.toLowerCase().includes(searchInput)
       )
     ),
-    catchError((err) => {
-      this.errorMessageSubject.next(err);
-      return EMPTY;
+    catchError(() => {
+      return throwError(() => new Error("Failed to search for pokemon"))
     })
   );
+
+  //combine searchPokemon and currentUser to subscribe in template
+  pokemonCardData$: Observable<any> = combineLatest({
+    searchedPokemon: this.searchedPokemon$,
+    user: this.currentUser$
+  });
 
   constructor(
     private pokemonService: PokemonService,
@@ -86,41 +81,29 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
   }
   //guard if no user signed in
   pokemonGuard(): void {
-    let dialogRef = this.dialog.open(PokemonguardComponent, {
+    this.dialog.open(PokemonguardComponent, {
       width: '450px'
-    })
-
-    dialogRef
-    .afterClosed()
-    .pipe(
-      takeUntil(this.ngUnsubscribe)
-    )
-    .subscribe({
-      next: res => console.log('Dialog was closed', res),
-      error: err => console.log('Error', err)
     });
   }
   //adds poke if user signed in else calls pokemon guard to open dialog
-  addToCollection(poke: any): void {
-    if(this.userId !== null && this.userId > 0){
-      this.updatePokemon(poke);
+  addToCollection(poke: any, userId: number, userPokeBalls: number): void {
+    if(userId !== null && userId > 0){
+      this.updatePokemon(poke, userId, userPokeBalls);
     }else{
       this.pokemonGuard();
     }
   }
 
   //----------------------add pokemon to an existing users pokeIndex----------------
-  updatePokemon(pokemon: any): void {
+  updatePokemon(pokemon: any, userPokeBalls: number, userId: number): void {
     //Trade can not be complete
-    if (this.userPokeBalls != null && this.userPokeBalls < 5) {
+    if (userPokeBalls != null && userPokeBalls < 5) {
       this.insufficientPokeBallsSnackBar(
         'You do not have enough Poke Balls at this time!',
         'Close'
       );
       return;
     }
-
-    console.log("pokemon: ",pokemon);
 
     const abNames: string[] = [];
     const statNames: string[] = [];
@@ -142,35 +125,20 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
       abilities: abNames,
       stats: statNames,
     };
-    console.log(newPoke.index);
-    console.log(newPoke);
 
     //Persists the clicked pokemon to the users pokemon collection
-    this.pokemonService
-      .updatePokemon(newPoke, this.userId)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response) => console.log('Response: ', response),
-        error: (err) => console.log('Error: ', err),
-      });
-
+    this.pokemonService.updatePokemon(newPoke,userId)
     //updates users pokemonballs on the backend
-    this.pokemonService
-      .deleteUserPokeBalls(5, this.userId)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (pokeBalls) => console.log('Remaining PokeBalls: ', pokeBalls),
-        error: (err) => console.log('Error: ', err),
-      });
+    this.pokemonService.deleteUserPokeBalls(5,userId)
 
     //updating userPokeBalls in component variable
-    if (this.userPokeBalls != null) {
-      this.userPokeBalls -= 5;
+    if (userPokeBalls != null) {
+        userPokeBalls -= 5;
     }
 
     //successful catch snackBar
     this.caughtPokemonSnackBar(
-      `Success, Check your Poke Index. ${this.userPokeBalls} Poke Balls left`,
+      `Success, Check your Poke Index. ${userPokeBalls} Poke Balls left`,
       'Close'
     );
   }
@@ -192,20 +160,5 @@ export class PokemonCardsComponent implements OnInit, OnDestroy {
     return this.snackBar.open(message, action, {
       duration: 5000,
     });
-  }
-
-  //-----------------------LifeCycle Hooks----------------------------------------------
-  ngOnInit(): void {
-    this.currentUser$.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-      next: (user) => {
-        (this.userPokeBalls = user.pokeBalls), (this.userId = user.id);
-      },
-      error: (err) => console.log('Error getting User: ', err),
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 }
