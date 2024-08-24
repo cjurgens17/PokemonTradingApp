@@ -53,7 +53,7 @@ export class TradeComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
 
   //This gets all currentUsers pokemon so we can select to trade
-  currentUserPokemon$ = this.userProfileService.currentUserPokemon$.pipe(
+  currentUserPokemon$ = this.userProfileService.getUserPokemon(this.userId).pipe(
     map((pokemon) => {
       return pokemon.sort((a, b) => a.name.localeCompare(b.name));
     }),
@@ -157,16 +157,6 @@ export class TradeComponent implements OnInit, OnDestroy {
     };
 
     this.message = tradeMsg;
-
-    //sets current User pokemon to BS in user-profileService
-    this.userProfileService.getUserPokemon(this.userId)
-    .pipe(
-      takeUntil(this.ngUnsubscribe)
-    )
-    .subscribe({
-      next: pokemon =>  this.userProfileService.passUserPokemon(pokemon),
-      error: err => console.log('Error: ', err)
-    })
   }
 
   ngOnDestroy(): void {

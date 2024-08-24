@@ -46,6 +46,13 @@ export class UserProfileService {
     })
   );
 
+  private userIdSubject = new BehaviorSubject<number>(0);
+  userId$ = this.userIdSubject.asObservable();
+
+  setUserId(id: number) {
+    this.userIdSubject.next(id);
+  }
+
   constructor(
     private http: HttpClient,
     private userLoginService: UserLoginService
