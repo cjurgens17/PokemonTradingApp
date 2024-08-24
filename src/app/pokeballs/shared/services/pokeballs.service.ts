@@ -27,12 +27,14 @@ export class PokeballsService {
   }
 
   //this reupdates the timer if we passed 24 hours from the last day
-  updateTimer24(id: number): Observable<Timer> {
+  updateTimer24(id: number, nextResetTime: Date): Observable<Timer> {
     return this.http
       .post<Timer>(
         `${this.apiUrl}/${id}/updateTimer`,
+        { prevDate: nextResetTime.toISOString() },
         { headers: environment.headers }
       )
+      .pipe(catchError(this.handleError));
   }
 
   //update current Users current PokeBalls
