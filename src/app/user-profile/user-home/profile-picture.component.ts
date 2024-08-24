@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { EMPTY, Observable, Subject, catchError, of, tap } from 'rxjs';
+import { Component, OnDestroy } from '@angular/core';
+import { EMPTY, Observable, Subject, catchError, of, takeUntil, tap } from 'rxjs';
 import { UserProfileService } from '../user-profile.service';
 import {
   MatSnackBar,
@@ -13,8 +13,10 @@ import { MatDialogRef } from '@angular/material/dialog';
   templateUrl: './profile-picture.component.html',
   styleUrls: ['./profile-picture.component.css'],
 })
-export class ProfilePictureComponent {
+export class ProfilePictureComponent implements OnDestroy {
   reactivePicture!: string;
+
+  private ngUnsubscribe = new Subject<void>();
 
   private staticProfilePictures: string[] = [
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_KaFyA-TtPrTCvgk8q0pENl8s-1p7xkrQbQ&usqp=CAU',
@@ -32,17 +34,27 @@ export class ProfilePictureComponent {
     private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<ProfilePictureComponent>
   ) {}
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
   //---------------Functions----------------------------------
   changeProfilePicture(selectedPicture: string): void {
     let userId = JSON.parse(localStorage.getItem('userLoginInfo') || '{}').id;
     this.userProfileService
       .updateUserProfilePicture(userId, selectedPicture)
       .pipe(
-        tap(() => this.pictureChangedSnackBar('Profile Picture Changed!', 'Close')),
-        catchError(() => EMPTY)
+        takeUntil(this.ngUnsubscribe),
+        tap(() => {
+          this.pictureChangedSnackBar('Profile Picture Changed!', 'Close');
+          this.userProfileService.updateProfilePictureSubject(selectedPicture);
+        }),
+        catchError((error) => {
+          console.error('Error updating profile picture:', error);
+          return EMPTY;
+        })
       )
-    //reacting to profile picture update--User goes back to profile , image will be updated
-    this.userProfileService.updateProfilePictureSubject(this.reactivePicture);
+      .subscribe();
   }
 
   transferPicture(picture: string): void {
