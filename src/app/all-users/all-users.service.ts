@@ -39,8 +39,7 @@ export class AllUsersService {
     filter(user => Boolean(user)),
     switchMap((user) => {
       return this.http.get<Pokemon[]>(`${this.userUrl}/${user?.id}/userPokemon`)
-    }),
-    tap(pokemon => console.log('User Pokemon', pokemon))
+    })
   );
 
   private userSelectedPokemonSubject = new Subject<string>();

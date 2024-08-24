@@ -22,14 +22,6 @@ import { environment } from 'src/environments/environment';
 export class UserProfileService {
   private userUrl = 'https://pokemon-trading-backend-dd013c59e9a7.herokuapp.com/user';
 
-  private currentUserPokemonSubject = new BehaviorSubject<Pokemon[]>([]);
-  currentUserPokemon$ = this.currentUserPokemonSubject.asObservable()
-  .pipe(
-    map((pokemon) => {
-      return pokemon.sort((a, b) => a.index - b.index);
-    })
-  );
-
   private inboxSubject = new BehaviorSubject<Message[]>([]);
   inbox$ = this.inboxSubject.asObservable()
   .pipe(
@@ -54,14 +46,18 @@ export class UserProfileService {
     })
   );
 
+  private userIdSubject = new BehaviorSubject<number>(0);
+  userId$ = this.userIdSubject.asObservable();
+
+  setUserId(id: number) {
+    this.userIdSubject.next(id);
+  }
+
   constructor(
     private http: HttpClient,
     private userLoginService: UserLoginService
   ) {}
-  //UPDATING SUBJECT METHODS---------------------------------------------------------
-  passUserPokemon(pokemonArray: Pokemon[]) {
-    this.currentUserPokemonSubject.next(pokemonArray);
-  }
+
 
   updateInboxSubject(messages: Message[]): void {
     this.inboxSubject.next(messages);

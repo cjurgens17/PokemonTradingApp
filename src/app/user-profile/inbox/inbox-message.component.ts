@@ -4,7 +4,7 @@ import {
   MatSnackBarRef,
   SimpleSnackBar,
 } from '@angular/material/snack-bar';
-import { Subject, takeUntil } from 'rxjs';
+import { map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { Message } from 'src/app/all-users/message';
 import { TradeService } from 'src/app/all-users/trade.service';
 import { InboxService } from './inbox.service';
@@ -137,40 +137,38 @@ export class InboxMessageComponent implements OnInit, OnDestroy {
     //Checking if users have pokemon avaiable to trade
     this.tradeService
       .checkUsersPokemon(username, currentUsername, userPokemon, tradePokemon)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (resp) => {
-          let hasPokemon = resp;
-          //users have pokemon available to trade
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        switchMap(hasPokemon => {
           if (hasPokemon) {
-            this.tradeService
-              .completeTrade(
-                username,
-                currentUsername,
-                userPokemon,
-                tradePokemon
-              )
-              .pipe(takeUntil(this.ngUnsubscribe))
-              .subscribe({
-                //this can return a pokemon[]
-                //then we pass to the users BS to update poke index after call is complete
-                next: pokemon => { console.log('Passeds Pokemon -------------', pokemon),this.userProfileService.passUserPokemon(pokemon)},
-                error: err => console.log('error: ', err)
-              });
-            //success snackbar
+            return this.tradeService.completeTrade(
+              username,
+              currentUsername,
+              userPokemon,
+              tradePokemon
+            ).pipe(
+              map(() => true)
+            );
+          } else {
+            return of(false);
+          }
+        })
+      )
+      .subscribe({
+        next: (tradeSuccessful) => {
+          if (tradeSuccessful) {
             this.acceptSuccessSnackBar(
               'Trade Successful, check your PokeIndex',
               'Close'
             );
           } else {
-            //fail snackbar
             this.acceptFailSnackBar(
               'Pokemon for trade are no longer available',
               'Close'
             );
           }
         },
-        error: err =>  console.log('error: ', err)
+        error: err => console.log('error: ', err)
       });
 
     this.tradeService
