@@ -22,9 +22,7 @@ export class PokeballsComponent {
 
   private resetPokemonBallsSubject = new Subject<void>();
 
-  currentUserTime$ = this.pokeBallsService.getUserTimer(this.userId).pipe(
-    shareReplay({ bufferSize: 1, refCount: true })
-  );
+  currentUserTime$ = this.pokeBallsService.getUserTimer(this.userId);
 
   resetPokemonBalls$ = this.resetPokemonBallsSubject.pipe(
     switchMap(() => {
@@ -67,6 +65,7 @@ export class PokeballsComponent {
 
   resetPokemonBalls(): void {
     this.resetPokemonBallsSubject.next();
+    this.currentUserTime$ = this.pokeBallsService.getUserTimer(this.userId)
   }
 
   preloadImage(): void {
