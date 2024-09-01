@@ -50,8 +50,10 @@ export class PokeballsComponent {
 
   isPokeballs$ = combineLatest([this.currentUserTime$, this.currentTime$]).pipe(
     map(([currentUserTime, currentTime]) => {
-      if (!currentUserTime || !currentUserTime.prevDate) return false;
-      return new Date(currentUserTime.prevDate) <= currentTime;
+      if(currentTime.getTime() < currentUserTime.prevDate.getTime()){
+        return true;
+      }
+      return false;
     })
   );
 
