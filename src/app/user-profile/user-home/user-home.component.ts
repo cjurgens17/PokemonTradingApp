@@ -73,6 +73,8 @@ export class UserHomeComponent implements OnInit {
 
           const clickedPokemonDetails = userPokemon.find(poke => poke.name === clickedPokemon);
 
+          this.userProfileService.updateProfilePictureSubject(currentUser.profilePicture as string)
+
           return {
             signedIn: true,
             currentUser: currentUser,
